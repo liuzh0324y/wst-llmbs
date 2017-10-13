@@ -1,0 +1,40 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:         llmbs
+# Required-Start:   
+# Required-Stop:
+# Default-Start:
+# Default-Stop:
+# Short-Description:
+# Description:
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/llmbs/bin/llmbs
+NAME=llmbs
+DESC=llmbs
+
+# Include llmbs defaults if available
+if [ -r /usr/default/llmbs ]; then
+    . /etc/default/llmbs
+fi
+
+STOP_SCHEDULE="${STOP_SCHEDULE:-QUIT/5/TERM/5/KILL/5}"
+
+test -x $DAEMON || exit 0
+
+case "$1" in 
+    start)
+    echo "start"
+    ;;
+    stop)
+    echo "stop"
+    ;;
+    restart)
+    echo "restart"
+    ;;
+    reload)
+    echo "reload"
+    ;;
+esac

@@ -1,8 +1,8 @@
-#include "application.h"
+#include "Application.h"
 
 int main(int argc, char **argv)
 {
-    application app;
+    Application app;
 
-    return app.run();
+    return app.Run(argc, argv);
 }

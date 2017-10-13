@@ -17,7 +17,7 @@ INCPATH=-I. -I${TOPDIR}/agora/include -I${TOPDIR}/libevent/include -I${TOPDIR}/j
 TARGET=bin/llmbs
 
 OBJS=objs/main.o 				\
-	objs/application.o 			\
+	objs/Application.o 			\
 	objs/recorder.o 			\
 	objs/loadconf.o 			\
 	objs/logger.o				\
@@ -28,7 +28,7 @@ OBJS=objs/main.o 				\
 
 
 SRCS=src/main.cc 				\
-	src/application.cc 			\
+	src/Application.cc 			\
 	src/recorder.cc 			\
 	src/loadconf.cc 			\
 	src/logger.cc				\
@@ -50,9 +50,9 @@ objs/main.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/main.o 				\
 		src/main.cc
 
-objs/application.o:
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/application.o 			\
-		src/application.cc 
+objs/Application.o:
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/Application.o 			\
+		src/Application.cc 
 
 objs/recorder.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/recorder.o 			\
