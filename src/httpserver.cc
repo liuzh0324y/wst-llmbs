@@ -149,8 +149,9 @@ string httpserver::parse_json(string jsonstr)
     if (!command.compare("STARTRECORD"))
     {
         result["command"] = "STARTRECORD";
-
-        result["code"] = _recorderGroup.start(root["key"].asString(), root["channel"].asString());
+        string mix = root["mixresolution"].asString();
+        if (mix.empty()) mix = "1280,720,15,2400";
+        result["code"] = _recorderGroup.start(root["key"].asString(), root["channel"].asString(), mix);
     }
     else if (!command.compare("STOPRECORD"))
     {

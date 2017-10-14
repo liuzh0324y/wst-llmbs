@@ -18,7 +18,7 @@ RecorderGroup::~RecorderGroup()
 
 }
 
-int  RecorderGroup::start(const string &appId, const string &channelId)
+int  RecorderGroup::start(const string &appId, const string &channelId, const string &mixResolution)
 {
     string channelKey;
     uint32_t uid = 0;
@@ -39,7 +39,6 @@ int  RecorderGroup::start(const string &appId, const string &channelId)
     bool isAudioOnly = false;
     bool isMixingEnabled= true;
 
-    string mixResolution("1280,720,15,2400");
     RecorderMap::iterator iter = _recorderMap.find(channelId);
     if (iter != _recorderMap.end())
     {
