@@ -64,7 +64,7 @@ public:
 
     void reportfile(FileInfo fileinfo);
 
-    void reportstaus(uint32_t code);
+    void reportstatus(uint32_t code, string description);
 
     static string getToken();
 

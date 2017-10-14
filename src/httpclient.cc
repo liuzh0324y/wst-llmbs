@@ -242,7 +242,7 @@ void httpclient::reportfile(FileInfo fileinfo)
     event_base_free(base);
 }
 
-void httpclient::reportstaus(uint32_t code)
+void httpclient::reportstatus(uint32_t code, string description)
 {
     if (_token.empty())
     {
@@ -263,7 +263,8 @@ void httpclient::reportstaus(uint32_t code)
     postjson["groupid"] = loadconf::instance().groupid();
     postjson["token"] = _token;
     postjson["status"] = code;
-
+    postjson["description"] = description;
+    postjson["time"] = time(0);
     base = event_base_new();
 
     uri = "http://";

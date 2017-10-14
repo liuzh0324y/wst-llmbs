@@ -146,6 +146,27 @@ void Recorder::onError(int error)
 	string out = "AgoraRecorder::Error: ";
 	out.append(T_as_string(error));
 	LOGW(out);
+
+	switch (error)
+	{
+	case 1:
+		{
+			httpclient::instance().reportstatus(AGORAFAILED, "agora filed");
+		}
+		break;
+	case 2:
+		{
+			httpclient::instance().reportstatus(AGORAINVAILDAGUMENT, "agora invaild agument");
+		}
+		break;
+	case 3:
+		{
+			httpclient::instance().reportstatus(AGORAINTERNALFAILED, "agora internal failed");
+		}
+		break;
+	default:
+		break;
+	}
 	leaveChannel();
 }
 

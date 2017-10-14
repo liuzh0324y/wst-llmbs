@@ -27,6 +27,7 @@ test -x $DAEMON || exit 0
 case "$1" in 
     start)
     echo "start"
+    /home/wisdom/work/ambs/bin/llmbs
     ;;
     stop)
     echo "stop"

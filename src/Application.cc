@@ -90,7 +90,7 @@ void Application::sub1_thread()
         size_t mbFreedisk = freeDisk>>20;
         if (mbFreedisk < loadconf::instance().freedisk())
         {
-            httpclient::instance().reportstaus(DISKFULL);
+            httpclient::instance().reportstatus(DISKFULL, "disk full");
         }
         // cout << loadconf::instance().recordpath() << "; free disk: " << mbFreedisk << endl;
         sleep(60*60);
