@@ -1,0 +1,57 @@
+# object files
+*.o 
+*.ko
+*.obj 
+*.elf
+
+# precompiled headers
+*.gch
+*.pch
+
+# libraries
+*.lib
+*.a
+*.la 
+*.lo 
+
+# shared objects
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# executables
+*.exe 
+*.out
+*.app
+*.i*86
+*.x86_64
+*hex
+
+# visual stdio files
+obj
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+*.ilk
+*.pdb
+
+# user-specific files
+*.suo
+*.user
+*.sln.docstates
+
+# mp4 files
+*.mp4
+
+# log files
+*.log
+
+# pid files
+*.pid
+
+# llmbs
+bin/llmbs
