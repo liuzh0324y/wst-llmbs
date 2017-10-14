@@ -22,6 +22,7 @@ using std::endl;
 using std::vector;
 using std::map;
 
+
 class Recorder : public agora::recording::IRecordingEngineEventHandler
 {
 public:
@@ -51,6 +52,9 @@ private:
 
     virtual void onUserJoined(uid_t uid, agora::recording::UserJoinInfos &infos);
     virtual void onUserOffline(uid_t uid, agora::recording::USER_OFFLINE_REASON_TYPE reason);
+
+    virtual const void audioFrameReceived(unsigned int uid, const agora::recording::AudioFrame *frame);
+    virtual const void videoFrameReceived(unsigned int uid, const agora::recording::VideoFrame *frame);
 
     void readFileList(string uid, string baseDir);
 

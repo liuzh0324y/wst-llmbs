@@ -146,6 +146,18 @@ string loadconf::_parse_conf(string input)
         {
             _httpport = tempstr;
         }
+        else if (temp.compare("rtmpport") == 0)
+        {
+            _rtmpport = tempstr;
+        }
+        else if (temp.compare("freedisk") == 0)
+        {
+            _freedisk = string_as_T<uint32_t>(tempstr);
+        }
+        else if (temp.compare("keeplive") == 0)
+        {
+            _keeplive = string_as_T<uint32_t>(tempstr);
+        }
     }
     return string();
 }
@@ -224,6 +236,10 @@ string loadconf::_parse_conf(vector<string> &filelist)
             else if (temp.compare("http_port") == 0)
             {
                 _httpport = tempstr;
+            }
+            else if (temp.compare("rtmpport") == 0)
+            {
+                _rtmpport = tempstr;
             }
             else if (temp.compare("freedisk") == 0)
             {

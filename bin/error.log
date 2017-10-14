@@ -1415,3 +1415,39 @@ server app stop
 
 [2017:10:12-16:23:18] code is userpwd error!
 [2017:10:12-16:23:18] listening on 0.0.0.0:18005
+[2017:10:13-17:14:39] load logger file.
+[2017:10:13-17:14:39] load config file.
+[2017:10:13-17:14:39] load license file.
+[2017:10:13-17:14:39] server app start
+[2017:10:13-17:14:39] {
+	"command" : "LOGIN",
+	"from" : "32944316472141180000000",
+	"groupid" : "0",
+	"ip" : "10.33.48.197",
+	"number" : "32944316472141180000000",
+	"password" : "123456",
+	"port" : 18005,
+	"seqnum" : 0,
+	"sessionid" : "",
+	"to" : "32944316472141180000000",
+	"type" : "AMBS",
+	"username" : "admin1",
+	"version" : "V1.0"
+}
+
+[2017:10:13-17:14:40] {
+   "code" : 101,
+   "command" : "LOGIN",
+   "from" : "32944316472141180000000",
+   "groupid" : "0",
+   "message" : "login info error",
+   "number" : "32944316472141180000000",
+   "seqnum" : 0,
+   "sessionid" : "",
+   "to" : "32944316472141180000000",
+   "type" : "AMBS",
+   "version" : "V1.0"
+}
+
+[2017:10:13-17:14:40] code is userpwd error!
+[2017:10:13-17:14:40] listening on 0.0.0.0:18005

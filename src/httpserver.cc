@@ -372,7 +372,9 @@ void httpserver::worker_thread()
     _handle = evhttp_bind_socket_with_handle(_http, "0.0.0.0", stoi(loadconf::instance().localport()));
     if (!_handle)
     {
-        LOGW("couldn't bind to port 2000.");
+        string log("couldn't bind to port: ");
+        log.append(loadconf::instance().localport());
+        LOGW(log);
         return;
     }
 

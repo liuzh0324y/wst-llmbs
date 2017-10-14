@@ -4,7 +4,7 @@ endif
 LINK=${CXX}
 
 TOPDIR=`pwd`/3rdparty
-LIBPATH=${TOPDIR}/agora/libs 
+LIBPATH=${TOPDIR}/agora/v1.3.0/libs 
 EVEPATH=${TOPDIR}/libevent/lib
 JSONPATH=${TOPDIR}/json/lib
 LDFLAGS=-static-libgcc -std=c++11
@@ -13,7 +13,7 @@ CXXFLAGS=-pipe -std=c++11 -fPIC -g -fno-omit-frame-pointer \
 					
 # -levent_core -levent_pthreads
 LIB=-pthread -lrt -L$(LIBPATH) -lRecordEngine -L$(EVEPATH) -levent -L$(JSONPATH) -ljsoncpp 
-INCPATH=-I. -I${TOPDIR}/agora/include -I${TOPDIR}/libevent/include -I${TOPDIR}/json/include
+INCPATH=-I. -I${TOPDIR}/agora/v1.3.0/include -I${TOPDIR}/libevent/include -I${TOPDIR}/json/include
 TARGET=bin/llmbs
 
 OBJS=objs/main.o 				\

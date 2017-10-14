@@ -204,6 +204,16 @@ void Recorder::onUserOffline(unsigned uid, agora::recording::USER_OFFLINE_REASON
 	setVideoMixLayout();
 }
 
+const void Recorder::audioFrameReceived(unsigned int uid, const agora::recording::AudioFrame *frame)
+{
+
+}
+
+const void Recorder::videoFrameReceived(unsigned int uid, const agora::recording::VideoFrame *frame)
+{
+
+}
+
 string Recorder::channel()
 {
 	return _channel;

@@ -39,6 +39,7 @@ int  RecorderGroup::start(const string &appId, const string &channelId)
     bool isAudioOnly = false;
     bool isMixingEnabled= true;
 
+    string mixResolution("1280,720,15,2400");
     RecorderMap::iterator iter = _recorderMap.find(channelId);
     if (iter != _recorderMap.end())
     {
@@ -61,6 +62,7 @@ int  RecorderGroup::start(const string &appId, const string &channelId)
 
     config.isAudioOnly = isAudioOnly;
     config.isMixingEnabled = isMixingEnabled;
+    config.mixResolution = (isMixingEnabled && !isAudioOnly)? const_cast<char*>(mixResolution.c_str()):NULL;;
 
     config.appliteDir = const_cast<char*>(applitePath.c_str());
     config.recordFileRootDir = const_cast<char*>(recordFileRootDir.c_str());
@@ -71,22 +73,25 @@ int  RecorderGroup::start(const string &appId, const string &channelId)
     config.lowUdpPort = lowUdpPort;
     config.highUdpPort = highUdpPort;
 
-    // cout << "  > appId[must]: " << appId << endl;
-    // cout << "  > channelKey[option]: " << (channelKey.empty()?"NULL":channelKey) << endl;
-    // cout << "  > channel[must]: " << (channelId.empty()?"NULL":channelId) << endl;
-    // cout << "  > uid[must]: " << uid << endl;
-    // // cout << "  > decodeAudio[option]: " << (decodeAudio?"true":"false") << endl;
-    // // cout << "  > decodeVideo[option]: " << (decodeVideo?"true":"false") << endl;
-    // cout << "  > config.idleLimitSec[option]: " << config.idleLimitSec << endl;
-    // cout << "  > config.channelProfile[option]: " << config.channelProfile << endl;
-    // cout << "  > config.isAudioOnly[option]: " << (config.isAudioOnly?"true":"false") << endl;
-    // cout << "  > config.isMixingEnabled[option]: " << (config.isMixingEnabled?"true":"false") << endl;
-    // cout << "  > config.appliteDir[must]: " << config.appliteDir << endl;
-    // cout << "  > config.recordFileRootDir[option]: " << config.recordFileRootDir << endl;
-    // cout << "  > config.secret[option]: " << (config.secret==NULL?"NULL":config.secret) << endl;
-    // cout << "  > config.decryptionMode[option]: " << (config.decryptionMode==NULL?"NULL":config.decryptionMode) << endl;
-    // cout << "  > config.lowUdpPort[option]: " << config.lowUdpPort << endl;
-    // cout << "  > config.highUdpPort[option]: " << config.highUdpPort << endl;
+    config.decodeAudio = false; 
+    config.decodeVideo = false;
+
+    cout << "  >> appId[must]: " << appId << endl;
+    cout << "  >> channelKey[option]: " << (channelKey.empty()?"NULL":channelKey) << endl;
+    cout << "  >> channel[must]: " << (channelId.empty()?"NULL":channelId) << endl;
+    cout << "  >> uid[must]: " << uid << endl;
+    cout << "  >> decodeAudio[option]: " << (config.decodeAudio?"true":"false") << endl;
+    cout << "  >> decodeVideo[option]: " << (config.decodeVideo?"true":"false") << endl;
+    cout << "  >> config.idleLimitSec[option]: " << config.idleLimitSec << endl;
+    cout << "  >> config.channelProfile[option]: " << config.channelProfile << endl;
+    cout << "  >> config.isAudioOnly[option]: " << (config.isAudioOnly?"true":"false") << endl;
+    cout << "  >> config.isMixingEnabled[option]: " << (config.isMixingEnabled?"true":"false") << endl;
+    cout << "  >> config.appliteDir[must]: " << config.appliteDir << endl;
+    cout << "  >> config.recordFileRootDir[option]: " << config.recordFileRootDir << endl;
+    cout << "  >> config.secret[option]: " << (config.secret==NULL?"NULL":config.secret) << endl;
+    cout << "  >> config.decryptionMode[option]: " << (config.decryptionMode==NULL?"NULL":config.decryptionMode) << endl;
+    cout << "  >> config.lowUdpPort[option]: " << config.lowUdpPort << endl;
+    cout << "  >> config.highUdpPort[option]: " << config.highUdpPort << endl;
 
     if (!recorder->createChannel(appId, channelKey, channelId, uid, false, false, config))
     {
