@@ -24,18 +24,34 @@ STOP_SCHEDULE="${STOP_SCHEDULE:-QUIT/5/TERM/5/KILL/5}"
 
 test -x $DAEMON || exit 0
 
+start()
+{
+    echo "start llmbs."
+    exit 0
+}
+
+stop()
+{
+    echo "stop llmbs."
+}
+
 case "$1" in 
-    start)
-    echo "start"
-    /home/wisdom/work/ambs/bin/llmbs
+start)
+    start
     ;;
-    stop)
-    echo "stop"
+stop)
+    stop
     ;;
-    restart)
-    echo "restart"
+restart)
+    stop
+    start
     ;;
-    reload)
+reload)
     echo "reload"
     ;;
+*)
+    echo "Usage: $NAME {start|stop|restart|reload}"
+    exit 0
 esac
+
+exit 0

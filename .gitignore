@@ -55,3 +55,4 @@ ipch/
 
 # llmbs
 bin/llmbs
+error.log

@@ -1,0 +1,12 @@
+[Unit]
+Description=llmbs
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/home/wisdom/work/ambs/bin/llmbs
+ExecStop=/home/wisdom/work/ambs/bin/llmbs -s stop
+
+
+[Install]
+WantedBy=multi-user.target
