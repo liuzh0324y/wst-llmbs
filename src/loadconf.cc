@@ -8,6 +8,7 @@ loadconf::loadconf()
     _seqnum = 0;
     _freedisk = 300;
     _keeplive = 3600;
+    _idleLimitSec = 600;
 }
 
 loadconf::~loadconf()
@@ -158,6 +159,10 @@ string loadconf::_parse_conf(string input)
         {
             _keeplive = string_as_T<uint32_t>(tempstr);
         }
+        else if (temp.compare("idleLimitSec") == 0)
+        {
+            _idleLimitSec = string_as_T<uint32_t>(tempstr);
+        }
     }
     return string();
 }
@@ -248,6 +253,10 @@ string loadconf::_parse_conf(vector<string> &filelist)
             else if (temp.compare("keeplive") == 0)
             {
                 _keeplive = string_as_T<uint32_t>(tempstr);
+            }
+            else if (temp.compare("idleLimitSec") == 0)
+            {
+                _idleLimitSec = string_as_T<uint32_t>(tempstr);
             }
         }
     } 
@@ -526,4 +535,14 @@ uint32_t loadconf::keeplivetime()
 void     loadconf::setkeeplivetime(const int timeout)
 {
     _keeplive = timeout;
+}
+
+uint32_t loadconf::idleLimitSec()
+{
+    return _idleLimitSec;
+}
+
+void     loadconf::setIdleLimitSec(const uint32_t sec)
+{
+    _idleLimitSec = sec;
 }

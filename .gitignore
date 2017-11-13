@@ -56,3 +56,6 @@ ipch/
 # llmbs
 bin/llmbs
 error.log
+
+# vscode
+.vscode

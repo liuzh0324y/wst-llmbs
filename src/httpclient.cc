@@ -55,7 +55,7 @@ void httpclient::login()
 
     http_req_post = (struct http_request_post *)start_http_request(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
-        
+
     event_base_dispatch(base);
     http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);
@@ -150,7 +150,7 @@ void httpclient::reportfile(vector<FileInfo> fileinfo)
     uri.append("/api/v1/user/reportfile");
     http_req_post = (struct http_request_post *)start_http_request(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
-        
+    
     event_base_dispatch(base);
     http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);

@@ -10,6 +10,7 @@ Recorder::Recorder() :
     IRecordingEngineEventHandler()
 {
 	_recorder = NULL;
+	_IsQuit = false;
     _stopped.store(false);
 }
 
@@ -25,6 +26,11 @@ Recorder::~Recorder()
 bool Recorder::stopped() const 
 {
     return _stopped;
+}
+
+bool Recorder::quit() const
+{
+	return _IsQuit;
 }
 
 bool Recorder::release()
@@ -167,6 +173,7 @@ void Recorder::onError(int error)
 	default:
 		break;
 	}
+	_IsQuit = true;
 	leaveChannel();
 }
 

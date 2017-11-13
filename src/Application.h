@@ -14,12 +14,18 @@ public:
     int Run();
     int Run(int argc, char ** argv);
 
+private:
+    int ParseOption(int argc, char ** argv);
+    void InitSignals();
+    int Daemon();
+
 protected:
     void main_thread();
     void sub1_thread();
     void sub2_thread();
-    static void signalHandler(int signum);
-    int ParseOption(int argc, char ** argv);
+    static void fSignalHandler(int signum);
+
+
 private:
     // quit flag
     static bool _is_quit;

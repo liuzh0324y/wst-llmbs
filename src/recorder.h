@@ -38,6 +38,7 @@ public:
     bool release();
 
     bool stopped() const;
+    bool quit() const;
 
     int reportfiles();
     string channel();
@@ -66,6 +67,7 @@ private:
     map<string, string> _userinfo;
 
     string _channel;
+    bool   _IsQuit;
 };
 
 template <class T>

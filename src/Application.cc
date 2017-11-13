@@ -106,12 +106,68 @@ void Application::sub2_thread()
     }
 }
 
-void Application::signalHandler(int signum)
+void Application::fSignalHandler(int signum)
 {
     _is_quit = true;
    
     // LOG(logger::LOGDEBUG, "server app signal handler.");
     // std::cout << "server app signal handler." << std::endl;
+}
+
+
+void Application::InitSignals()
+{
+
+}
+
+int Application::Daemon()
+{
+    int fd;
+
+    switch (fork())
+    {
+    case -1:
+        return -1;
+
+    case 0:
+        break;
+    
+    default:
+        exit(0);
+    }
+
+    if (setsid() == -1)
+    {
+        return -1;
+    }
+
+    umask(0);
+
+    fd = open("/dev/null", O_RDWR);
+    if (fd == -1)
+    {
+        return -1;
+    }
+
+    if (dup2(fd, STDIN_FILENO) == -1)
+    {
+        return -1;
+    }
+
+    if (dup2(fd, STDOUT_FILENO) == -1)
+    {
+        return -1;
+    }
+
+    if (fd > STDERR_FILENO)
+    {
+        if (close(fd) == -1)
+        {
+            return -1;
+        }
+    }
+
+    return 0;
 }
 
 int Application::ParseOption(int argc, char ** argv)
@@ -132,22 +188,18 @@ int Application::ParseOption(int argc, char ** argv)
             {
             case '?':
             case 'h':
-            case 'H':
                 cout << "show help" << endl;
                 break;
 
             case 'v':
-            case 'V':
                 cout << "show version" << endl;
                 break;
 
             case 'q':
-            case 'Q':
                 cout << "show quit" << endl;
                 break;
 
             case 's':
-            case 'S':
                 cout << "show signal" << endl;
                 return -1;
 
@@ -169,7 +221,7 @@ int Application::Run()
 
     LOGW("server app start");
 
-    // signal(SIGINT, signalHandler);
+    // signal(SIGINT, fSignalHandler);
     std::thread worker(&Application::main_thread, this);
     std::thread sub1(&Application::sub1_thread, this);
     std::thread sub2(&Application::sub2_thread, this);
@@ -189,4 +241,5 @@ int Application::Run(int argc, char ** argv)
     {
         return 1;
     }
+
 }

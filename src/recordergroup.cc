@@ -5,12 +5,15 @@
 
 RecorderGroup::RecorderGroup()
 {
-
+    std::thread worker(&RecorderGroup::WorkerTime, this);
+    worker.detach();
 }
 
 RecorderGroup::RecorderGroup(string &appId)
 {
     _appid = appId;
+    std::thread worker(&RecorderGroup::WorkerTime, this);
+    worker.detach();
 }
 
 RecorderGroup::~RecorderGroup()
@@ -27,8 +30,7 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
     string decryptionMode;
     string secret;
 
-    int idleLimitSec = 12 * 60 * 60;
-
+    int idleLimitSec=loadconf::instance().idleLimitSec();
     string applitePath=loadconf::instance().applitepath();
     string appliteLogPath=loadconf::instance().logspath();
     string recordFileRootDir=loadconf::instance().recordpath();
@@ -75,22 +77,22 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
     config.decodeAudio = false; 
     config.decodeVideo = false;
 
-    cout << "  >> appId[must]: " << appId << endl;
-    cout << "  >> channelKey[option]: " << (channelKey.empty()?"NULL":channelKey) << endl;
-    cout << "  >> channel[must]: " << (channelId.empty()?"NULL":channelId) << endl;
-    cout << "  >> uid[must]: " << uid << endl;
-    cout << "  >> decodeAudio[option]: " << (config.decodeAudio?"true":"false") << endl;
-    cout << "  >> decodeVideo[option]: " << (config.decodeVideo?"true":"false") << endl;
-    cout << "  >> config.idleLimitSec[option]: " << config.idleLimitSec << endl;
-    cout << "  >> config.channelProfile[option]: " << config.channelProfile << endl;
-    cout << "  >> config.isAudioOnly[option]: " << (config.isAudioOnly?"true":"false") << endl;
-    cout << "  >> config.isMixingEnabled[option]: " << (config.isMixingEnabled?"true":"false") << endl;
-    cout << "  >> config.appliteDir[must]: " << config.appliteDir << endl;
-    cout << "  >> config.recordFileRootDir[option]: " << config.recordFileRootDir << endl;
-    cout << "  >> config.secret[option]: " << (config.secret==NULL?"NULL":config.secret) << endl;
-    cout << "  >> config.decryptionMode[option]: " << (config.decryptionMode==NULL?"NULL":config.decryptionMode) << endl;
-    cout << "  >> config.lowUdpPort[option]: " << config.lowUdpPort << endl;
-    cout << "  >> config.highUdpPort[option]: " << config.highUdpPort << endl;
+    // cout << "  >> appId[must]: " << appId << endl;
+    // cout << "  >> channelKey[option]: " << (channelKey.empty()?"NULL":channelKey) << endl;
+    // cout << "  >> channel[must]: " << (channelId.empty()?"NULL":channelId) << endl;
+    // cout << "  >> uid[must]: " << uid << endl;
+    // cout << "  >> decodeAudio[option]: " << (config.decodeAudio?"true":"false") << endl;
+    // cout << "  >> decodeVideo[option]: " << (config.decodeVideo?"true":"false") << endl;
+    // cout << "  >> config.idleLimitSec[option]: " << config.idleLimitSec << endl;
+    // cout << "  >> config.channelProfile[option]: " << config.channelProfile << endl;
+    // cout << "  >> config.isAudioOnly[option]: " << (config.isAudioOnly?"true":"false") << endl;
+    // cout << "  >> config.isMixingEnabled[option]: " << (config.isMixingEnabled?"true":"false") << endl;
+    // cout << "  >> config.appliteDir[must]: " << config.appliteDir << endl;
+    // cout << "  >> config.recordFileRootDir[option]: " << config.recordFileRootDir << endl;
+    // cout << "  >> config.secret[option]: " << (config.secret==NULL?"NULL":config.secret) << endl;
+    // cout << "  >> config.decryptionMode[option]: " << (config.decryptionMode==NULL?"NULL":config.decryptionMode) << endl;
+    // cout << "  >> config.lowUdpPort[option]: " << config.lowUdpPort << endl;
+    // cout << "  >> config.highUdpPort[option]: " << config.highUdpPort << endl;
 
     if (!recorder->createChannel(appId, channelKey, channelId, uid, false, false, config))
     {
@@ -126,7 +128,6 @@ int RecorderGroup::stop(const string &appId, const string &channelId)
             _mutex_id.unlock();
             return FREECHANNELFAILED;
         }
-        
     }
     _mutex_id.unlock();
     LOGW("app id not found!");
@@ -306,6 +307,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     outinfo.path = loadconf::instance().recordpath();
     outinfo.channel = channel;
 
+    LOGW("MIX FILES REPORT FILE.");
     httpclient::instance().reportfile(outinfo);
     // reportfiles(outinfo);
     // for (iter; iter != files.end(); iter++)
@@ -419,4 +421,48 @@ int RecorderGroup::reportstatus(int code, string description)
 
     // httpclient::instance()->reportstatus();
     return 0;
+}
+
+void RecorderGroup::InitTimer()
+{
+    struct sigaction act;
+    struct itimerval val;
+
+    act.sa_handler = fCheckRecorder;
+    act.sa_flags = 0;
+
+    sigemptyset(&act.sa_mask);
+    sigaction(SIGPROF, &act, NULL);
+
+    val.it_value.tv_sec = 1;
+    val.it_value.tv_usec = 0;
+
+    val.it_interval = val.it_value;
+
+    setitimer(ITIMER_PROF, &val, NULL);
+}
+
+void RecorderGroup::fCheckRecorder(int i)
+{
+    
+}
+
+void RecorderGroup::WorkerTime()
+{
+    while (1)
+    {
+        sleep(60);
+        _mutex_id.lock();
+
+        for (auto iter = _recorderMap.begin(); iter != _recorderMap.end(); iter++)
+        {
+            if (iter->second->quit())
+            {
+                delete iter->second;
+                _recorderMap.erase(iter);
+            }
+        }
+        // LOGW("Check recorder map.");
+        _mutex_id.unlock();
+    }
 }

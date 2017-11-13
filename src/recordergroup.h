@@ -41,9 +41,14 @@ public:
     int addRecordInfoQueue(const string channel);
 
 protected:
+    void WorkerTime();
     void mixmedia_worker(vector<FileInfo> files);
     void reportfile_worker(string channel, string dir);
     void readFileList(string channel, string baseDir);
+    static void fCheckRecorder(int i);
+
+private:
+    void InitTimer();
 private:
     // recorder objs
     RecorderMap _recorderMap;

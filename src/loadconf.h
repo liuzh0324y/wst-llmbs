@@ -74,6 +74,9 @@ public:
     // keep live
     uint32_t keeplivetime();
     void     setkeeplivetime(const int timeout);
+    // idle limit second
+    uint32_t idleLimitSec();
+    void     setIdleLimitSec(const uint32_t sec);
     // get number
     string number();
     // get seq number
@@ -131,6 +134,8 @@ private:
     uint32_t   _freedisk;
     // keep live
     uint32_t   _keeplive;
+    // idle limit second
+    uint32_t   _idleLimitSec;
 };
 
 template<class T>
