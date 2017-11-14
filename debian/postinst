@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ -x "/etc/init.d/llmbs" ]; then
+    if [  ! -e "/usr/local/llmbs/conf/llmbs.conf" ]; then
+        update-rc.d llmbs defaults >/dev/null
+    fi
+fi
+
+exit 0

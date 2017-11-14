@@ -13,7 +13,7 @@ class logger
 public:
     static logger& instance();
 
-    bool    init(string filename="error.log");
+    bool    init(string filename="/usr/local/llmbs/logs/error.log");
 
     void    free();
 

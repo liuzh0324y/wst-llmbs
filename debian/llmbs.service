@@ -1,0 +1,12 @@
+[Unit]
+Description=llmbs - llvision storage
+Documentation=https://llvision.com
+After=network-online.target remote-fs.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/llmbs
+
+[Install]
+WantedBy=multi-user.target

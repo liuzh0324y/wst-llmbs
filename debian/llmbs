@@ -1,0 +1,42 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:             llmbs
+# Required-Start:       $network $remote_fs $local_fs
+# Required-Stop:        $network $remote_fs $local_fs
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    Stop/start llmbs
+### END INIT INFO
+
+# Author: Wisdom <liuzh@llvision.com>
+
+DAEMON=/usr/local/bin/llmbs
+
+dostart() {
+    start-stop-daemon --start --background --exec $DAEMON
+}
+
+dostop() {
+    start-stop-daemon --stop --background --exec $DAEMON
+}
+
+case "$1" in
+    start)
+        echo "Starting $DAEMON"
+        dostart
+        echo "."
+        ;;
+    stop)
+        echo "Stopping $DAEMON"
+        dostop
+        echo "."
+        ;;
+    restart)
+        dostop
+        dostart
+        ;;
+    *)
+        echo "Usage: $DAEMON {start|stop|restart}" >&2
+        exit 3
+        ;;
+esac

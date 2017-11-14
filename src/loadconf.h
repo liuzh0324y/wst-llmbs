@@ -13,9 +13,9 @@ public:
     // get loadconf instance
     static loadconf& instance();
     // load config file
-    bool load_config_file(string file="llmbs.conf");
+    bool load_config_file(string file="/usr/local/llmbs/conf/llmbs.conf");
     // create license
-    bool load_license_file(string file="license.key");
+    bool load_license_file(string file="/usr/local/llmbs/key/license.key");
 
     // user name
     string username();

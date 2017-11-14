@@ -9,6 +9,8 @@ loadconf::loadconf()
     _freedisk = 300;
     _keeplive = 3600;
     _idleLimitSec = 600;
+
+    _applitepath = "/usr/local/llmbs/tools";
 }
 
 loadconf::~loadconf()
@@ -123,14 +125,14 @@ string loadconf::_parse_conf(string input)
         {
             _recordpath = tempstr;
         }
-        else if (temp.compare("logs_path") == 0)
-        {
-            _logspath = tempstr;
-        }
-        else if (temp.compare("applite_path") == 0)
-        {
-            _applitepath = tempstr;
-        }
+        // else if (temp.compare("logs_path") == 0)
+        // {
+        //     _logspath = tempstr;
+        // }
+        // else if (temp.compare("applite_path") == 0)
+        // {
+        //     _applitepath = tempstr;
+        // }
         else if (temp.compare("groupid") == 0)
         {
             _groupid = tempstr;
@@ -218,14 +220,14 @@ string loadconf::_parse_conf(vector<string> &filelist)
             {
                 _recordpath = tempstr;
             }
-            else if (temp.compare("logs_path") == 0)
-            {
-                _logspath = tempstr;
-            }
-            else if (temp.compare("applite_path") == 0)
-            {
-                _applitepath = tempstr;
-            }
+            // else if (temp.compare("logs_path") == 0)
+            // {
+            //     _logspath = tempstr;
+            // }
+            // else if (temp.compare("applite_path") == 0)
+            // {
+            //     _applitepath = tempstr;
+            // }
             else if (temp.compare("groupid") == 0)
             {
                 _groupid = tempstr;

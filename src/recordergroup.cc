@@ -274,7 +274,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     string outfile = tmpstr + ".mp4";
 
     string out = loadconf::instance().recordpath()+"/"+outfile;
-    string mixpath = "python convert.py ";
+    string mixpath = "python /usr/local/llmbs/tools/convert.py ";
     mixpath.append((*iter).path);   // python convert.py inpath
     mixpath.append(" ");
     mixpath.append(out);            // python convert.py inpath outfile
@@ -291,7 +291,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
 
     // picture
     string picfile = loadconf::instance().recordpath()+"/"+tmpstr+".jpeg";
-    string command_pic = "./ffmpeg -i ";
+    string command_pic = "/usr/local/llmbs/tools/ffmpeg -i ";
     command_pic.append(out);
     command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
     command_pic.append(picfile);
