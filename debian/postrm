@@ -1,2 +1,7 @@
+#!/bin/sh
+
+set -e
+
+update-rc.d llmbs remove >/dev/null
 
 exit 0

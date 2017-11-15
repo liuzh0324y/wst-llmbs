@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e 
+
+update-rc.d llmbs defaults >/dev/null
+
+if [ -x "/etc/init.d/llmbs" ]; then
+    if [  ! -e "/usr/local/llmbs/conf/llmbs.conf" ]; then
+        update-rc.d llmbs defaults >/dev/null
+    fi
+fi
+
+#deb-systemd-helper unmask llmbs.service >/dev/null || true
+
+#if deb-systemd-helper --quiet was-enabled llmbs.service; then
+#    deb-systemd-helper enable llmbs.service >/dev/null || true
+#else
+＃    deb-systemd-helper update-state llmbs.service >/dev/null || true
+＃fi
+
+
+exit 0

@@ -122,6 +122,8 @@ deb:
 	test -d deb/lib/systemd/system || mkdir -p deb/lib/systemd/system
 
 	cp debian/control deb/DEBIAN/control
+	cp debian/preinst deb/DEBIAN/preinst
+	cp debian/prerm deb/DEBIAN/prerm
 	cp debian/postinst deb/DEBIAN/postinst
 	cp debian/postrm  deb/DEBIAN/postrm
 	cp objs/llmbs deb/usr/local/bin
@@ -130,8 +132,8 @@ deb:
 	cp tools/video_recorder deb/usr/local/llmbs/tools/video_recorder
 	cp tools/convert.py deb/usr/local/llmbs/tools/convert.py
 	cp debian/llmbs deb/etc/init.d/llmbs
-	cp debian/llmbs.service deb/lib/systemd/system/llmbs.service
-	
+	#cp debian/llmbs.service deb/lib/systemd/system/llmbs.service
+
 	sudo dpkg -b deb llmbs_1.0.1_linux-amd64.deb
 
 undeb:

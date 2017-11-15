@@ -17,7 +17,7 @@ dostart() {
 }
 
 dostop() {
-    start-stop-daemon --stop --background --exec $DAEMON
+    start-stop-daemon --stop --exec $DAEMON
 }
 
 case "$1" in
@@ -40,3 +40,5 @@ case "$1" in
         exit 3
         ;;
 esac
+
+exit 0
