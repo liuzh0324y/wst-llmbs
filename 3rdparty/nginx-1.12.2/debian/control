@@ -1,0 +1,5 @@
+Package: nginx
+Version: 1.12.2~xenial
+Architecture: amd64
+Maintainer: Wisdom <liuzh@llvision.com>
+Description: http & rtmp server

@@ -1,0 +1,23 @@
+#!/bin/sh 
+
+OUT=out
+PREFIX=$OUT/usr/local/nginx
+VERSION=1.12.2
+PLATFORM=xenial_x64
+
+test -d $OUT/DEBIAN || mkdir -p $OUT/DEBIAN
+test -d $OUT/record || mkdir -p $OUT/record
+test -d $OUT/etc/profile.d || mkdir -p $OUT/etc/profile.d
+test -d $PREFIX/bin || mkdir -p $PREFIX/bin
+test -d $PREFIX/conf || mkdir -p $PREFIX/conf
+test -d $PREFIX/logs || mkdir -p $PREFIX/logs
+test -d $PREFIX/temp || mkdir -p $PREFIX/temp
+
+cp debian/control $OUT/DEBIAN/control
+cp debian/nginx.sh $OUT/etc/profile.d/nginx.sh
+cp debian/postinst $OUT/DEBIAN/postinst
+cp debian/postrm $OUT/DEBIAN/postrm
+cp objs/nginx $PREFIX/bin/nginx
+cp conf/* $PREFIX/conf/
+
+dpkg -b $OUT nginx_$VERSION_$PLATFORM.deb

@@ -15,6 +15,9 @@ CXXFLAGS=-pipe -std=c++11 -fPIC -g -fno-omit-frame-pointer \
 LIB=-pthread -lrt -L$(LIBPATH) -lRecordEngine -L$(EVEPATH) -levent -L$(JSONPATH) -ljsoncpp 
 INCPATH=-I. -I${TOPDIR}/agora/v1.3.0/include -I${TOPDIR}/libevent/include -I${TOPDIR}/json/include
 TARGET=objs/llmbs
+OUT=out
+VERSION=1.0.1
+PLATFORM=xenial-amd64
 
 OBJS=objs/main.o 				\
 	objs/Application.o 			\
@@ -84,13 +87,14 @@ objs/httpclient.o:
 
 install:
 	test -d '/usr/local/llmbs' || mkdir -p '/usr/local/llmbs'
+	test -d '/usr/local/llmbs/bin' || mkdir -p '/usr/local/llmbs/bin'
 	test -d '/usr/local/llmbs/conf' || mkdir -p '/usr/local/llmbs/conf'
 	test -d '/usr/local/llmbs/key' || mkdir -p '/usr/local/llmbs/key'
 	test -d '/usr/local/llmbs/logs' || mkdir -p '/usr/local/llmbs/logs'
 	test -d '/usr/local/llmbs/tools' || mkdir -p '/usr/local/llmbs/tools'
 	
-	test ! -f '/usr/local/bin/llmbs' || mv '/usr/local/bin/llmbs' '/usr/local/bin/llmbs.old' 
-	cp objs/llmbs '/usr/local/bin/llmbs'
+	test ! -f '/usr/local/llmbs/bin/llmbs' || mv '/usr/local/llmbs/bin/llmbs' '/usr/local/llmbs/bin/llmbs.old' 
+	cp objs/llmbs '/usr/local/llmbs/bin/llmbs'
 
 	test ! -f '/usr/local/llmbs/conf/llmbs.conf' || mv '/usr/local/llmbs/conf/llmbs.conf' '/usr/local/llmbs/conf/llmbs.conf.default'
 	cp conf/llmbs.conf /usr/local/llmbs/conf/llmbs.conf
@@ -108,34 +112,35 @@ install:
 	cp tools/convert.py /usr/local/llmbs/tools/convert.py
 
 remove:
-	rm -rf /usr/local/bin/llmbs*
 	rm -rf /usr/local/llmbs
 
 deb:
-	test -d deb/DEBIAN || mkdir -p deb/DEBIAN
-	test -d deb/usr/local/bin || mkdir -p deb/usr/local/bin
-	test -d deb/usr/local/llmbs/conf || mkdir -p deb/usr/local/llmbs/conf
-	test -d deb/usr/local/llmbs/logs || mkdir -p deb/usr/local/llmbs/logs
-	test -d deb/usr/local/llmbs/key || mkdir -p deb/usr/local/llmbs/key
-	test -d deb/usr/local/llmbs/tools || mkdir -p deb/usr/local/llmbs/tools
-	test -d deb/etc/init.d || mkdir -p deb/etc/init.d 
-	test -d deb/lib/systemd/system || mkdir -p deb/lib/systemd/system
+	test -d $(OUT)/DEBIAN || mkdir -p $(OUT)/DEBIAN
+	test -d $(OUT)/usr/local/llmbs/bin || mkdir -p $(OUT)/usr/local/llmbs/bin
+	test -d $(OUT)/usr/local/llmbs/conf || mkdir -p $(OUT)/usr/local/llmbs/conf
+	test -d $(OUT)/usr/local/llmbs/logs || mkdir -p $(OUT)/usr/local/llmbs/logs
+	test -d $(OUT)/usr/local/llmbs/key || mkdir -p $(OUT)/usr/local/llmbs/key
+	test -d $(OUT)/usr/local/llmbs/tools || mkdir -p $(OUT)/usr/local/llmbs/tools
+	test -d $(OUT)/etc/init.d || mkdir -p $(OUT)/etc/init.d 
+	test -d $(OUT)/etc/profile.d || mkdir -p $(OUT)/etc/profile.d
+	test -d $(OUT)/lib/systemd/system || mkdir -p $(OUT)/lib/systemd/system
 
-	cp debian/control deb/DEBIAN/control
-	cp debian/preinst deb/DEBIAN/preinst
-	cp debian/prerm deb/DEBIAN/prerm
-	cp debian/postinst deb/DEBIAN/postinst
-	cp debian/postrm  deb/DEBIAN/postrm
-	cp objs/llmbs deb/usr/local/bin
-	cp conf/llmbs.conf deb/usr/local/llmbs/conf/llmbs.conf
-	cp tools/ffmpeg deb/usr/local/llmbs/tools/ffmpeg
-	cp tools/video_recorder deb/usr/local/llmbs/tools/video_recorder
-	cp tools/convert.py deb/usr/local/llmbs/tools/convert.py
-	cp debian/llmbs deb/etc/init.d/llmbs
-	#cp debian/llmbs.service deb/lib/systemd/system/llmbs.service
+	cp debian/control $(OUT)/DEBIAN/control
+	cp debian/preinst $(OUT)/DEBIAN/preinst
+	cp debian/prerm $(OUT)/DEBIAN/prerm
+	cp debian/postinst $(OUT)/DEBIAN/postinst
+	cp debian/postrm  $(OUT)/DEBIAN/postrm
+	cp objs/llmbs $(OUT)/usr/local/llmbs/bin
+	cp conf/llmbs.conf $(OUT)/usr/local/llmbs/conf/llmbs.conf
+	cp tools/ffmpeg $(OUT)/usr/local/llmbs/tools/ffmpeg
+	cp tools/video_recorder $(OUT)/usr/local/llmbs/tools/video_recorder
+	cp tools/convert.py $(OUT)/usr/local/llmbs/tools/convert.py
+	cp debian/llmbs $(OUT)/etc/init.d/llmbs
+	cp debian/llmbs.sh $(OUT)/etc/profile.d/llmbs.sh
+	#cp debian/llmbs.service $(OUT)/lib/systemd/system/llmbs.service
 
-	sudo dpkg -b deb llmbs_1.0.1_linux-amd64.deb
+	sudo dpkg -b $(OUT) llmbs_$(VERSION)_$(PLATFORM).deb
 
 undeb:
-	rm -rf deb
-	rm -rf llmbs_1.0.1_linux-amd64.deb
+	rm -rf $(OUT)
+	rm -rf llmbs_$(VERSION)_$(PLATFORM).deb
