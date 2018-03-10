@@ -1,0 +1,12 @@
+[submodule "wst-ext/agora"]
+	path = wst-ext/agora
+	url = https://github.com/wisdomdev/agora
+	branch = master
+[submodule "wst-ext/libevent"]
+	path = wst-ext/libevent
+	url = https://github.com/wisdomdev/libevent
+	branch = master
+[submodule "wst-ext/jsoncpp"]
+	path = wst-ext/jsoncpp
+	url = https://github.com/wisdomdev/jsoncpp
+	branch = master

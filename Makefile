@@ -3,19 +3,19 @@ default:	build
 
 build:
 	test -d objs || mkdir -p objs
-	$(MAKE) -f src/Makefile
+	$(MAKE) -f wst/Makefile
 
 install:
-	$(MAKE) -f src/Makefile install
+	$(MAKE) -f wst/Makefile install
 
 remove:
-	$(MAKE) -f src/Makefile remove
+	$(MAKE) -f wst/Makefile remove
 	
 deb:
-	$(MAKE) -f src/Makefile deb
+	$(MAKE) -f wst/Makefile deb
 
 undeb:
-	$(MAKE) -f src/Makefile undeb
+	$(MAKE) -f wst/Makefile undeb
 
 clean:
 	rm -rf objs
