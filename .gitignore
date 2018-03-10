@@ -59,3 +59,10 @@ error.log
 
 # vscode
 .vscode
+
+# autoconf cachefile
+autom4te.cache
+
+configure
+configure.in
+configure.scan

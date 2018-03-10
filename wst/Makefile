@@ -30,15 +30,15 @@ OBJS=objs/main.o 				\
 	objs/httpclient.o
 
 
-SRCS=src/main.cc 				\
-	src/Application.cc 			\
-	src/recorder.cc 			\
-	src/loadconf.cc 			\
-	src/logger.cc				\
-	src/recordergroup.cc 		\
-	src/filemerge.cc			\
-	src/httpserver.cc 			\
-	src/httpclient.cc	
+SRCS=wst/main.cc 				\
+	wst/Application.cc 			\
+	wst/recorder.cc 			\
+	wst/loadconf.cc 			\
+	wst/logger.cc				\
+	wst/recordergroup.cc 		\
+	wst/filemerge.cc			\
+	wst/httpserver.cc 			\
+	wst/httpclient.cc	
 
 .PHONY: all clean
 all: $(TARGET)
@@ -51,76 +51,76 @@ $(TARGET): $(OBJS)
 
 objs/main.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/main.o 				\
-		src/main.cc
+		wst/main.cc
 
 objs/Application.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/Application.o 			\
-		src/Application.cc 
+		wst/Application.cc 
 
 objs/recorder.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/recorder.o 			\
-		src/recorder.cc
+		wst/recorder.cc
 
 objs/loadconf.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/loadconf.o 			\
-		src/loadconf.cc
+		wst/loadconf.cc
 
 objs/logger.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/logger.o 				\
-		src/logger.cc
+		wst/logger.cc
 
 objs/recordergroup.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/recordergroup.o 		\
-		src/recordergroup.cc
+		wst/recordergroup.cc
 
 objs/filemerge.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/filemerge.o 			\
-		src/filemerge.cc 
+		wst/filemerge.cc 
 
 objs/httpserver.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/httpserver.o 			\
-		src/httpserver.cc
+		wst/httpserver.cc
 
 objs/httpclient.o:
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objs/httpclient.o 			\
-		src/httpclient.cc
+		wst/httpclient.cc
 
 install:
-	test -d '/usr/local/llmbs' || mkdir -p '/usr/local/llmbs'
-	test -d '/usr/local/llmbs/bin' || mkdir -p '/usr/local/llmbs/bin'
-	test -d '/usr/local/llmbs/conf' || mkdir -p '/usr/local/llmbs/conf'
-	test -d '/usr/local/llmbs/key' || mkdir -p '/usr/local/llmbs/key'
-	test -d '/usr/local/llmbs/logs' || mkdir -p '/usr/local/llmbs/logs'
-	test -d '/usr/local/llmbs/tools' || mkdir -p '/usr/local/llmbs/tools'
+	test -d '/opt/llmbs' || mkdir -p '/opt/llmbs'
+	test -d '/opt/llmbs/bin' || mkdir -p '/opt/llmbs/bin'
+	test -d '/opt/llmbs/conf' || mkdir -p '/opt/llmbs/conf'
+	test -d '/opt/llmbs/key' || mkdir -p '/opt/llmbs/key'
+	test -d '/opt/llmbs/logs' || mkdir -p '/opt/llmbs/logs'
+	test -d '/opt/llmbs/tools' || mkdir -p '/opt/llmbs/tools'
 	
-	test ! -f '/usr/local/llmbs/bin/llmbs' || mv '/usr/local/llmbs/bin/llmbs' '/usr/local/llmbs/bin/llmbs.old' 
-	cp objs/llmbs '/usr/local/llmbs/bin/llmbs'
+	test ! -f '/opt/llmbs/bin/llmbs' || mv '/opt/llmbs/bin/llmbs' '/opt/llmbs/bin/llmbs.old' 
+	cp objs/llmbs '/opt/llmbs/bin/llmbs'
 
-	test ! -f '/usr/local/llmbs/conf/llmbs.conf' || mv '/usr/local/llmbs/conf/llmbs.conf' '/usr/local/llmbs/conf/llmbs.conf.default'
-	cp conf/llmbs.conf /usr/local/llmbs/conf/llmbs.conf
+	test ! -f '/opt/llmbs/conf/llmbs.conf' || mv '/opt/llmbs/conf/llmbs.conf' '/opt/llmbs/conf/llmbs.conf.default'
+	cp conf/llmbs.conf /opt/llmbs/conf/llmbs.conf
 
-	test ! -f '/usr/local/llmbs/key/license.key' || mv /usr/local/llmbs/key/license.key /usr/local/llmbs/key/license.key.default
-	cp key/license.key /usr/local/llmbs/key/license.key
+	test ! -f '/opt/llmbs/key/license.key' || mv /opt/llmbs/key/license.key /opt/llmbs/key/license.key.default
+	cp key/license.key /opt/llmbs/key/license.key
 
-	test ! -f /usr/local/llmbs/tools/ffmpeg || mv /usr/local/llmbs/tools/ffmpeg /usr/local/llmbs/tools/ffmpeg.old
-	cp tools/ffmpeg /usr/local/llmbs/tools/ffmpeg
+	test ! -f /opt/llmbs/tools/ffmpeg || mv /opt/llmbs/tools/ffmpeg /opt/llmbs/tools/ffmpeg.old
+	cp tools/ffmpeg /opt/llmbs/tools/ffmpeg
 
-	test ! -f /usr/local/llmbs/tools/video_recorder || mv /usr/local/llmbs/tools/video_recorder /usr/local/llmbs/tools/video_recorder.old
-	cp tools/video_recorder /usr/local/llmbs/tools/video_recorder
+	test ! -f /opt/llmbs/tools/video_recorder || mv /opt/llmbs/tools/video_recorder /opt/llmbs/tools/video_recorder.old
+	cp tools/video_recorder /opt/llmbs/tools/video_recorder
 
-	test ! -f /usr/local/llmbs/tools/convert.py || mv /usr/local/llmbs/tools/convert.py /usr/local/llmbs/tools/convert.py.default
-	cp tools/convert.py /usr/local/llmbs/tools/convert.py
+	test ! -f /opt/llmbs/tools/convert.py || mv /opt/llmbs/tools/convert.py /opt/llmbs/tools/convert.py.default
+	cp tools/convert.py /opt/llmbs/tools/convert.py
 
 remove:
-	rm -rf /usr/local/llmbs
+	rm -rf /opt/llmbs
 
 deb:
 	test -d $(OUT)/DEBIAN || mkdir -p $(OUT)/DEBIAN
-	test -d $(OUT)/usr/local/llmbs/bin || mkdir -p $(OUT)/usr/local/llmbs/bin
-	test -d $(OUT)/usr/local/llmbs/conf || mkdir -p $(OUT)/usr/local/llmbs/conf
-	test -d $(OUT)/usr/local/llmbs/logs || mkdir -p $(OUT)/usr/local/llmbs/logs
-	test -d $(OUT)/usr/local/llmbs/key || mkdir -p $(OUT)/usr/local/llmbs/key
-	test -d $(OUT)/usr/local/llmbs/tools || mkdir -p $(OUT)/usr/local/llmbs/tools
+	test -d $(OUT)/opt/llmbs/bin || mkdir -p $(OUT)/opt/llmbs/bin
+	test -d $(OUT)/opt/llmbs/conf || mkdir -p $(OUT)/opt/llmbs/conf
+	test -d $(OUT)/opt/llmbs/logs || mkdir -p $(OUT)/opt/llmbs/logs
+	test -d $(OUT)/opt/llmbs/key || mkdir -p $(OUT)/opt/llmbs/key
+	test -d $(OUT)/opt/llmbs/tools || mkdir -p $(OUT)/opt/llmbs/tools
 	test -d $(OUT)/etc/init.d || mkdir -p $(OUT)/etc/init.d 
 	test -d $(OUT)/etc/profile.d || mkdir -p $(OUT)/etc/profile.d
 	test -d $(OUT)/lib/systemd/system || mkdir -p $(OUT)/lib/systemd/system
@@ -130,11 +130,11 @@ deb:
 	cp debian/prerm $(OUT)/DEBIAN/prerm
 	cp debian/postinst $(OUT)/DEBIAN/postinst
 	cp debian/postrm  $(OUT)/DEBIAN/postrm
-	cp objs/llmbs $(OUT)/usr/local/llmbs/bin
-	cp conf/llmbs.conf $(OUT)/usr/local/llmbs/conf/llmbs.conf
-	cp tools/ffmpeg $(OUT)/usr/local/llmbs/tools/ffmpeg
-	cp tools/video_recorder $(OUT)/usr/local/llmbs/tools/video_recorder
-	cp tools/convert.py $(OUT)/usr/local/llmbs/tools/convert.py
+	cp objs/llmbs $(OUT)/opt/llmbs/bin
+	cp conf/llmbs.conf $(OUT)/opt/llmbs/conf/llmbs.conf
+	cp tools/ffmpeg $(OUT)/opt/llmbs/tools/ffmpeg
+	cp tools/video_recorder $(OUT)/opt/llmbs/tools/video_recorder
+	cp tools/convert.py $(OUT)/opt/llmbs/tools/convert.py
 	cp debian/llmbs $(OUT)/etc/init.d/llmbs
 	cp debian/llmbs.sh $(OUT)/etc/profile.d/llmbs.sh
 	#cp debian/llmbs.service $(OUT)/lib/systemd/system/llmbs.service
