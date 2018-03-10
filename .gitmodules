@@ -10,3 +10,7 @@
 	path = wst-ext/jsoncpp
 	url = https://github.com/wisdomdev/jsoncpp
 	branch = master
+[submodule "wst-common"]
+	path = wst-common
+	url = https://github.com/wisdomdev/wst-common
+	branch = master
