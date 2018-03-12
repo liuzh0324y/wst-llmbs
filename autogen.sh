@@ -12,6 +12,9 @@ test -n "$srcdir" || srcdir=.
 olddir=`pwd`
 cd "$srcdir"
 
+package=llmbs
+srcfile=llmbs.doap
+
 # Make sure we have wst-common
 if test ! -f wst-common/wst-autogen.sh;
 then
@@ -28,6 +31,8 @@ then
     exit 1
 fi
 . wst-common/wst-autogen.sh
+
+autogen_options $@
 
 printf "+ check for build tools"
 if test -z "$NOCHECK"; then
@@ -49,3 +54,45 @@ if test -z "$NOCHECK"; then
 else
     echo ": skipped version checks"
 fi
+
+# if no arguments specified then this will be printed
+if test -z "$*" && test -z "$NOCONFIGURE"; then
+    echo "+ checking for autogen.sh options"
+    echo "  This autogen script will automatically run ./configure as:"
+    echo "  ./configure $CONFIGURE_DEF_OPT"
+    echo "  To pass any additional options, please specify them on the $0"
+    echo "  commond line."
+fi
+
+toplevel_check $srcfile
+
+# autopoint
+if test -d po && grep ^AM_GNU_GETTEXT_VERSION configure.ac >/dev/null; then
+    tool_run "autopoint" "--force"
+fi
+
+# aclocal
+if test -f acinclude.m4; then rm acinclude.m4; fi
+
+autoreconf --force --install || exit 1
+
+test -n "$NOCONFIGURE" && {
+    echo "+ skipping configure stage for package $package, as requested."
+    echo "+ autogen.sh done."
+    exit 0
+}
+
+cd "$olddir"
+
+echo "+ running configure"
+test ! -z "$CONFIGURE_DEF_OPT" && echo "  default flags: $CONFIGURE_DEF_OPT"
+test ! -z "$CONFIGURE_EXT_OPT" && echo "  external flags: $CONFIGURE_EXT_OPT"
+echo
+
+echo "$srcdir/configure" $CONFIGURE_DEF_OPT $CONFIGURE_EXT_OPT
+"$srcdir/configure" $CONFIGURE_DEF_OPT $CONFIGURE_EXT_OPT || {
+    echo "  configure failed"
+    exit 1
+}
+
+echo "Now type 'make' to compile $package"
