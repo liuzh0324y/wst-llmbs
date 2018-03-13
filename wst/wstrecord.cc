@@ -1,7 +1,7 @@
-#include "recorder.h"
-#include "filemerge.h"
-#include "httpclient.h"
-#include "loadconf.h"
+#include "wstrecord.h"
+#include "wstfile.h"
+#include "wstclient.h"
+#include "wstconf.h"
 
 #include <dirent.h>
 

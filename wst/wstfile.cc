@@ -1,4 +1,4 @@
-#include "filemerge.h"
+#include "wstfile.h"
 
 #include <iostream>
 using std::cout;

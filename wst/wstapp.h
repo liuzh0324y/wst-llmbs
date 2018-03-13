@@ -1,7 +1,7 @@
 #ifndef _SERVERAPP_H_
 #define _SERVERAPP_H_
 
-#include "httpserver.h"
+#include "wsthttp.h"
 
 class AgoraRecorder;
 

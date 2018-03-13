@@ -1,5 +1,5 @@
-#include "httpserver.h"
-#include "loadconf.h"
+#include "wsthttp.h"
+#include "wstconf.h"
 
 #include <sys/stat.h>
 #include <sys/socket.h>

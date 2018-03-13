@@ -1,7 +1,7 @@
-#include "recordergroup.h"
-#include "loadconf.h"
-#include "recorder.h"
-#include "httpclient.h"
+#include "wstrecordgroup.h"
+#include "wstconf.h"
+#include "wstrecord.h"
+#include "wstclient.h"
 
 RecorderGroup::RecorderGroup()
 {

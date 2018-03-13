@@ -1,7 +1,7 @@
-#include "Application.h"
-#include "recorder.h"
-#include "loadconf.h"
-#include "logger.h"
+#include "wstapp.h"
+#include "wstrecord.h"
+#include "wstconf.h"
+#include "wstlog.h"
 
 #include <csignal>
 #include <thread>

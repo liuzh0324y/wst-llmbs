@@ -1,4 +1,4 @@
-#include "Application.h"
+#include "wstapp.h"
 
 int main(int argc, char **argv)
 {

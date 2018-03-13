@@ -1,4 +1,4 @@
-#include "loadconf.h"
+#include "wstconf.h"
 
 loadconf *loadconf::_instance = NULL;
 mutex loadconf::_lock;
