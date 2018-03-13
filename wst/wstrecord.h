@@ -27,7 +27,7 @@ class Recorder : public agora::recording::IRecordingEngineEventHandler
 {
 public:
     Recorder();
-    ~Recorder();
+    virtual ~Recorder();
 
     bool createChannel(const string &appid, const string &channelKey, const string &channelId, uid_t uid,
             bool decodeAudio, bool decodeVideo, agora::recording::RecordingConfig &config);
@@ -45,17 +45,17 @@ public:
     string storagepath();
     
 private:
-    virtual void onError(int error);
+    virtual void onError(int error, agora::linuxsdk::STAT_CODE_TYPE stat_code);
     virtual void onWarning(int warn);
 
     virtual void onJoinChannelSuccess(const char *channelId, uid_t uid);
-    virtual void onLeaveChannel();
+    virtual void onLeaveChannel(agora::linuxsdk::LEAVE_PATH_CODE code);
 
-    virtual void onUserJoined(uid_t uid, agora::recording::UserJoinInfos &infos);
-    virtual void onUserOffline(uid_t uid, agora::recording::USER_OFFLINE_REASON_TYPE reason);
+    virtual void onUserJoined(uid_t uid, agora::linuxsdk::UserJoinInfos &infos);
+    virtual void onUserOffline(uid_t uid, agora::linuxsdk::USER_OFFLINE_REASON_TYPE reason);
 
-    virtual const void audioFrameReceived(unsigned int uid, const agora::recording::AudioFrame *frame);
-    virtual const void videoFrameReceived(unsigned int uid, const agora::recording::VideoFrame *frame);
+    virtual void audioFrameReceived(unsigned int uid, const agora::linuxsdk::AudioFrame *frame) const;
+    virtual void videoFrameReceived(unsigned int uid, const agora::linuxsdk::VideoFrame *frame) const;
 
     void readFileList(string uid, string baseDir);
 
@@ -63,7 +63,7 @@ private:
     atomic_bool_t _stopped;
     agora::recording::IRecordingEngine *_recorder;
 
-    vector<agora::recording::uid_t> _peers;
+    vector<agora::linuxsdk::uid_t> _peers;
     map<string, string> _userinfo;
 
     string _channel;

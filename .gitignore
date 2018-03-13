@@ -63,6 +63,9 @@ error.log
 # autoconf cachefile
 autom4te.cache
 
+ext
+wst/.deps
+
 configure
 configure.in
 configure.scan

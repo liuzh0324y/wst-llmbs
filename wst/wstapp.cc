@@ -84,15 +84,15 @@ void WstApp::sub1_thread()
     // closedir(dir);
     while (!_is_quit)
     {
-        statfs(loadconf::instance().recordpath().c_str(), &diskinfo);
+        statfs(WstConf::instance().recordpath().c_str(), &diskinfo);
         unsigned long long totalBlocks = diskinfo.f_bsize;
         unsigned long long freeDisk = diskinfo.f_bfree * totalBlocks;
         size_t mbFreedisk = freeDisk>>20;
-        if (mbFreedisk < loadconf::instance().freedisk())
+        if (mbFreedisk < WstConf::instance().freedisk())
         {
             httpclient::instance().reportstatus(DISKFULL, "disk full");
         }
-        // cout << loadconf::instance().recordpath() << "; free disk: " << mbFreedisk << endl;
+        // cout << WstConf::instance().recordpath() << "; free disk: " << mbFreedisk << endl;
         sleep(60*60);
     }
 }
@@ -101,7 +101,7 @@ void WstApp::sub2_thread()
 {
     while (!_is_quit)
     {
-        sleep(loadconf::instance().keeplivetime());
+        sleep(WstConf::instance().keeplivetime());
         httpclient::instance().keeplive();
     }
 }
@@ -215,22 +215,22 @@ int WstApp::ParseOption(int argc, char ** argv)
 
 int WstApp::Run()
 {
-    logger::instance().init();
-    loadconf::instance().load_config_file();
-    loadconf::instance().load_license_file();
+    WstLog::instance().init();
+    WstConf::instance().load_config_file();
+    WstConf::instance().load_license_file();
 
     LOGW("server app start");
 
     // signal(SIGINT, fSignalHandler);
-    std::thread worker(&Application::main_thread, this);
-    std::thread sub1(&Application::sub1_thread, this);
-    std::thread sub2(&Application::sub2_thread, this);
+    std::thread worker(&WstApp::main_thread, this);
+    std::thread sub1(&WstApp::sub1_thread, this);
+    std::thread sub2(&WstApp::sub2_thread, this);
     worker.join();
     sub1.join();
     sub2.join();
 
     LOGW("server app stop");
-    logger::instance().free();
+    WstLog::instance().free();
 
     return 0;
 }

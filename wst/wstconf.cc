@@ -1,9 +1,9 @@
 #include "wstconf.h"
 
-loadconf *loadconf::_instance = NULL;
-mutex loadconf::_lock;
+WstConf *WstConf::_instance = NULL;
+mutex WstConf::_lock;
 
-loadconf::loadconf()
+WstConf::WstConf()
 {
     _seqnum = 0;
     _freedisk = 300;
@@ -13,18 +13,18 @@ loadconf::loadconf()
     _applitepath = "/usr/local/llmbs/tools";
 }
 
-loadconf::~loadconf()
+WstConf::~WstConf()
 {
 
 }
 
-loadconf& loadconf::instance()
+WstConf& WstConf::instance()
 {    
-    static loadconf theloadconf;
+    static WstConf theloadconf;
     return theloadconf;
 }
 
-bool loadconf::load_config_file(string file)
+bool WstConf::load_config_file(string file)
 {
     vector<string> filevec;
     _input.open(file);
@@ -51,7 +51,7 @@ bool loadconf::load_config_file(string file)
     return true;
 }
 
-bool loadconf::load_license_file(string file)
+bool WstConf::load_license_file(string file)
 {
     ofstream fs;
     try
@@ -70,7 +70,7 @@ bool loadconf::load_license_file(string file)
     return true;
 }
 
-string loadconf::_parse_conf(string input)
+string WstConf::_parse_conf(string input)
 {
     if (input.empty())
     {
@@ -169,7 +169,7 @@ string loadconf::_parse_conf(string input)
     return string();
 }
 
-string loadconf::_parse_conf(vector<string> &filelist)
+string WstConf::_parse_conf(vector<string> &filelist)
 {
     vector<string>::iterator iter = filelist.begin();
     for (iter; iter != filelist.end(); iter++)
@@ -302,7 +302,7 @@ static void getcpuid(char *id)
                                       dx[0], dx[1], dx[2]);
 }
 
-string loadconf::number()
+string WstConf::number()
 {
     char cpuid[100];
     getcpuid(cpuid);
@@ -310,241 +310,241 @@ string loadconf::number()
     return cpuid;
 }
 
-uint32_t loadconf::seqnum()
+uint32_t WstConf::seqnum()
 {
     return _seqnum++;
 }
 
 // user name
-string loadconf::username()
+string WstConf::username()
 {
     return _username;
 }
 
-void   loadconf::setusername(const string& name)
+void   WstConf::setusername(const string& name)
 {
     _username = name;
 }
 
 
 // user password
-string loadconf::password()
+string WstConf::password()
 {
     return _password;
 }
 
-void   loadconf::setpassword(const string& password)
+void   WstConf::setpassword(const string& password)
 {
     _password = password;
 }
 
 
 // local ip
-string loadconf::localip()
+string WstConf::localip()
 {
     return _localip;
 }
 
-void   loadconf::setlocalip(const string& ip)
+void   WstConf::setlocalip(const string& ip)
 {
     _localip = ip;
 }
 
 
 // local port
-string loadconf::localport()
+string WstConf::localport()
 {
     return _localport;
 }
 
-void   loadconf::setlocalport(const string& port)
+void   WstConf::setlocalport(const string& port)
 {
     _localport = port;
 }
 
 
 // server ip
-string loadconf::serverip()
+string WstConf::serverip()
 {
     return _serverIp;
 }
 
-void   loadconf::setserverip(const string& ip)
+void   WstConf::setserverip(const string& ip)
 {
     _serverIp = ip;
 }
 
 
 // server port
-string loadconf::serverport()
+string WstConf::serverport()
 {
     return _serverPort;
 }
 
-void   loadconf::setserverport(const string& port)
+void   WstConf::setserverport(const string& port)
 {
     _serverPort = port;
 }
 
 
 // connect timeout
-uint32_t loadconf::connecttimeout()
+uint32_t WstConf::connecttimeout()
 {
     return _connectTimeout;
 }
 
-void   loadconf::setconnectimeout(const uint32_t& timeout)
+void   WstConf::setconnectimeout(const uint32_t& timeout)
 {
     _connectTimeout = timeout;
 }
 
 
 // send timeout
-uint32_t loadconf::sendtimeout()
+uint32_t WstConf::sendtimeout()
 {
     return _sendTimeout;
 }
 
-void   loadconf::setsendtimeout(const uint32_t& timeout)
+void   WstConf::setsendtimeout(const uint32_t& timeout)
 {
     _sendTimeout = timeout;
 }
 
 
 // recv timeout
-uint32_t loadconf::recvtimeout()
+uint32_t WstConf::recvtimeout()
 {
     return _recvTimeout;
 }
 
-void   loadconf::setrecvtimeout(const uint32_t& timeout)
+void   WstConf::setrecvtimeout(const uint32_t& timeout)
 {
     _recvTimeout = timeout;
 }
 
 
 // record path
-string loadconf::recordpath()
+string WstConf::recordpath()
 {
     return _recordpath;
 }
 
-void   loadconf::setrecordpath(const string& path)
+void   WstConf::setrecordpath(const string& path)
 {
     _recordpath = path;
 }
 
 
 // logs path
-string loadconf::logspath()
+string WstConf::logspath()
 {
     return _logspath;
 }
 
-void   loadconf::setlogspath(const string& path)
+void   WstConf::setlogspath(const string& path)
 {
     _logspath = path;
 }
 
 
 // applite path
-string loadconf::applitepath()
+string WstConf::applitepath()
 {
     return _applitepath;
 }
 
-void   loadconf::setapplitepath(const string& path)
+void   WstConf::setapplitepath(const string& path)
 {
     _applitepath = path;
 }
 
 
 // group id
-string loadconf::groupid()
+string WstConf::groupid()
 {
     return _groupid;
 }
 
-void   loadconf::setgroupid(const string& id)
+void   WstConf::setgroupid(const string& id)
 {
     _groupid = id;
 }
 
 
 // server type
-string loadconf::servertype()
+string WstConf::servertype()
 {
     return _type;
 }
 
-void   loadconf::setservertype(const string& type)
+void   WstConf::setservertype(const string& type)
 {
     _type = type;
 }
 
 
 // http path
-string loadconf::httppath()
+string WstConf::httppath()
 {
     return _httppath;
 }
 
-void   loadconf::sethttppath(const string& path)
+void   WstConf::sethttppath(const string& path)
 {
     _httppath = path;
 }
 
 
 // http port
-string loadconf::httpport()
+string WstConf::httpport()
 {
     return _httpport;
 }
 
-void   loadconf::sethttpport(const string& port)
+void   WstConf::sethttpport(const string& port)
 {
     _httpport = port;
 }
 
 
 // rtmp port
-string loadconf::rtmpport()
+string WstConf::rtmpport()
 {
     return _rtmpport;
 }
 
-void   loadconf::setrtmpport(const string& port)
+void   WstConf::setrtmpport(const string& port)
 {
     _rtmpport = port;
 }
 
 // free disk
-uint32_t loadconf::freedisk()
+uint32_t WstConf::freedisk()
 {
     return _freedisk;
 }
 
-void     loadconf::setfreedisk(const int size)
+void     WstConf::setfreedisk(const int size)
 {
     _freedisk = size;
 }
 
-uint32_t loadconf::keeplivetime()
+uint32_t WstConf::keeplivetime()
 {
     return _keeplive;
 }
 
-void     loadconf::setkeeplivetime(const int timeout)
+void     WstConf::setkeeplivetime(const int timeout)
 {
     _keeplive = timeout;
 }
 
-uint32_t loadconf::idleLimitSec()
+uint32_t WstConf::idleLimitSec()
 {
     return _idleLimitSec;
 }
 
-void     loadconf::setIdleLimitSec(const uint32_t sec)
+void     WstConf::setIdleLimitSec(const uint32_t sec)
 {
     _idleLimitSec = sec;
 }

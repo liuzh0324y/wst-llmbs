@@ -53,7 +53,7 @@ struct http_request_post
 class httpclient 
 {
 public:
-    // get loadconf instance
+    // get WstConf instance
     static httpclient& instance();
 
     void login();

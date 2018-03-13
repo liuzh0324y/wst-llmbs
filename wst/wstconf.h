@@ -7,11 +7,11 @@
  * # note identity
  * TEST= vlaue identity
  */
-class loadconf
+class WstConf
 {
 public:
-    // get loadconf instance
-    static loadconf& instance();
+    // get WstConf instance
+    static WstConf& instance();
     // load config file
     bool load_config_file(string file="/usr/local/llmbs/conf/llmbs.conf");
     // create license
@@ -83,14 +83,14 @@ public:
     uint32_t seqnum();
 
 private:
-    loadconf();
-    ~loadconf();
+    WstConf();
+    ~WstConf();
     // parser config file
     string _parse_conf(string input);
     string _parse_conf(vector<string> &input);
     
 protected:
-    static loadconf     *_instance;
+    static WstConf     *_instance;
     static mutex         _lock;
     ifstream             _input;
     uint32_t             _seqnum;

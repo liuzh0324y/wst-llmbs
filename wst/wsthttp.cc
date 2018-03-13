@@ -1,5 +1,6 @@
 #include "wsthttp.h"
 #include "wstconf.h"
+#include "wstlog.h"
 
 #include <sys/stat.h>
 #include <sys/socket.h>
@@ -109,9 +110,9 @@ void httpserver::set_common_json(Json::Value &node)
     node["from"] = _header.from;
     node["to"] = _header.to;
     node["command"] = _header.command;
-    node["type"] = loadconf::instance().servertype();
+    node["type"] = WstConf::instance().servertype();
     node["number"] = _header.number;
-    node["groupid"] = loadconf::instance().groupid();
+    node["groupid"] = WstConf::instance().groupid();
 }
 
 string httpserver::parse_json(string jsonstr)
@@ -123,8 +124,8 @@ string httpserver::parse_json(string jsonstr)
 
     parse_common_json(jsonstr);
     set_common_json(result);
-    result["from"] = loadconf::instance().number(); // rand;
-    result["to"] = loadconf::instance().number(); // rand;
+    result["from"] = WstConf::instance().number(); // rand;
+    result["to"] = WstConf::instance().number(); // rand;
     
     // check
     time_t curtime;
@@ -370,11 +371,11 @@ void httpserver::worker_thread()
 
     evhttp_set_gencb(_http, request_handler, this);
 
-    _handle = evhttp_bind_socket_with_handle(_http, "0.0.0.0", stoi(loadconf::instance().localport()));
+    _handle = evhttp_bind_socket_with_handle(_http, "0.0.0.0", stoi(WstConf::instance().localport()));
     if (!_handle)
     {
         string log("couldn't bind to port: ");
-        log.append(loadconf::instance().localport());
+        log.append(WstConf::instance().localport());
         LOGW(log);
         return;
     }

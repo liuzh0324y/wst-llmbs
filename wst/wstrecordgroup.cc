@@ -2,6 +2,7 @@
 #include "wstconf.h"
 #include "wstrecord.h"
 #include "wstclient.h"
+#include "wstlog.h"
 
 RecorderGroup::RecorderGroup()
 {
@@ -30,10 +31,10 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
     string decryptionMode;
     string secret;
 
-    int idleLimitSec=loadconf::instance().idleLimitSec();
-    string applitePath=loadconf::instance().applitepath();
-    string appliteLogPath=loadconf::instance().logspath();
-    string recordFileRootDir=loadconf::instance().recordpath();
+    int idleLimitSec=WstConf::instance().idleLimitSec();
+    string applitePath=WstConf::instance().applitepath();
+    string appliteLogPath=WstConf::instance().logspath();
+    string recordFileRootDir=WstConf::instance().recordpath();
 
     int lowUdpPort = 0;
     int highUdpPort = 0;
@@ -56,10 +57,10 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
         uid, appId.c_str(), channelId.c_str());
 
     _appid = appId;
-    Recorder *recorder = new Recorder();
+    Recorder *recorder = new Recorder;
     agora::recording::RecordingConfig config;
     config.idleLimitSec = idleLimitSec;
-    config.channelProfile = static_cast<agora::recording::CHANNEL_PROFILE_TYPE>(channelProfile);
+    config.channelProfile = static_cast<agora::linuxsdk::CHANNEL_PROFILE_TYPE>(channelProfile);
 
     config.isAudioOnly = isAudioOnly;
     config.isMixingEnabled = isMixingEnabled;
@@ -74,8 +75,8 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
     config.lowUdpPort = lowUdpPort;
     config.highUdpPort = highUdpPort;
 
-    config.decodeAudio = false; 
-    config.decodeVideo = false;
+    config.decodeAudio = agora::linuxsdk::AUDIO_FORMAT_DEFAULT_TYPE; 
+    config.decodeVideo = agora::linuxsdk::VIDEO_FORMAT_DEFAULT_TYPE;
 
     // cout << "  >> appId[must]: " << appId << endl;
     // cout << "  >> channelKey[option]: " << (channelKey.empty()?"NULL":channelKey) << endl;
@@ -273,7 +274,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     string tmpstr = (*iter).name.substr(0, pos);
     string outfile = tmpstr + ".mp4";
 
-    string out = loadconf::instance().recordpath()+"/"+outfile;
+    string out = WstConf::instance().recordpath()+"/"+outfile;
     string mixpath = "python /usr/local/llmbs/tools/convert.py ";
     mixpath.append((*iter).path);   // python convert.py inpath
     mixpath.append(" ");
@@ -290,7 +291,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     // cout << "mixmedia: "<< mixfile << endl;
 
     // picture
-    string picfile = loadconf::instance().recordpath()+"/"+tmpstr+".jpeg";
+    string picfile = WstConf::instance().recordpath()+"/"+tmpstr+".jpeg";
     string command_pic = "/usr/local/llmbs/tools/ffmpeg -i ";
     command_pic.append(out);
     command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
@@ -304,7 +305,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     outinfo.name = outfile;
     outinfo.pic = tmpstr+".jpeg";
     outinfo.type = "mp4";
-    outinfo.path = loadconf::instance().recordpath();
+    outinfo.path = WstConf::instance().recordpath();
     outinfo.channel = channel;
 
     LOGW("MIX FILES REPORT FILE.");

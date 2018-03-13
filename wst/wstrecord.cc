@@ -2,6 +2,7 @@
 #include "wstfile.h"
 #include "wstclient.h"
 #include "wstconf.h"
+#include "wstlog.h"
 
 #include <dirent.h>
 
@@ -78,7 +79,7 @@ int Recorder::setVideoMixLayout()
 {
     LOG(INFO, "setVideoMixLayout: user size: %d", _peers.size());
 
-	agora::recording::VideoMixingLayout layout;
+	agora::linuxsdk::VideoMixingLayout layout;
 	layout.canvasWidth = 1280;
 	layout.canvasHeight = 720;
 	layout.backgroundColor = "#23b9dc";
@@ -88,7 +89,7 @@ int Recorder::setVideoMixLayout()
 	if (!_peers.empty())
 	{
 		LOG(INFO, "setVideoMixLayout: peers not empty");
-		agora::recording::VideoMixingLayout::Region *regionList = new agora::recording::VideoMixingLayout::Region[_peers.size()];
+		agora::linuxsdk::VideoMixingLayout::Region *regionList = new agora::linuxsdk::VideoMixingLayout::Region[_peers.size()];
 		
 		regionList[0].uid = _peers[0];
 		regionList[0].x = 0.f;		
@@ -147,7 +148,7 @@ int Recorder::setVideoMixLayout()
 	return 0;
 }
 
-void Recorder::onError(int error)
+void Recorder::onError(int error, agora::linuxsdk::STAT_CODE_TYPE stat_code)
 {
 	string out = "AgoraRecorder::Error: ";
 	out.append(T_as_string(error));
@@ -194,25 +195,25 @@ void Recorder::onJoinChannelSuccess(const char *channelId, uid_t uid)
 	LOGW(out);
 }
 
-void Recorder::onLeaveChannel()
+void Recorder::onLeaveChannel(agora::linuxsdk::LEAVE_PATH_CODE code)
 {
 	LOGW("leave channel");
 }
 
-void Recorder::onUserJoined(unsigned uid, agora::recording::UserJoinInfos &infos)
+void Recorder::onUserJoined(unsigned uid, agora::linuxsdk::UserJoinInfos &infos)
 {
 	// cout << "User " << uid << " joined, RecordingDir:" << (infos.recordingDir ? infos.recordingDir : "NULL") << endl;
 	string out = "User ";
 	out.append(T_as_string(uid));
-	out.append(" joined, RecordingDir:");
-	out.append(infos.recordingDir ? infos.recordingDir : "NULL");
+	out.append(" joined, storageDir:");
+	out.append(infos.storageDir ? infos.storageDir : "NULL");
 	LOGW(out);
 	_peers.push_back(uid);
-	_userinfo.insert(make_pair(convertToStdString(uid),infos.recordingDir));
+	_userinfo.insert(make_pair(convertToStdString(uid),infos.storageDir));
 	setVideoMixLayout();
 }
 
-void Recorder::onUserOffline(unsigned uid, agora::recording::USER_OFFLINE_REASON_TYPE reason)
+void Recorder::onUserOffline(unsigned uid, agora::linuxsdk::USER_OFFLINE_REASON_TYPE reason)
 {
 	// When the user is offline after reporting file information.
 	string out = "User ";
@@ -232,12 +233,12 @@ void Recorder::onUserOffline(unsigned uid, agora::recording::USER_OFFLINE_REASON
 	setVideoMixLayout();
 }
 
-const void Recorder::audioFrameReceived(unsigned int uid, const agora::recording::AudioFrame *frame)
+void Recorder::audioFrameReceived(unsigned int uid, const agora::linuxsdk::AudioFrame *frame) const
 {
 
 }
 
-const void Recorder::videoFrameReceived(unsigned int uid, const agora::recording::VideoFrame *frame)
+void Recorder::videoFrameReceived(unsigned int uid, const agora::linuxsdk::VideoFrame *frame) const
 {
 
 }
