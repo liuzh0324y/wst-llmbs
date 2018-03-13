@@ -1,5 +1,5 @@
-#ifndef _FILE_MERGE_H_
-#define _FILE_MERGE_H_
+#ifndef WST_FILE_H
+#define WST_FILE_H
 
 #include "config.h"
 
@@ -13,4 +13,4 @@ public:
     void merge(string dest, string src, ...);
 };
 
-#endif // _FILE_MERGE_H_
+#endif // WST_FILE_H

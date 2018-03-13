@@ -8,8 +8,8 @@ AC_INIT(llmbs,2.0.1,liuzhihuic@qq.com)
 AG_WST_INIT
 
 dnl initialize automake (we require GNU make)
-# AM_INIT_AUTOMAKE([-Wno-portability 1.14 no-dist-gzip dist-xz tar-ustar subdir-objects])
-AM_INIT_AUTOMAKE(llmbs, 2.0.1)
+AM_INIT_AUTOMAKE([-Wno-portability 1.14 no-dist-gzip dist-xz tar-ustar subdir-objects])
+# AM_INIT_AUTOMAKE(llmbs, 2.0.1)
 
 dnl define PACKAGE_VERSION_* variables
 # AS_VERSION
@@ -31,6 +31,7 @@ AC_SUBST(WST_VERSION_NANO)
 
 dnl Add parameters for aclocal (keep in sync with Makefile.am)
 AC_SUBST(ACLOCAL_AMFLAGS, "-I m4 -I wst-common/m4")
+
 
 AC_CONFIG_FILES(
     Makefile

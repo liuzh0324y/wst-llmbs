@@ -1,30 +1,30 @@
 #include "wstlog.h"
 #include <ctime>
 
-logger::logger()
+WstLog::WstLog()
 {
 
 }
 
-logger& logger::instance()
+WstLog& WstLog::instance()
 {
-    static logger theLogger;
+    static WstLog theLogger;
     return theLogger;
 }
 
-bool    logger::init(string filename)
+bool    WstLog::init(string filename)
 {
     _OutFile.open(filename, ofstream::out | ofstream::app);
     LOGW("load logger file.");
     return true;
 }
 
-void    logger::free()
+void    WstLog::free()
 {
     _OutFile.close();
 }
 
-int     logger::write(string message)
+int     WstLog::write(string message)
 {
     ostringstream oss;
     time_t now = time(0);
@@ -36,13 +36,13 @@ int     logger::write(string message)
     return 0;
 }
 
-int     logger::write_console(string message)
+int     WstLog::write_console(string message)
 {
     cout << message << endl;
     return message.length();
 }
 
-int     logger::write_file(string message)
+int     WstLog::write_file(string message)
 {
     _OutFile << message << endl;
     _OutFile.flush();

@@ -1,15 +1,15 @@
-#ifndef _SERVERAPP_H_
-#define _SERVERAPP_H_
+#ifndef WST_APP_H
+#define WST_APP_H
 
 #include "wsthttp.h"
 
 class AgoraRecorder;
 
-class Application
+class WstApp
 {
 public:
-    Application();
-    ~Application();
+    WstApp();
+    ~WstApp();
 
     int Run();
     int Run(int argc, char ** argv);
@@ -31,4 +31,4 @@ private:
     static bool _is_quit;
 };
 
-#endif // _SERVERAPP_H_
+#endif // WST_APP_H

@@ -1,5 +1,5 @@
-#ifndef _RECORDER_GROUP_H_
-#define _RECORDER_GROUP_H_
+#ifndef WST_RECORDGROUP_H
+#define WST_RECORDGROUP_H
 
 #include "config.h"
 #include <iostream>
@@ -58,4 +58,4 @@ private:
     string _appid;
 };
 
-#endif // _RECORDER_GROUP_H_
+#endif // WST_RECORDGROUP_H

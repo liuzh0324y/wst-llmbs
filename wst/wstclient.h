@@ -1,5 +1,5 @@
-#ifndef _HTTP_CLIENT_H_
-#define _HTTP_CLIENT_H_
+#ifndef WST_CLIENT_H
+#define WST_CLIENT_H
 
 #include "config.h"
 
@@ -93,4 +93,4 @@ private:
     static int          _maxchannel;
 };
 
-#endif // _HTTP_CLIENT_H_
+#endif // WST_CLIENT_H

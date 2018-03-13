@@ -9,19 +9,19 @@
 #include <sys/vfs.h>
 #include <sys/stat.h>
 
-bool Application::_is_quit = false;
+bool WstApp::_is_quit = false;
 
-Application::Application()
+WstApp::WstApp()
 {
 
 }
 
-Application::~Application()
+WstApp::~WstApp()
 {
 
 }
 
-void Application::main_thread()
+void WstApp::main_thread()
 {
     // http server
     httpserver http;
@@ -31,7 +31,7 @@ void Application::main_thread()
     http.http_server_free();
 }
 
-void Application::sub1_thread()
+void WstApp::sub1_thread()
 {
     struct statfs diskinfo;
     // DIR *dir = opendir(loadconf::instance().recordpath().c_str());
@@ -97,7 +97,7 @@ void Application::sub1_thread()
     }
 }
 
-void Application::sub2_thread()
+void WstApp::sub2_thread()
 {
     while (!_is_quit)
     {
@@ -106,7 +106,7 @@ void Application::sub2_thread()
     }
 }
 
-void Application::fSignalHandler(int signum)
+void WstApp::fSignalHandler(int signum)
 {
     _is_quit = true;
    
@@ -115,12 +115,12 @@ void Application::fSignalHandler(int signum)
 }
 
 
-void Application::InitSignals()
+void WstApp::InitSignals()
 {
 
 }
 
-int Application::Daemon()
+int WstApp::Daemon()
 {
     int fd;
 
@@ -170,7 +170,7 @@ int Application::Daemon()
     return 0;
 }
 
-int Application::ParseOption(int argc, char ** argv)
+int WstApp::ParseOption(int argc, char ** argv)
 {
     char *p;
     
@@ -213,7 +213,7 @@ int Application::ParseOption(int argc, char ** argv)
     return 0;
 }
 
-int Application::Run()
+int WstApp::Run()
 {
     logger::instance().init();
     loadconf::instance().load_config_file();
@@ -235,7 +235,7 @@ int Application::Run()
     return 0;
 }
 
-int Application::Run(int argc, char ** argv)
+int WstApp::Run(int argc, char ** argv)
 {
     if (ParseOption(argc, argv) != 0)
     {

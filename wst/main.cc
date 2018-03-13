@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv)
 {
-    Application app;
+    WstApp app;
 
     // return app.Run(argc, argv);
     return app.Run();

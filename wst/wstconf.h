@@ -1,5 +1,5 @@
-#ifndef _LOAD_CONF_H_
-#define _LOAD_CONF_H_
+#ifndef WST_CONF_H
+#define WST_CONF_H
 
 #include "config.h"
 
@@ -155,4 +155,4 @@ std::string T_as_string(const T& t)
     return ost.str();
 }
 
-#endif // _LOAD_CONF_H_
+#endif // WST_CONF_H

@@ -1,5 +1,5 @@
-#ifndef _AGORA_RECORDER_H_
-#define _AGORA_RECORDER_H_
+#ifndef WST_RECORD_H
+#define WST_RECORD_H
 
 #include "config.h"
 
@@ -78,4 +78,4 @@ string convertToStdString(T value)
     return ss.str();
 }
 
-#endif // _AGORA_RECORDER_H_
+#endif // WST_RECORD_H

@@ -1,5 +1,5 @@
-#ifndef _HTTP_SERVER_H_
-#define _HTTP_SERVER_H_
+#ifndef WST_HTTP_H
+#define WST_HTTP_H
 
 #include "wstrecordgroup.h"
 #include "wstclient.h"
@@ -80,4 +80,4 @@ private:
     RecorderGroup _recorderGroup;
 };
 
-#endif // _HTTP_SERVER_H_
+#endif // WST_HTTP_H

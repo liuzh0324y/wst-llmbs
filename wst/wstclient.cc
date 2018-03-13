@@ -1,5 +1,5 @@
-#include "httpclient.h"
-#include "loadconf.h"
+#include "wstclient.h"
+#include "wstconf.h"
 #include <string>
 
 string       httpclient::_token;

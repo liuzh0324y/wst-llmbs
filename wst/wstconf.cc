@@ -47,7 +47,7 @@ bool loadconf::load_config_file(string file)
     _input.close();
 
     _parse_conf(filevec);
-    LOGW("load config file.");
+    // LOGW("load config file.");
     return true;
 }
 
@@ -66,7 +66,7 @@ bool loadconf::load_license_file(string file)
         std::cerr << "exception: " << e.what() << endl;
     }
     
-    LOGW("load license file.");
+    // LOGW("load license file.");
     return true;
 }
 

@@ -1,5 +1,5 @@
-#ifndef _LOGGER_H_
-#define _LOGGER_H_
+#ifndef WST_LOG_H
+#define WST_LOG_H
 
 #include <iostream>
 #include <fstream>
@@ -8,10 +8,10 @@
 
 using namespace std;
 
-class logger
+class WstLog
 {
 public:
-    static logger& instance();
+    static WstLog& instance();
 
     bool    init(string filename="/usr/local/llmbs/logs/error.log");
 
@@ -25,12 +25,12 @@ private:
 
     int     write_file(string message);
 
-    logger();
+    WstLog();
 
     ofstream    _OutFile;
 };
 
 #define LOGW(msg)   \
-    logger::instance().write(msg);
+    WstLog::instance().write(msg);
 
-#endif // _LOGGER_H_
+#endif // WST_LOG_H
