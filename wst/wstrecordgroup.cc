@@ -31,10 +31,10 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
     string decryptionMode;
     string secret;
 
-    int idleLimitSec=WstConf::instance().idleLimitSec();
-    string applitePath=WstConf::instance().applitepath();
-    string appliteLogPath=WstConf::instance().logspath();
-    string recordFileRootDir=WstConf::instance().recordpath();
+    int idleLimitSec=WstConf::Instance().idleLimitSec();
+    string applitePath=WstConf::Instance().applitepath();
+    string appliteLogPath=WstConf::Instance().logspath();
+    string recordFileRootDir=WstConf::Instance().recordpath();
 
     int lowUdpPort = 0;
     int highUdpPort = 0;
@@ -48,7 +48,7 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
         LOGW("app id already existed!");
         return CHANNELSTARTED; // already 
     }
-    if (_recorderMap.size() >= httpclient::instance().maxchannel())
+    if (_recorderMap.size() >= httpclient::Instance().maxchannel())
     {
         return RECORDCHANNELFULL; // channel full
     }
@@ -224,7 +224,7 @@ void RecorderGroup::readFileList(string channel, string baseDir)
 			iterinfo.channel = channel;
 			outfiles.push_back(iterinfo);
 		}
-		httpclient::instance().reportfile(outfiles);
+		httpclient::Instance().reportfile(outfiles);
 	}
 
 	closedir(dir);
@@ -274,7 +274,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     string tmpstr = (*iter).name.substr(0, pos);
     string outfile = tmpstr + ".mp4";
 
-    string out = WstConf::instance().recordpath()+"/"+outfile;
+    string out = WstConf::Instance().recordpath()+"/"+outfile;
     string mixpath = "python /usr/local/llmbs/tools/convert.py ";
     mixpath.append((*iter).path);   // python convert.py inpath
     mixpath.append(" ");
@@ -285,13 +285,13 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     if (::access(out.c_str(), F_OK) == -1)
     {
         LOGW("merge failed.");
-        // httpclient::instance().reportstatus();
+        // httpclient::Instance().reportstatus();
         return;
     }
     // cout << "mixmedia: "<< mixfile << endl;
 
     // picture
-    string picfile = WstConf::instance().recordpath()+"/"+tmpstr+".jpeg";
+    string picfile = WstConf::Instance().recordpath()+"/"+tmpstr+".jpeg";
     string command_pic = "/usr/local/llmbs/tools/ffmpeg -i ";
     command_pic.append(out);
     command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
@@ -305,11 +305,11 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     outinfo.name = outfile;
     outinfo.pic = tmpstr+".jpeg";
     outinfo.type = "mp4";
-    outinfo.path = WstConf::instance().recordpath();
+    outinfo.path = WstConf::Instance().recordpath();
     outinfo.channel = channel;
 
     LOGW("MIX FILES REPORT FILE.");
-    httpclient::instance().reportfile(outinfo);
+    httpclient::Instance().reportfile(outinfo);
     // reportfiles(outinfo);
     // for (iter; iter != files.end(); iter++)
     // {
@@ -404,7 +404,7 @@ int RecorderGroup::reportfiles(const string basepath)
 	if (filelist.size() > 0)
 	{
 		cout << "file size: " << filelist.size() << endl;
-		httpclient::instance().reportfile(filelist);
+		httpclient::Instance().reportfile(filelist);
 	}
 
     closedir(dir);
@@ -420,7 +420,7 @@ int RecorderGroup::reportfiles(FileInfo files)
 int RecorderGroup::reportstatus(int code, string description)
 {
 
-    // httpclient::instance()->reportstatus();
+    // httpclient::Instance()->reportstatus();
     return 0;
 }
 

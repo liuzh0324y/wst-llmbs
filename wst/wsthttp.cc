@@ -110,9 +110,9 @@ void httpserver::set_common_json(Json::Value &node)
     node["from"] = _header.from;
     node["to"] = _header.to;
     node["command"] = _header.command;
-    node["type"] = WstConf::instance().servertype();
+    node["type"] = WstConf::Instance().servertype();
     node["number"] = _header.number;
-    node["groupid"] = WstConf::instance().groupid();
+    node["groupid"] = WstConf::Instance().groupid();
 }
 
 string httpserver::parse_json(string jsonstr)
@@ -124,13 +124,13 @@ string httpserver::parse_json(string jsonstr)
 
     parse_common_json(jsonstr);
     set_common_json(result);
-    result["from"] = WstConf::instance().number(); // rand;
-    result["to"] = WstConf::instance().number(); // rand;
+    result["from"] = WstConf::Instance().number(); // rand;
+    result["to"] = WstConf::Instance().number(); // rand;
     
     // check
     time_t curtime;
     time(&curtime);
-    if (curtime > string_as_T<time_t>(httpclient::instance().timeout()))
+    if (curtime > string_as_T<time_t>(httpclient::Instance().timeout()))
     {
         result["code"] = AUTHORIZATIONDATEEXPIRED;
         return result.toStyledString();
@@ -353,7 +353,7 @@ void httpserver::worker_thread()
 {
     struct event *signal_event;
 
-    httpclient::instance().login();
+    httpclient::Instance().login();
 
     _base = event_base_new();
     if (!_base)
@@ -371,11 +371,11 @@ void httpserver::worker_thread()
 
     evhttp_set_gencb(_http, request_handler, this);
 
-    _handle = evhttp_bind_socket_with_handle(_http, "0.0.0.0", stoi(WstConf::instance().localport()));
+    _handle = evhttp_bind_socket_with_handle(_http, "0.0.0.0", stoi(WstConf::Instance().localport()));
     if (!_handle)
     {
         string log("couldn't bind to port: ");
-        log.append(WstConf::instance().localport());
+        log.append(WstConf::Instance().localport());
         LOGW(log);
         return;
     }
@@ -438,6 +438,6 @@ void httpserver::worker_thread()
         event_base_free(_base);
         _base = NULL;
     }
-    httpclient::instance().logout();
+    httpclient::Instance().logout();
     LOGW("worker_thread end");
 }

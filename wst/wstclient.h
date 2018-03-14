@@ -54,7 +54,7 @@ class httpclient
 {
 public:
     // get WstConf instance
-    static httpclient& instance();
+    static httpclient& Instance();
 
     void login();
     

@@ -11,9 +11,9 @@ using namespace std;
 class WstLog
 {
 public:
-    static WstLog& instance();
+    static WstLog& Instance();
 
-    bool    init(string filename="/usr/local/llmbs/logs/error.log");
+    bool    init(string filename="/opt/llmbs/logs/error.log");
 
     void    free();
 
@@ -31,6 +31,6 @@ private:
 };
 
 #define LOGW(msg)   \
-    WstLog::instance().write(msg);
+    WstLog::Instance().write(msg);
 
 #endif // WST_LOG_H

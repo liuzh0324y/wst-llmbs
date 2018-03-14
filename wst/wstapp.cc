@@ -21,7 +21,7 @@ WstApp::~WstApp()
 
 }
 
-void WstApp::main_thread()
+void WstApp::mainThread()
 {
     // http server
     httpserver http;
@@ -31,25 +31,25 @@ void WstApp::main_thread()
     http.http_server_free();
 }
 
-void WstApp::sub1_thread()
+void WstApp::sub1Thread()
 {
     struct statfs diskinfo;
-    // DIR *dir = opendir(loadconf::instance().recordpath().c_str());
+    // DIR *dir = opendir(WstConf::Instance().recordpath().c_str());
     // if (dir == NULL)
     // {
     //     int beginCmpPath;
     //     int endCmpPath;
     //     int fullPathLen;
-    //     int pathLen = loadconf::instance().recordpath().length();
+    //     int pathLen = WstConf::Instance().recordpath().length();
     //     char currentPath[128] = {0};
     //     char fullPath[128] = {0};
-    //     if (loadconf::instance().recordpath().at(0) != '/')
+    //     if (WstConf::Instance().recordpath().at(0) != '/')
     //     {
     //         getcwd(currentPath, sizeof(currentPath));
     //         strcat(currentPath, "/");
     //         beginCmpPath = strlen(currentPath);
-    //         strcat(currentPath, loadconf::instance().recordpath().c_str());
-    //         if (loadconf::instance().recordpath().at(pathLen) != '/')
+    //         strcat(currentPath, WstConf::Instance().recordpath().c_str());
+    //         if (WstConf::Instance().recordpath().at(pathLen) != '/')
     //         {
     //             strcat(currentPath, "/");
     //         }
@@ -57,8 +57,8 @@ void WstApp::sub1_thread()
     //     }
     //     else
     //     {
-    //         strcpy(currentPath, loadconf::instance().recordpath().c_str());
-    //         if (loadconf::instance().recordpath().at(loadconf::instance().recordpath().length()) != '/')
+    //         strcpy(currentPath, WstConf::Instance().recordpath().c_str());
+    //         if (WstConf::Instance().recordpath().at(WstConf::Instance().recordpath().length()) != '/')
     //         {
     //             strcat(currentPath, "/");
     //         }
@@ -84,25 +84,25 @@ void WstApp::sub1_thread()
     // closedir(dir);
     while (!_is_quit)
     {
-        statfs(WstConf::instance().recordpath().c_str(), &diskinfo);
+        statfs(WstConf::Instance().recordpath().c_str(), &diskinfo);
         unsigned long long totalBlocks = diskinfo.f_bsize;
         unsigned long long freeDisk = diskinfo.f_bfree * totalBlocks;
         size_t mbFreedisk = freeDisk>>20;
-        if (mbFreedisk < WstConf::instance().freedisk())
+        if (mbFreedisk < WstConf::Instance().freedisk())
         {
-            httpclient::instance().reportstatus(DISKFULL, "disk full");
+            httpclient::Instance().reportstatus(DISKFULL, "disk full");
         }
-        // cout << WstConf::instance().recordpath() << "; free disk: " << mbFreedisk << endl;
+        // cout << WstConf::Instance().recordpath() << "; free disk: " << mbFreedisk << endl;
         sleep(60*60);
     }
 }
 
-void WstApp::sub2_thread()
+void WstApp::sub2Thread()
 {
     while (!_is_quit)
     {
-        sleep(WstConf::instance().keeplivetime());
-        httpclient::instance().keeplive();
+        sleep(WstConf::Instance().keeplivetime());
+        httpclient::Instance().keeplive();
     }
 }
 
@@ -115,12 +115,12 @@ void WstApp::fSignalHandler(int signum)
 }
 
 
-void WstApp::InitSignals()
+void WstApp::initSignals()
 {
 
 }
 
-int WstApp::Daemon()
+int WstApp::daemon()
 {
     int fd;
 
@@ -170,7 +170,7 @@ int WstApp::Daemon()
     return 0;
 }
 
-int WstApp::ParseOption(int argc, char ** argv)
+int WstApp::parseOption(int argc, char ** argv)
 {
     char *p;
     
@@ -215,29 +215,29 @@ int WstApp::ParseOption(int argc, char ** argv)
 
 int WstApp::Run()
 {
-    WstLog::instance().init();
-    WstConf::instance().load_config_file();
-    WstConf::instance().load_license_file();
+    WstLog::Instance().init();
+    WstConf::Instance().ReadConfigFile();
+    WstConf::Instance().ReadLicenseFile();
 
     LOGW("server app start");
 
     // signal(SIGINT, fSignalHandler);
-    std::thread worker(&WstApp::main_thread, this);
-    std::thread sub1(&WstApp::sub1_thread, this);
-    std::thread sub2(&WstApp::sub2_thread, this);
+    std::thread worker(&WstApp::mainThread, this);
+    std::thread sub1(&WstApp::sub1Thread, this);
+    std::thread sub2(&WstApp::sub2Thread, this);
     worker.join();
     sub1.join();
     sub2.join();
 
     LOGW("server app stop");
-    WstLog::instance().free();
+    WstLog::Instance().free();
 
     return 0;
 }
 
 int WstApp::Run(int argc, char ** argv)
 {
-    if (ParseOption(argc, argv) != 0)
+    if (parseOption(argc, argv) != 0)
     {
         return 1;
     }

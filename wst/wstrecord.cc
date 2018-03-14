@@ -7,8 +7,7 @@
 #include <dirent.h>
 
 
-Recorder::Recorder() :
-    IRecordingEngineEventHandler()
+Recorder::Recorder() : IRecordingEngineEventHandler()
 {
 	_recorder = NULL;
 	_IsQuit = false;
@@ -158,17 +157,17 @@ void Recorder::onError(int error, agora::linuxsdk::STAT_CODE_TYPE stat_code)
 	{
 	case 1:
 		{
-			httpclient::instance().reportstatus(AGORAFAILED, "agora filed");
+			httpclient::Instance().reportstatus(AGORAFAILED, "agora filed");
 		}
 		break;
 	case 2:
 		{
-			httpclient::instance().reportstatus(AGORAINVAILDAGUMENT, "agora invaild agument");
+			httpclient::Instance().reportstatus(AGORAINVAILDAGUMENT, "agora invaild agument");
 		}
 		break;
 	case 3:
 		{
-			httpclient::instance().reportstatus(AGORAINTERNALFAILED, "agora internal failed");
+			httpclient::Instance().reportstatus(AGORAINTERNALFAILED, "agora internal failed");
 		}
 		break;
 	default:
@@ -335,7 +334,7 @@ void Recorder::readFileList(string uid, string baseDir)
 			iterinfo.channel = _channel;
 			outfiles.push_back(iterinfo);
 		}
-		httpclient::instance().reportfile(outfiles);
+		httpclient::Instance().reportfile(outfiles);
 	}
 
 	closedir(dir);

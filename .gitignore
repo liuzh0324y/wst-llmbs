@@ -65,6 +65,7 @@ autom4te.cache
 
 ext
 wst/.deps
+wst/llmbs
 
 configure
 configure.in

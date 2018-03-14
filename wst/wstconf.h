@@ -11,11 +11,11 @@ class WstConf
 {
 public:
     // get WstConf instance
-    static WstConf& instance();
+    static WstConf& Instance();
     // load config file
-    bool load_config_file(string file="/usr/local/llmbs/conf/llmbs.conf");
+    bool ReadConfigFile(string file="/opt/llmbs/conf/llmbs.conf");
     // create license
-    bool load_license_file(string file="/usr/local/llmbs/key/license.key");
+    bool ReadLicenseFile(string file="/opt/llmbs/conf/license.key");
 
     // user name
     string username();

@@ -10,7 +10,7 @@ WstConf::WstConf()
     _keeplive = 3600;
     _idleLimitSec = 600;
 
-    _applitepath = "/usr/local/llmbs/tools";
+    _applitepath = "/opt/llmbs/tools";
 }
 
 WstConf::~WstConf()
@@ -18,13 +18,13 @@ WstConf::~WstConf()
 
 }
 
-WstConf& WstConf::instance()
+WstConf& WstConf::Instance()
 {    
     static WstConf theloadconf;
     return theloadconf;
 }
 
-bool WstConf::load_config_file(string file)
+bool WstConf::ReadConfigFile(string file)
 {
     vector<string> filevec;
     _input.open(file);
@@ -51,7 +51,7 @@ bool WstConf::load_config_file(string file)
     return true;
 }
 
-bool WstConf::load_license_file(string file)
+bool WstConf::ReadLicenseFile(string file)
 {
     ofstream fs;
     try

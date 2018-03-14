@@ -19,7 +19,7 @@ httpclient::~httpclient()
 
 }
 
-httpclient& httpclient::instance()
+httpclient& httpclient::Instance()
 {
     static httpclient theclient;
     
@@ -33,25 +33,25 @@ void httpclient::login()
     string uri;
     Json::Value postjson;
     postjson["version"] = "V1.0";
-    postjson["seqnum"] = WstConf::instance().seqnum();
+    postjson["seqnum"] = WstConf::Instance().seqnum();
     postjson["sessionid"] = "";
-    postjson["from"] = WstConf::instance().number(); // rand
-    postjson["to"] = WstConf::instance().number(); // rand
+    postjson["from"] = WstConf::Instance().number(); // rand
+    postjson["to"] = WstConf::Instance().number(); // rand
     postjson["command"] = "LOGIN";
-    postjson["type"] = WstConf::instance().servertype();
-    postjson["number"] = WstConf::instance().number(); // rand
-    postjson["groupid"] = WstConf::instance().groupid();
-    postjson["ip"] = WstConf::instance().localip();
-    postjson["port"] = string_as_T<int>(WstConf::instance().localport());
-    postjson["username"] = WstConf::instance().username();
-    postjson["password"] = WstConf::instance().password();
+    postjson["type"] = WstConf::Instance().servertype();
+    postjson["number"] = WstConf::Instance().number(); // rand
+    postjson["groupid"] = WstConf::Instance().groupid();
+    postjson["ip"] = WstConf::Instance().localip();
+    postjson["port"] = string_as_T<int>(WstConf::Instance().localport());
+    postjson["username"] = WstConf::Instance().username();
+    postjson["password"] = WstConf::Instance().password();
     
     base = event_base_new();
 
     uri = "http://";
-    uri.append(WstConf::instance().serverip());
+    uri.append(WstConf::Instance().serverip());
     uri.append(":");
-    uri.append(WstConf::instance().serverport());
+    uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/auth/login");
 
     http_req_post = (struct http_request_post *)start_http_request(base,
@@ -69,22 +69,22 @@ void httpclient::logout()
     string uri;
     Json::Value postjson;
     postjson["version"] = "V1.0";
-    postjson["seqnum"] = WstConf::instance().seqnum();
+    postjson["seqnum"] = WstConf::Instance().seqnum();
     postjson["sessionid"] = "";
-    postjson["from"] = WstConf::instance().number(); // rand
-    postjson["to"] = WstConf::instance().number(); // rand
+    postjson["from"] = WstConf::Instance().number(); // rand
+    postjson["to"] = WstConf::Instance().number(); // rand
     postjson["command"] = "LOGOUT";
-    postjson["type"] = WstConf::instance().servertype();
-    postjson["number"] = WstConf::instance().number();
-    postjson["groupid"] = WstConf::instance().groupid();
+    postjson["type"] = WstConf::Instance().servertype();
+    postjson["number"] = WstConf::Instance().number();
+    postjson["groupid"] = WstConf::Instance().groupid();
     postjson["token"] = _token;
 
     base = event_base_new();
     
     uri.append("http://");
-    uri.append(WstConf::instance().serverip());
+    uri.append(WstConf::Instance().serverip());
     uri.append(":");
-    uri.append(WstConf::instance().serverport());
+    uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/auth/logout");
     http_req_post = (struct http_request_post *)start_http_request(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
@@ -101,14 +101,14 @@ void httpclient::reportfile(vector<FileInfo> fileinfo)
     string uri;
     Json::Value postjson;
     postjson["version"] = "V1.0";
-    postjson["seqnum"] = WstConf::instance().seqnum();
+    postjson["seqnum"] = WstConf::Instance().seqnum();
     postjson["sessionid"] = "";
-    postjson["from"] = WstConf::instance().number(); // rand
-    postjson["to"] = WstConf::instance().number(); // rand;
+    postjson["from"] = WstConf::Instance().number(); // rand
+    postjson["to"] = WstConf::Instance().number(); // rand;
     postjson["command"] = "REPORTFILE";
-    postjson["type"] = WstConf::instance().servertype();
-    postjson["number"] = WstConf::instance().number(); // rand
-    postjson["groupid"] = WstConf::instance().groupid();
+    postjson["type"] = WstConf::Instance().servertype();
+    postjson["number"] = WstConf::Instance().number(); // rand
+    postjson["groupid"] = WstConf::Instance().groupid();
     postjson["token"] = _token;
     vector<FileInfo>::iterator iter = fileinfo.begin();
     for (iter; iter != fileinfo.end(); iter++)
@@ -116,11 +116,11 @@ void httpclient::reportfile(vector<FileInfo> fileinfo)
         postjson["channel"] = (*iter).channel;
 
         string downurl = "http://";
-        downurl.append(WstConf::instance().localip());
+        downurl.append(WstConf::Instance().localip());
         downurl.append(":");
-        downurl.append(WstConf::instance().httpport());
-        downurl.append(WstConf::instance().httppath());
-        string str = (*iter).path.substr(WstConf::instance().recordpath().length(), (*iter).path.length()-WstConf::instance().recordpath().length());
+        downurl.append(WstConf::Instance().httpport());
+        downurl.append(WstConf::Instance().httppath());
+        string str = (*iter).path.substr(WstConf::Instance().recordpath().length(), (*iter).path.length()-WstConf::Instance().recordpath().length());
         downurl.append(str);
         if (downurl.at(downurl.length()-1) != '/')
         {
@@ -145,9 +145,9 @@ void httpclient::reportfile(vector<FileInfo> fileinfo)
     base = event_base_new();
 
     uri = "http://";
-    uri.append(WstConf::instance().serverip());
+    uri.append(WstConf::Instance().serverip());
     uri.append(":");
-    uri.append(WstConf::instance().serverport());
+    uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/reportfile");
     http_req_post = (struct http_request_post *)start_http_request(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
@@ -164,23 +164,23 @@ void httpclient::reportfile(FileInfo fileinfo)
     string uri;
     Json::Value postjson;
     postjson["version"] = "V1.0";
-    postjson["seqnum"] = WstConf::instance().seqnum();
+    postjson["seqnum"] = WstConf::Instance().seqnum();
     postjson["sessionid"] = "";
-    postjson["from"] = WstConf::instance().number(); // rand
-    postjson["to"] = WstConf::instance().number(); // rand;
+    postjson["from"] = WstConf::Instance().number(); // rand
+    postjson["to"] = WstConf::Instance().number(); // rand;
     postjson["command"] = "REPORTMIXFILE";
-    postjson["type"] = WstConf::instance().servertype();
-    postjson["number"] = WstConf::instance().number(); // rand
-    postjson["groupid"] = WstConf::instance().groupid();
+    postjson["type"] = WstConf::Instance().servertype();
+    postjson["number"] = WstConf::Instance().number(); // rand
+    postjson["groupid"] = WstConf::Instance().groupid();
     postjson["token"] = _token;
     postjson["channel"] = fileinfo.channel;
     {
         string downurl = "http://";
-        downurl.append(WstConf::instance().localip());
+        downurl.append(WstConf::Instance().localip());
         downurl.append(":");
-        downurl.append(WstConf::instance().httpport());
-        downurl.append(WstConf::instance().httppath());
-        string str = fileinfo.path.substr(WstConf::instance().recordpath().length(), fileinfo.path.length()-WstConf::instance().recordpath().length());
+        downurl.append(WstConf::Instance().httpport());
+        downurl.append(WstConf::Instance().httppath());
+        string str = fileinfo.path.substr(WstConf::Instance().recordpath().length(), fileinfo.path.length()-WstConf::Instance().recordpath().length());
         downurl.append(str);
         if (downurl.at(downurl.length()-1) != '/')
         {
@@ -192,10 +192,10 @@ void httpclient::reportfile(FileInfo fileinfo)
         string picurl;
 
         rtmpurl = "rtmp://";
-        rtmpurl.append(WstConf::instance().localip());
+        rtmpurl.append(WstConf::Instance().localip());
         rtmpurl.append(":");
-        rtmpurl.append(WstConf::instance().rtmpport());
-        rtmpurl.append(WstConf::instance().httppath());
+        rtmpurl.append(WstConf::Instance().rtmpport());
+        rtmpurl.append(WstConf::Instance().httppath());
         if (rtmpurl.at(rtmpurl.length()-1) != '/')
         {
             rtmpurl.append("/");
@@ -203,10 +203,10 @@ void httpclient::reportfile(FileInfo fileinfo)
         rtmpurl.append(fileinfo.name);
 
         picurl = "http://";
-        picurl.append(WstConf::instance().localip());
+        picurl.append(WstConf::Instance().localip());
         picurl.append(":");
-        picurl.append(WstConf::instance().httpport());
-        picurl.append(WstConf::instance().httppath());
+        picurl.append(WstConf::Instance().httpport());
+        picurl.append(WstConf::Instance().httppath());
         if (picurl.at(picurl.length()-1) != '/')
         {
             picurl.append("/");
@@ -231,9 +231,9 @@ void httpclient::reportfile(FileInfo fileinfo)
     base = event_base_new();
 
     uri = "http://";
-    uri.append(WstConf::instance().serverip());
+    uri.append(WstConf::Instance().serverip());
     uri.append(":");
-    uri.append(WstConf::instance().serverport());
+    uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/reportfile");
     http_req_post = (struct http_request_post *)start_http_request(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
@@ -254,14 +254,14 @@ void httpclient::reportstatus(uint32_t code, string description)
     string uri;
     Json::Value postjson;
     postjson["version"] = "V1.0";
-    postjson["seqnum"] = WstConf::instance().seqnum();
+    postjson["seqnum"] = WstConf::Instance().seqnum();
     postjson["sessionid"] = "";
-    postjson["from"] = WstConf::instance().number(); // rand
-    postjson["to"] = WstConf::instance().number(); // rand
+    postjson["from"] = WstConf::Instance().number(); // rand
+    postjson["to"] = WstConf::Instance().number(); // rand
     postjson["command"] = "REPORTSTATUS";
-    postjson["type"] = WstConf::instance().servertype();
-    postjson["number"] = WstConf::instance().number(); // rand
-    postjson["groupid"] = WstConf::instance().groupid();
+    postjson["type"] = WstConf::Instance().servertype();
+    postjson["number"] = WstConf::Instance().number(); // rand
+    postjson["groupid"] = WstConf::Instance().groupid();
     postjson["token"] = _token;
     postjson["status"] = code;
     postjson["description"] = description;
@@ -269,9 +269,9 @@ void httpclient::reportstatus(uint32_t code, string description)
     base = event_base_new();
 
     uri = "http://";
-    uri.append(WstConf::instance().serverip());
+    uri.append(WstConf::Instance().serverip());
     uri.append(":");
-    uri.append(WstConf::instance().serverport());
+    uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/reportstatus");
 
     http_req_post = (struct http_request_post *)start_http_request(base,
@@ -309,22 +309,22 @@ void httpclient::keeplive()
     string uri;
     Json::Value postjson;
     postjson["version"] = "V1.0";
-    postjson["seqnum"] = WstConf::instance().seqnum();
+    postjson["seqnum"] = WstConf::Instance().seqnum();
     postjson["sessionid"] = "";
-    postjson["from"] = WstConf::instance().number(); // rand
-    postjson["to"] = WstConf::instance().number(); // rand
+    postjson["from"] = WstConf::Instance().number(); // rand
+    postjson["to"] = WstConf::Instance().number(); // rand
     postjson["command"] = "KEEPLIVE";
-    postjson["type"] = WstConf::instance().servertype();
-    postjson["number"] = WstConf::instance().number();
-    postjson["groupid"] = WstConf::instance().groupid();
+    postjson["type"] = WstConf::Instance().servertype();
+    postjson["number"] = WstConf::Instance().number();
+    postjson["groupid"] = WstConf::Instance().groupid();
     postjson["token"] = _token;
 
     base = event_base_new();
     
     uri.append("http://");
-    uri.append(WstConf::instance().serverip());
+    uri.append(WstConf::Instance().serverip());
     uri.append(":");
-    uri.append(WstConf::instance().serverport());
+    uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/keeplive");
     http_req_post = (struct http_request_post *)start_http_request(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
@@ -411,7 +411,7 @@ void httpclient::http_request_post_cb(struct evhttp_request *req, void *arg)
                     }
                     case TOKENERROR:
                     {
-                        instance().login();
+                        Instance().login();
                         LOGW("code is token error!");
                         break;
                     }

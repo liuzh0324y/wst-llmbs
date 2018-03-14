@@ -6,7 +6,7 @@ WstLog::WstLog()
 
 }
 
-WstLog& WstLog::instance()
+WstLog& WstLog::Instance()
 {
     static WstLog theLogger;
     return theLogger;

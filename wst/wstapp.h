@@ -15,14 +15,14 @@ public:
     int Run(int argc, char ** argv);
 
 private:
-    int ParseOption(int argc, char ** argv);
-    void InitSignals();
-    int Daemon();
+    int     parseOption(int argc, char ** argv);
+    void    initSignals();
+    int     daemon();
 
 protected:
-    void main_thread();
-    void sub1_thread();
-    void sub2_thread();
+    void mainThread();
+    void sub1Thread();
+    void sub2Thread();
     static void fSignalHandler(int signum);
 
 
