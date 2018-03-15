@@ -1,0 +1,4 @@
+AC_DEFUN([WST_LOGS_CHECK],
+[
+    WST_DIR
+])
