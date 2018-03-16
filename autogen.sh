@@ -21,7 +21,7 @@ then
     echo "+ Setting up wst-common submodule"
     git submodule init
 fi
-git submodule update --remote
+git submodule update
 
 # source helper functions
 if test ! -f wst-common/wst-autogen.sh;
@@ -53,6 +53,16 @@ if test -z "$NOCHECK"; then
     }
 else
     echo ": skipped version checks"
+fi
+
+if test ! -f $srcdir/tools/AgoraCoreService;
+then
+    cp $srcdir/wst-ext/agora/v2.1.0/bin/AgoraCoreService $srcdir/tools/AgoraCoreService
+fi
+
+if test ! -f $srcdir/tools/ffmpeg;
+then
+    cp $srcdir/wst-ext/agora/v2.1.0/tools/ffmpeg $srcdir/tools/ffmpeg
 fi
 
 # if no arguments specified then this will be printed

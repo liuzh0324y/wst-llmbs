@@ -79,6 +79,7 @@ config.cache
 config.guess
 config.h 
 config.h.in 
+config.h.in~
 config.h-new
 config.log
 config.rpath
@@ -90,8 +91,12 @@ ltmain.sh
 missing
 stamp-h 
 stamp-h.in 
+stamp-h1
 stamp.h 
+
 autoregen.sh
 compile
 depcomp
 install-sh
+
+*.*~

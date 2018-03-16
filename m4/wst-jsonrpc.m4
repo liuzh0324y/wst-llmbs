@@ -1,6 +1,6 @@
 dnl ##############################################################
 dnl jsonrpc support
-AC_DEFUN([JSONRPC_SUPPORT],
+AC_DEFUN([WST_JSONRPC_CHECK],
 [
     JSONRPC_INCS=`pwd`/ext/jsonrpc/include
     JSONRPC_LIBS=`pwd`/ext/jsonrpc/lib

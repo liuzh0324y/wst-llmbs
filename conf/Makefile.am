@@ -1,2 +1,2 @@
-confdir= $(prefix)
-conf_DATA= conf/llmbs.conf conf/license.key
+confdir= $(WST_CONF_DIR)
+conf_DATA= llmbs.conf license.key
