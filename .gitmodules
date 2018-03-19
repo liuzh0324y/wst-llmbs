@@ -5,11 +5,11 @@
 [submodule "wst-ext/libevent"]
 	path = wst-ext/libevent
 	url = https://github.com/wisdomdev/libevent
-	branch = master
+	branch = release-v2.1.8
 [submodule "wst-ext/jsoncpp"]
 	path = wst-ext/jsoncpp
 	url = https://github.com/wisdomdev/jsoncpp
-	branch = master
+	branch = release-v1.8.4
 [submodule "wst-common"]
 	path = wst-common
 	url = https://github.com/wisdomdev/wst-common
