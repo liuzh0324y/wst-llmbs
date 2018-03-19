@@ -6,7 +6,7 @@ Wants=network-online.target
 
 [Service]
 Type=forking
-ExecStart=/usr/local/bin/llmbs
+ExecStart=/opt/llmbs/bin/llmbs
 
 [Install]
 WantedBy=multi-user.target

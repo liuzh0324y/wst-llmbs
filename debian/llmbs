@@ -10,7 +10,7 @@
 
 # Author: Wisdom <liuzh@llvision.com>
 
-DAEMON=/usr/local/bin/llmbs
+DAEMON=/opt/llmbs/bin/llmbs
 
 dostart() {
     start-stop-daemon --start --background --exec $DAEMON

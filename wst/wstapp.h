@@ -28,7 +28,7 @@ protected:
 
 private:
     // quit flag
-    static bool _is_quit;
+    static bool _isQuit;
 };
 
 #endif // WST_APP_H

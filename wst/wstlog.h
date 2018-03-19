@@ -13,17 +13,17 @@ class WstLog
 public:
     static WstLog& Instance();
 
-    bool    init(string filename="/opt/llmbs/logs/error.log");
+    bool    Initialize(string filename="/opt/llmbs/logs/error.log");
 
-    void    free();
+    void    Destroy();
 
-    int     write(string message);
+    int     Write(string message);
 
 private:
 
-    int     write_console(string message);
+    int     writeConsole(string message);
 
-    int     write_file(string message);
+    int     writeFile(string message);
 
     WstLog();
 
@@ -31,6 +31,6 @@ private:
 };
 
 #define LOGW(msg)   \
-    WstLog::Instance().write(msg);
+    WstLog::Instance().Write(msg);
 
 #endif // WST_LOG_H

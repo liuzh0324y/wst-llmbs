@@ -1,3 +1,3 @@
 #!/bin/sh 
 
-export PATH=/usr/local/llmbs/bin:$PATH
+export PATH=$PATH:/opt/llmbs/bin

@@ -9,7 +9,7 @@
 #include <sys/vfs.h>
 #include <sys/stat.h>
 
-bool WstApp::_is_quit = false;
+bool WstApp::_isQuit = false;
 
 WstApp::WstApp()
 {
@@ -82,7 +82,7 @@ void WstApp::sub1Thread()
     //     }
     // }
     // closedir(dir);
-    while (!_is_quit)
+    while (!_isQuit)
     {
         statfs(WstConf::Instance().recordpath().c_str(), &diskinfo);
         unsigned long long totalBlocks = diskinfo.f_bsize;
@@ -99,7 +99,7 @@ void WstApp::sub1Thread()
 
 void WstApp::sub2Thread()
 {
-    while (!_is_quit)
+    while (!_isQuit)
     {
         sleep(WstConf::Instance().keeplivetime());
         httpclient::Instance().keeplive();
@@ -108,7 +108,7 @@ void WstApp::sub2Thread()
 
 void WstApp::fSignalHandler(int signum)
 {
-    _is_quit = true;
+    _isQuit = true;
    
     // LOG(logger::LOGDEBUG, "server app signal handler.");
     // std::cout << "server app signal handler." << std::endl;
@@ -215,7 +215,7 @@ int WstApp::parseOption(int argc, char ** argv)
 
 int WstApp::Run()
 {
-    WstLog::Instance().init();
+    WstLog::Instance().Initialize();
     WstConf::Instance().ReadConfigFile();
     WstConf::Instance().ReadLicenseFile();
 
@@ -230,7 +230,7 @@ int WstApp::Run()
     sub2.join();
 
     LOGW("server app stop");
-    WstLog::Instance().free();
+    WstLog::Instance().Destroy();
 
     return 0;
 }

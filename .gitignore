@@ -66,6 +66,7 @@ autom4te.cache
 ext
 wst/.deps
 wst/llmbs
+outdebian
 
 configure
 configure.in
