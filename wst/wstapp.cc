@@ -24,64 +24,17 @@ WstApp::~WstApp()
 void WstApp::mainThread()
 {
     // http server
-    httpserver http;
-    http.http_server_init();
-    http.http_server_run();
-    http.http_server_stop();
-    http.http_server_free();
+    WstHttpServer http;
+    http.Initialize();
+    http.Start();
+    http.Stop();
+    http.Destroy();
 }
 
 void WstApp::sub1Thread()
 {
     struct statfs diskinfo;
-    // DIR *dir = opendir(WstConf::Instance().recordpath().c_str());
-    // if (dir == NULL)
-    // {
-    //     int beginCmpPath;
-    //     int endCmpPath;
-    //     int fullPathLen;
-    //     int pathLen = WstConf::Instance().recordpath().length();
-    //     char currentPath[128] = {0};
-    //     char fullPath[128] = {0};
-    //     if (WstConf::Instance().recordpath().at(0) != '/')
-    //     {
-    //         getcwd(currentPath, sizeof(currentPath));
-    //         strcat(currentPath, "/");
-    //         beginCmpPath = strlen(currentPath);
-    //         strcat(currentPath, WstConf::Instance().recordpath().c_str());
-    //         if (WstConf::Instance().recordpath().at(pathLen) != '/')
-    //         {
-    //             strcat(currentPath, "/");
-    //         }
-    //         endCmpPath = strlen(currentPath);
-    //     }
-    //     else
-    //     {
-    //         strcpy(currentPath, WstConf::Instance().recordpath().c_str());
-    //         if (WstConf::Instance().recordpath().at(WstConf::Instance().recordpath().length()) != '/')
-    //         {
-    //             strcat(currentPath, "/");
-    //         }
-    //         beginCmpPath = 1;
-    //         endCmpPath = strlen(currentPath);
-    //     }
-    //     for (int i = beginCmpPath; i < endCmpPath; i++)
-    //     {
-    //         if (currentPath[i] == '/')
-    //         {
-    //             currentPath[i] = '\0';
-    //             if (access(currentPath, NULL) != 0)
-    //             {
-    //                 if (mkdir(currentPath, 0755) == -1)
-    //                 {
-
-    //                 }
-    //             }
-    //             currentPath[i] = '/';
-    //         }
-    //     }
-    // }
-    // closedir(dir);
+    
     while (!_isQuit)
     {
         statfs(WstConf::Instance().recordpath().c_str(), &diskinfo);
@@ -118,56 +71,6 @@ void WstApp::fSignalHandler(int signum)
 void WstApp::initSignals()
 {
 
-}
-
-int WstApp::daemon()
-{
-    int fd;
-
-    switch (fork())
-    {
-    case -1:
-        return -1;
-
-    case 0:
-        break;
-    
-    default:
-        exit(0);
-    }
-
-    if (setsid() == -1)
-    {
-        return -1;
-    }
-
-    umask(0);
-
-    fd = open("/dev/null", O_RDWR);
-    if (fd == -1)
-    {
-        return -1;
-    }
-
-    if (dup2(fd, STDIN_FILENO) == -1)
-    {
-        return -1;
-    }
-
-    if (dup2(fd, STDOUT_FILENO) == -1)
-    {
-        return -1;
-    }
-
-    if (fd > STDERR_FILENO)
-    {
-        if (close(fd) == -1)
-        {
-            return -1;
-        }
-    }
-
-    return 0;
 }
 
 int WstApp::parseOption(int argc, char ** argv)

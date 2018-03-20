@@ -1,4 +1,5 @@
 #include "wstconf.h"
+#include "wstlog.h"
 
 WstConf *WstConf::_instance = NULL;
 mutex WstConf::_lock;
@@ -9,8 +10,27 @@ WstConf::WstConf()
     _freedisk = 300;
     _keeplive = 3600;
     _idleLimitSec = 600;
-
+    
+    _username = "admin";
+    _password = "123456";
+    _localip = "127.0.0.1";
+    _localport = "18005";
+    _serverIp = "127.0.0.1";
+    _serverPort = "18003";
+    _connectTimeout = 30000;
+    _sendTimeout = 30000;
+    _recvTimeout = 30000;
+    _recordpath = "/record";
+    _logspath = "/opt/llmbs/logs";
     _applitepath = "/opt/llmbs/tools";
+    _groupid = "0";
+    _type = "ambs";
+    _httppath = "/record";
+    _httpport = "18020";
+    _rtmpport = "18019";
+    _freedisk = 300;
+    _keeplive = 3600;
+    _idleLimitSec = 3600;
 }
 
 WstConf::~WstConf()
@@ -28,6 +48,13 @@ bool WstConf::ReadConfigFile(string file)
 {
     vector<string> filevec;
     _input.open(file);
+    if (!_input)
+    {
+        std::stringstream temp;
+        temp << "could not load file. " << file;
+        LOGW(temp.str());
+        return false;
+    }
 
     while (!_input.eof())
     {

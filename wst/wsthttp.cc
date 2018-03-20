@@ -30,29 +30,29 @@
 using std::thread;
 
 
-httpserver::httpserver()
+WstHttpServer::WstHttpServer()
 {
 
 }
 
-httpserver::~httpserver()
+WstHttpServer::~WstHttpServer()
 {
 
 }
 
-bool httpserver::http_server_init()
+bool WstHttpServer::Initialize()
 {
     return true;
 }
 
-bool httpserver::http_server_run()
+bool WstHttpServer::Start()
 {
-    thread worker(&httpserver::worker_thread, this);
+    thread worker(&WstHttpServer::workThread, this);
     worker.join();
     return true;
 }
 
-bool httpserver::http_server_stop()
+bool WstHttpServer::Stop()
 {
 	// struct timeval delay = { 2, 0 };
 
@@ -63,12 +63,12 @@ bool httpserver::http_server_stop()
     return true;
 }
 
-void httpserver::http_server_free()
+void WstHttpServer::Destroy()
 {
 
 }
 
-bool httpserver::check_status(string jsonstr)
+bool WstHttpServer::checkStatus(string jsonstr)
 {
     Json::Reader reader;
     Json::Value  root;
@@ -81,7 +81,7 @@ bool httpserver::check_status(string jsonstr)
     return true;
 }
 
-void httpserver::parse_common_json(string jsonstr)
+void WstHttpServer::parseCommonJsonRPC(string jsonstr)
 {
     Json::Reader reader;
     Json::Value root;
@@ -102,7 +102,7 @@ void httpserver::parse_common_json(string jsonstr)
     if (!root["token"].isNull()) { _header.token = root["token"].asString(); }
 }
 
-void httpserver::set_common_json(Json::Value &node)
+void WstHttpServer::setCommonJsonRPC(Json::Value &node)
 {
     node["version"] = _header.version;
     node["seqnum"] = _header.seqnum;
@@ -115,15 +115,15 @@ void httpserver::set_common_json(Json::Value &node)
     node["groupid"] = WstConf::Instance().groupid();
 }
 
-string httpserver::parse_json(string jsonstr)
+string WstHttpServer::parseJsonRPC(string jsonstr)
 {
     Json::Reader reader;
     Json::Value root;
     Json::Value result;
     string command;
 
-    parse_common_json(jsonstr);
-    set_common_json(result);
+    parseCommonJsonRPC(jsonstr);
+    setCommonJsonRPC(result);
     result["from"] = WstConf::Instance().number(); // rand;
     result["to"] = WstConf::Instance().number(); // rand;
     
@@ -220,7 +220,7 @@ string httpserver::parse_json(string jsonstr)
     return result.toStyledString();
 }
 
-string httpserver::get_handler(struct evhttp_request *req, void *arg)
+string WstHttpServer::getHandler(struct evhttp_request *req, void *arg)
 {
     // struct evbuffer *buf = evbuffer_new();
     // if (!buf)
@@ -235,7 +235,7 @@ string httpserver::get_handler(struct evhttp_request *req, void *arg)
     return string();
 }
 
-string httpserver::post_handler(struct evhttp_request *req, void *arg)
+string WstHttpServer::postHandler(struct evhttp_request *req, void *arg)
 {
     const char          *uri;
     struct evbuffer     *evbuf;
@@ -276,7 +276,7 @@ string httpserver::post_handler(struct evhttp_request *req, void *arg)
     }
 
     LOGW(inbuf);
-    outbuf = parse_json(inbuf);
+    outbuf = parseJsonRPC(inbuf);
     
     if (decoded)
     {
@@ -286,27 +286,27 @@ string httpserver::post_handler(struct evhttp_request *req, void *arg)
     return outbuf;
 }
 
-void httpserver::request_handler(struct evhttp_request *req, void *arg)
+void WstHttpServer::requestHandler(struct evhttp_request *req, void *arg)
 {
     struct evbuffer     *buf;
     string               result;
-    httpserver          *param;
+    WstHttpServer          *param;
     char                 len[26];
     struct evkeyvalq    *headers;
     struct evkeyval     *header;
     
-    param = (httpserver*)arg;
+    param = (WstHttpServer*)arg;
 
     switch (evhttp_request_get_command(req))
     {
         case EVHTTP_REQ_GET:
         {
-            result = param->get_handler(req, arg);
+            result = param->getHandler(req, arg);
             break;
         }
         case EVHTTP_REQ_POST:
         {
-            result = param->post_handler(req, arg);
+            result = param->postHandler(req, arg);
             break;
         }
         default:
@@ -338,23 +338,22 @@ void httpserver::request_handler(struct evhttp_request *req, void *arg)
     }  
 }
 
-void httpserver::signal_cb(evutil_socket_t sig, short events, void *user_data)
+void WstHttpServer::signalHandler(evutil_socket_t sig, short events, void *user_data)
 {
 	struct event_base *base = (struct event_base *)user_data;
 	struct timeval delay = { 2, 0 };
 
-    cout << "signal cb" << endl;
-	// printf("Caught an interrupt signal; exiting cleanly in two seconds.\n");
-
 	event_base_loopexit(base, &delay);
 }
 
-void httpserver::worker_thread()
+void WstHttpServer::workThread()
 {
     struct event *signal_event;
 
+    LOGW("login start");
     httpclient::Instance().login();
-
+    LOGW("login end");
+    
     _base = event_base_new();
     if (!_base)
     {
@@ -369,7 +368,7 @@ void httpserver::worker_thread()
         return;
     }
 
-    evhttp_set_gencb(_http, request_handler, this);
+    evhttp_set_gencb(_http, requestHandler, this);
 
     _handle = evhttp_bind_socket_with_handle(_http, "0.0.0.0", stoi(WstConf::Instance().localport()));
     if (!_handle)
@@ -380,7 +379,7 @@ void httpserver::worker_thread()
         return;
     }
 
-    signal_event = evsignal_new(_base, SIGINT, signal_cb, (void *)_base);
+    signal_event = evsignal_new(_base, SIGINT, signalHandler, (void *)_base);
 
     struct sockaddr_storage ss;
     evutil_socket_t fd;

@@ -43,33 +43,33 @@ public:
     }
 };
 
-class httpserver
+class WstHttpServer
 {
 public:
-    httpserver();
-    ~httpserver();
+    WstHttpServer();
+    ~WstHttpServer();
 
-    bool http_server_init();
+    bool Initialize();
 
-    bool http_server_run();
+    bool Start();
 
-    bool http_server_stop();
+    bool Stop();
 
-    void http_server_free();
+    void Destroy();
 
 protected:
-    void worker_thread();
+    void workThread();
 
-    static void request_handler(struct evhttp_request *req, void *arg);
-    static void signal_cb(evutil_socket_t sig, short events, void *user_data);
+    static void requestHandler(struct evhttp_request *req, void *arg);
+    static void signalHandler(evutil_socket_t sig, short events, void *user_data);
 
-    string get_handler(struct evhttp_request *req, void *arg);
-    string post_handler(struct evhttp_request *req, void *arg);
+    string getHandler(struct evhttp_request *req, void *arg);
+    string postHandler(struct evhttp_request *req, void *arg);
 
-    string parse_json(string jsonstr);
-    void   parse_common_json(string jsonstr);
-    void   set_common_json(Json::Value &node);
-    bool   check_status(string jsonstr);
+    string parseJsonRPC(string jsonstr);
+    void   parseCommonJsonRPC(string jsonstr);
+    void   setCommonJsonRPC(Json::Value &node);
+    bool   checkStatus(string jsonstr);
     
 private:
     struct event_base *_base;

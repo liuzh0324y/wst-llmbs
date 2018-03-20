@@ -54,6 +54,7 @@ void httpclient::login()
     uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/auth/login");
 
+    LOGW(uri);
     http_req_post = (struct http_request_post *)start_http_request(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
 
@@ -517,8 +518,10 @@ int httpclient::start_url_request(struct http_request_get *http_req, int req_get
     {
         evhttp_connection_free(http_req->cn);
     }
+    
     // cout << "((((((((((***************)))))))))))))))" << http_req->uri << endl;
     int port = evhttp_uri_get_port(http_req->uri);
+
     http_req->cn = evhttp_connection_base_new(http_req->base, NULL, evhttp_uri_get_host(http_req->uri), (port == -1 ? 80 : port));
     
     if (req_get_flag == REQUEST_POST_FLAG)

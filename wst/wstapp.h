@@ -17,7 +17,6 @@ public:
 private:
     int     parseOption(int argc, char ** argv);
     void    initSignals();
-    int     daemon();
 
 protected:
     void mainThread();

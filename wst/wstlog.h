@@ -25,9 +25,11 @@ private:
 
     int     writeFile(string message);
 
+    std::string getTime();
+    
     WstLog();
 
-    ofstream    _OutFile;
+    ofstream    _outFile;
 };
 
 #define LOGW(msg)   \
