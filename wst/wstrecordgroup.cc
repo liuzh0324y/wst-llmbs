@@ -48,7 +48,7 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
         LOGW("app id already existed!");
         return CHANNELSTARTED; // already 
     }
-    if (_recorderMap.size() >= httpclient::Instance().maxchannel())
+    if (_recorderMap.size() >= WstHttpClient::Instance().MaxChannel())
     {
         return RECORDCHANNELFULL; // channel full
     }
@@ -78,46 +78,8 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
     config.decodeAudio = agora::linuxsdk::AUDIO_FORMAT_DEFAULT_TYPE; 
     config.decodeVideo = agora::linuxsdk::VIDEO_FORMAT_DEFAULT_TYPE;
 
-// bool isAudioOnly;
-// bool isVideoOnly;
-// bool isMixingEnabled;
-// bool mixedVideoAudio;
-// char * mixResolution;
-// char * decryptionMode;
-// char * secret;
-// char * appliteDir;
-// char * recordFileRootDir;
-// char * cfgFilePath;
-// agora::linuxsdk::VIDEO_FORMAT_TYPE decodeVideo;
-// agora::linuxsdk::AUDIO_FORMAT_TYPE decodeAudio; 
-// int lowUdpPort;
-// int highUdpPort;  
-// int idleLimitSec;
-// int captureInterval;
-// agora::linuxsdk::CHANNEL_PROFILE_TYPE channelProfile;
-// agora::linuxsdk::REMOTE_VIDEO_STREAM_TYPE streamType;
-// agora::linuxsdk::TRIGGER_MODE_TYPE triggerMode;
-// agora::linuxsdk::LANGUAGE_TYPE lang;
-    // cout << "  >> appId[must]: " << appId << endl;
-    // cout << "  >> channelKey[option]: " << (channelKey.empty()?"NULL":channelKey) << endl;
-    // cout << "  >> channel[must]: " << (channelId.empty()?"NULL":channelId) << endl;
-    // cout << "  >> uid[must]: " << uid << endl;
-    // cout << "  >> decodeAudio[option]: " << (config.decodeAudio?"true":"false") << endl;
-    // cout << "  >> decodeVideo[option]: " << (config.decodeVideo?"true":"false") << endl;
-    // cout << "  >> config.idleLimitSec[option]: " << config.idleLimitSec << endl;
-    // cout << "  >> config.channelProfile[option]: " << config.channelProfile << endl;
-    // cout << "  >> config.isAudioOnly[option]: " << (config.isAudioOnly?"true":"false") << endl;
-    // cout << "  >> config.isMixingEnabled[option]: " << (config.isMixingEnabled?"true":"false") << endl;
-    // cout << "  >> config.appliteDir[must]: " << config.appliteDir << endl;
-    // cout << "  >> config.recordFileRootDir[option]: " << config.recordFileRootDir << endl;
-    // cout << "  >> config.secret[option]: " << (config.secret==NULL?"NULL":config.secret) << endl;
-    // cout << "  >> config.decryptionMode[option]: " << (config.decryptionMode==NULL?"NULL":config.decryptionMode) << endl;
-    // cout << "  >> config.lowUdpPort[option]: " << config.lowUdpPort << endl;
-    // cout << "  >> config.highUdpPort[option]: " << config.highUdpPort << endl;
-
     if (!recorder->createChannel(appId, channelKey, channelId, uid, false, false, config))
     {
-        // cerr << "Failed to create agora channel: " << channelId << endl;
         LOGW("create agora channel failed!");
         return 303;
     }
@@ -244,7 +206,7 @@ void RecorderGroup::readFileList(string channel, string baseDir)
 			iterinfo.channel = channel;
 			outfiles.push_back(iterinfo);
 		}
-		httpclient::Instance().reportfile(outfiles);
+		WstHttpClient::Instance().ReportFile(outfiles);
 	}
 
 	closedir(dir);
@@ -329,7 +291,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     outinfo.channel = channel;
 
     LOGW("MIX FILES REPORT FILE.");
-    httpclient::Instance().reportfile(outinfo);
+    WstHttpClient::Instance().ReportFile(outinfo);
     // reportfiles(outinfo);
     // for (iter; iter != files.end(); iter++)
     // {
@@ -424,7 +386,7 @@ int RecorderGroup::reportfiles(const string basepath)
 	if (filelist.size() > 0)
 	{
 		cout << "file size: " << filelist.size() << endl;
-		httpclient::Instance().reportfile(filelist);
+		WstHttpClient::Instance().ReportFile(filelist);
 	}
 
     closedir(dir);

@@ -3,30 +3,30 @@
 #include "wstlog.h"
 #include <string>
 
-string       httpclient::_token;
-string       httpclient::_time;
-int          httpclient::_maxclient = 0;
-int          httpclient::_maxchannel = 0;
+string       WstHttpClient::_token;
+string       WstHttpClient::_time;
+int          WstHttpClient::_maxclient = 0;
+int          WstHttpClient::_maxchannel = 0;
 
 
-httpclient::httpclient()
+WstHttpClient::WstHttpClient()
 {
     
 }
 
-httpclient::~httpclient()
+WstHttpClient::~WstHttpClient()
 {
 
 }
 
-httpclient& httpclient::Instance()
+WstHttpClient& WstHttpClient::Instance()
 {
-    static httpclient theclient;
+    static WstHttpClient theclient;
     
     return theclient;
 }
 
-void httpclient::login()
+void WstHttpClient::Login()
 {
     struct event_base *base;
     struct http_request_post *http_req_post;
@@ -55,15 +55,15 @@ void httpclient::login()
     uri.append("/api/v1/auth/login");
 
     LOGW(uri);
-    http_req_post = (struct http_request_post *)start_http_request(base,
+    http_req_post = (struct http_request_post *)startHttpRequest(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
 
     event_base_dispatch(base);
-    http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
+    httpRequestFree((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);
 }
 
-void httpclient::logout()
+void WstHttpClient::Logout()
 {
     struct event_base *base;
     struct http_request_post *http_req_post;
@@ -87,15 +87,15 @@ void httpclient::logout()
     uri.append(":");
     uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/auth/logout");
-    http_req_post = (struct http_request_post *)start_http_request(base,
+    http_req_post = (struct http_request_post *)startHttpRequest(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
     
     event_base_dispatch(base);
-    http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
+    httpRequestFree((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);
 }
 
-void httpclient::reportfile(vector<FileInfo> fileinfo)
+void WstHttpClient::ReportFile(vector<FileInfo> fileinfo)
 {
     struct event_base *base;
     struct http_request_post *http_req_post;
@@ -150,15 +150,15 @@ void httpclient::reportfile(vector<FileInfo> fileinfo)
     uri.append(":");
     uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/reportfile");
-    http_req_post = (struct http_request_post *)start_http_request(base,
+    http_req_post = (struct http_request_post *)startHttpRequest(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
     
     event_base_dispatch(base);
-    http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
+    httpRequestFree((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);
 }
 
-void httpclient::reportfile(FileInfo fileinfo)
+void WstHttpClient::ReportFile(FileInfo fileinfo)
 {
     struct event_base *base;
     struct http_request_post *http_req_post;
@@ -236,15 +236,15 @@ void httpclient::reportfile(FileInfo fileinfo)
     uri.append(":");
     uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/reportfile");
-    http_req_post = (struct http_request_post *)start_http_request(base,
+    http_req_post = (struct http_request_post *)startHttpRequest(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
         
     event_base_dispatch(base);
-    http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
+    httpRequestFree((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);
 }
 
-void httpclient::reportstatus(uint32_t code, string description)
+void WstHttpClient::ReportStatus(uint32_t code, string description)
 {
     if (_token.empty())
     {
@@ -275,35 +275,35 @@ void httpclient::reportstatus(uint32_t code, string description)
     uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/reportstatus");
 
-    http_req_post = (struct http_request_post *)start_http_request(base,
+    http_req_post = (struct http_request_post *)startHttpRequest(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
         
     event_base_dispatch(base);
-    http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
+    httpRequestFree((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);
 }
 
-string httpclient::getToken()
+string WstHttpClient::GetToken()
 {
     return _token;
 }
 
-string httpclient::timeout()
+string WstHttpClient::TimeOut()
 {
     return _time;
 }
 
-int    httpclient::maxclient()
+int    WstHttpClient::MaxClient()
 {
     return _maxclient;
 }
 
-int    httpclient::maxchannel()
+int    WstHttpClient::MaxChannel()
 {
     return _maxchannel;
 }
 
-void httpclient::keeplive()
+void WstHttpClient::KeepLive()
 {
     struct event_base *base;
     struct http_request_post *http_req_post;
@@ -327,15 +327,15 @@ void httpclient::keeplive()
     uri.append(":");
     uri.append(WstConf::Instance().serverport());
     uri.append("/api/v1/user/keeplive");
-    http_req_post = (struct http_request_post *)start_http_request(base,
+    http_req_post = (struct http_request_post *)startHttpRequest(base,
         uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
     
     event_base_dispatch(base);
-    http_request_free((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
+    httpRequestFree((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
     event_base_free(base);
 }
 
-void httpclient::http_request_get_cb(struct evhttp_request *req, void *arg)
+void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
 {
     struct http_request_post *http_req_post = (struct http_request_post*)arg;
 
@@ -352,7 +352,7 @@ void httpclient::http_request_get_cb(struct evhttp_request *req, void *arg)
     event_base_loopexit(http_req_post->base, 0);
 }
 
-void httpclient::http_request_post_cb(struct evhttp_request *req, void *arg)
+void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg)
 {
     struct http_request_post *http_req_post;
     struct evbuffer *buf;
@@ -412,7 +412,7 @@ void httpclient::http_request_post_cb(struct evhttp_request *req, void *arg)
                     }
                     case TOKENERROR:
                     {
-                        Instance().login();
+                        Instance().Login();
                         LOGW("code is token error!");
                         break;
                     }
@@ -449,7 +449,7 @@ void httpclient::http_request_post_cb(struct evhttp_request *req, void *arg)
     event_base_loopexit(http_req_post->base, 0);
 }
 
-void *httpclient::http_request_new(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data)
+void *WstHttpClient::httpRequestNew(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data)
 {
     int len = 0;
     if (req_get_flag == REQUEST_GET_FLAG)
@@ -488,7 +488,7 @@ void *httpclient::http_request_new(struct event_base *base, const char *url, int
     return http_req_get;
 }
 
-void httpclient::http_request_free(struct http_request_get *http_req_get, int req_get_flag)
+void WstHttpClient::httpRequestFree(struct http_request_get *http_req_get, int req_get_flag)
 {
     evhttp_connection_free(http_req_get->cn);
     evhttp_uri_free(http_req_get->uri);
@@ -512,7 +512,7 @@ void httpclient::http_request_free(struct http_request_get *http_req_get, int re
     http_req_get = NULL;
 }
 
-int httpclient::start_url_request(struct http_request_get *http_req, int req_get_flag)
+int WstHttpClient::startUrlRequest(struct http_request_get *http_req, int req_get_flag)
 {
     if (http_req->cn)
     {
@@ -526,11 +526,11 @@ int httpclient::start_url_request(struct http_request_get *http_req, int req_get
     
     if (req_get_flag == REQUEST_POST_FLAG)
     {
-        http_req->req = evhttp_request_new(http_request_post_cb, http_req);
+        http_req->req = evhttp_request_new(httpRequestPostHandler, http_req);
     }
     else if (req_get_flag == REQUEST_GET_FLAG)
     {
-        http_req->req = evhttp_request_new(http_request_get_cb, http_req);
+        http_req->req = evhttp_request_new(httpRequestGetHandler, http_req);
     }
     
     if (req_get_flag == REQUEST_POST_FLAG)
@@ -559,12 +559,12 @@ int httpclient::start_url_request(struct http_request_get *http_req, int req_get
     return 0;
 }
 
-void *httpclient::start_http_request(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data)
+void *WstHttpClient::startHttpRequest(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data)
 {
     
-    struct http_request_get *http_req_get = (struct http_request_get *)http_request_new(base, url, req_get_flag, content_type, data);
+    struct http_request_get *http_req_get = (struct http_request_get *)httpRequestNew(base, url, req_get_flag, content_type, data);
     
-    start_url_request(http_req_get, req_get_flag);
+    startUrlRequest(http_req_get, req_get_flag);
 
     return http_req_get;
 }

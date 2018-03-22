@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "wstconf.h"
 
 using namespace std;
 
@@ -34,5 +35,6 @@ private:
 
 #define LOGW(msg)   \
     WstLog::Instance().Write(msg);
+
 
 #endif // WST_LOG_H

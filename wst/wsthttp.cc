@@ -130,7 +130,7 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
     // check
     time_t curtime;
     time(&curtime);
-    if (curtime > string_as_T<time_t>(httpclient::Instance().timeout()))
+    if (curtime > string_as_T<time_t>(WstHttpClient::Instance().TimeOut()))
     {
         result["code"] = AUTHORIZATIONDATEEXPIRED;
         return result.toStyledString();
@@ -351,7 +351,7 @@ void WstHttpServer::workThread()
     struct event *signal_event;
 
     LOGW("login start");
-    httpclient::Instance().login();
+    WstHttpClient::Instance().Login();
     LOGW("login end");
     
     _base = event_base_new();
@@ -437,6 +437,6 @@ void WstHttpServer::workThread()
         event_base_free(_base);
         _base = NULL;
     }
-    httpclient::Instance().logout();
+    WstHttpClient::Instance().Logout();
     LOGW("worker_thread end");
 }

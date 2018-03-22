@@ -20,8 +20,8 @@ private:
 
 protected:
     void mainThread();
-    void sub1Thread();
-    void sub2Thread();
+    void checkDiskThread();
+    void keepLiveThread();
     static void fSignalHandler(int signum);
 
 

@@ -76,18 +76,16 @@ bool Recorder::leaveChannel()
 
 int Recorder::setVideoMixLayout()
 {
-    LOG(INFO, "setVideoMixLayout: user size: %d", _peers.size());
-
 	agora::linuxsdk::VideoMixingLayout layout;
 	layout.canvasWidth = 1280;
 	layout.canvasHeight = 720;
-	layout.backgroundColor = "#23b9dc";
+	layout.backgroundColor = "#000000";
 
 	layout.regionCount = _peers.size();
 
 	if (!_peers.empty())
 	{
-		LOG(INFO, "setVideoMixLayout: peers not empty");
+		LOGW("setVideoMixLayout: peers not empty");
 		agora::linuxsdk::VideoMixingLayout::Region *regionList = new agora::linuxsdk::VideoMixingLayout::Region[_peers.size()];
 		
 		regionList[0].uid = _peers[0];
@@ -103,7 +101,11 @@ int Recorder::setVideoMixLayout()
 			regionList[0].uid, regionList[0].x, regionList[0].y, 
 			regionList[0].width, regionList[0].height, regionList[0].zOrder,
 			regionList[0].alpha);
-
+		// std::string reginlog = "region 0 uid: ";
+		// reginlog.append(std::string(regionList[0].uid).c_str());
+		// reginlog.append(", x: ");
+		// reginlog.append(regionList[0].x);
+		// LOGW();
 		float canvasWidth = 1280.0;
 		float canvasHeight = 720.0;
 
@@ -112,29 +114,6 @@ int Recorder::setVideoMixLayout()
 		float viewHeight = viewVEdge * (canvasWidth / canvasHeight);
 		float viewWidth = viewHEdge * (canvasWidth / canvasHeight);
 
-		// for (int i = 1; i < _peers.size(); i++)
-		// {
-		// 	if (i >= 7) break;
-		// 	regionList[i].uid = _peers[i];
-
-		// 	float xIndex = i % 3;
-		// 	float yIndex = i / 3;
-		// 	regionList[i].x = xIndex * (viewWidth + viewHEdge) + viewHEdge;
-		// 	regionList[i].y = 1 - (yIndex + 1) * (viewHeight + viewVEdge);
-		// 	regionList[i].width = viewWidth;
-		// 	regionList[i].height = viewHeight;
-		// 	regionList[i].zOrder = 0;
-		// 	regionList[i].alpha = i + 1;
-		// 	regionList[i].renderMode = 0;
-		// }
-
-		// regionList[1].x = 0;
-		// regionList[1].y = 0;
-		// regionList[1].width = canvasWidth;
-		// regionList[1].height = canvasHeight;
-		// regionList[1].zOrder = 0;
-		// regionList[1].alpha = 1;
-		// regionList[1].renderMode = 0;
 		layout.regions = regionList;
 	}
 	else
@@ -157,17 +136,17 @@ void Recorder::onError(int error, agora::linuxsdk::STAT_CODE_TYPE stat_code)
 	{
 	case 1:
 		{
-			httpclient::Instance().reportstatus(AGORAFAILED, "agora filed");
+			WstHttpClient::Instance().ReportStatus(AGORAFAILED, "agora filed");
 		}
 		break;
 	case 2:
 		{
-			httpclient::Instance().reportstatus(AGORAINVAILDAGUMENT, "agora invaild agument");
+			WstHttpClient::Instance().ReportStatus(AGORAINVAILDAGUMENT, "agora invaild agument");
 		}
 		break;
 	case 3:
 		{
-			httpclient::Instance().reportstatus(AGORAINTERNALFAILED, "agora internal failed");
+			WstHttpClient::Instance().ReportStatus(AGORAINTERNALFAILED, "agora internal failed");
 		}
 		break;
 	default:
@@ -229,7 +208,7 @@ void Recorder::onUserOffline(unsigned uid, agora::linuxsdk::USER_OFFLINE_REASON_
 	// 	_userinfo.erase(iter);
 	// }
 	
-	setVideoMixLayout();
+	// setVideoMixLayout();
 }
 
 void Recorder::audioFrameReceived(unsigned int uid, const agora::linuxsdk::AudioFrame *frame) const
@@ -334,7 +313,7 @@ void Recorder::readFileList(string uid, string baseDir)
 			iterinfo.channel = _channel;
 			outfiles.push_back(iterinfo);
 		}
-		httpclient::Instance().reportfile(outfiles);
+		WstHttpClient::Instance().ReportFile(outfiles);
 	}
 
 	closedir(dir);

@@ -50,41 +50,42 @@ struct http_request_post
     char *post_data;
 };
 
-class httpclient 
+class WstHttpClient 
 {
 public:
     // get WstConf instance
-    static httpclient& Instance();
+    static WstHttpClient& Instance();
+    static string GetToken();
 
-    void login();
+    void    Login();
+
+    void    Logout();
+
+    void    ReportFile(vector<FileInfo> fileinfo);
+
+    void    ReportFile(FileInfo fileinfo);
+
+    void    ReportStatus(uint32_t code, string description);
+
+    string TimeOut();
+
+    int    MaxClient();
     
-    void logout();
+    int    MaxChannel();
 
-    void reportfile(vector<FileInfo> fileinfo);
-
-    void reportfile(FileInfo fileinfo);
-
-    void reportstatus(uint32_t code, string description);
-
-    static string getToken();
-
-    string timeout();
-    int    maxclient();
-    int    maxchannel();
-
-    void keeplive();
+    void KeepLive();
 protected:
-    httpclient();
-    ~httpclient();
+    WstHttpClient();
+    ~WstHttpClient();
 
 protected:
-    static void http_request_get_cb(struct evhttp_request *req, void *arg);
-    static void http_request_post_cb(struct evhttp_request *req, void *arg);
+    static void httpRequestGetHandler(struct evhttp_request *req, void *arg);
+    static void httpRequestPostHandler(struct evhttp_request *req, void *arg);
 
-    void *http_request_new(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
-    void  http_request_free(struct http_request_get *http_req_get, int req_get_flag);
-    int   start_url_request(struct http_request_get *http_req, int req_get_flag);
-    void *start_http_request(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
+    void *httpRequestNew(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
+    void  httpRequestFree(struct http_request_get *http_req_get, int req_get_flag);
+    int   startUrlRequest(struct http_request_get *http_req, int req_get_flag);
+    void *startHttpRequest(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
 
 private:
     static string       _token;

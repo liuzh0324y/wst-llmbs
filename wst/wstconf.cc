@@ -73,7 +73,7 @@ bool WstConf::ReadConfigFile(string file)
 
     _input.close();
 
-    _parse_conf(filevec);
+    parseConf(filevec);
     // LOGW("load config file.");
     return true;
 }
@@ -97,7 +97,7 @@ bool WstConf::ReadLicenseFile(string file)
     return true;
 }
 
-string WstConf::_parse_conf(string input)
+string WstConf::parseConf(string input)
 {
     if (input.empty())
     {
@@ -196,7 +196,7 @@ string WstConf::_parse_conf(string input)
     return string();
 }
 
-string WstConf::_parse_conf(vector<string> &filelist)
+string WstConf::parseConf(vector<string> &filelist)
 {
     vector<string>::iterator iter = filelist.begin();
     for (iter; iter != filelist.end(); iter++)

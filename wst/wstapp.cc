@@ -31,7 +31,7 @@ void WstApp::mainThread()
     http.Destroy();
 }
 
-void WstApp::sub1Thread()
+void WstApp::checkDiskThread()
 {
     struct statfs diskinfo;
     
@@ -43,19 +43,19 @@ void WstApp::sub1Thread()
         size_t mbFreedisk = freeDisk>>20;
         if (mbFreedisk < WstConf::Instance().freedisk())
         {
-            httpclient::Instance().reportstatus(DISKFULL, "disk full");
+            WstHttpClient::Instance().ReportStatus(DISKFULL, "disk full");
         }
         // cout << WstConf::Instance().recordpath() << "; free disk: " << mbFreedisk << endl;
         sleep(60*60);
     }
 }
 
-void WstApp::sub2Thread()
+void WstApp::keepLiveThread()
 {
     while (!_isQuit)
     {
         sleep(WstConf::Instance().keeplivetime());
-        httpclient::Instance().keeplive();
+        WstHttpClient::Instance().KeepLive();
     }
 }
 
@@ -126,8 +126,8 @@ int WstApp::Run()
 
     // signal(SIGINT, fSignalHandler);
     std::thread worker(&WstApp::mainThread, this);
-    std::thread sub1(&WstApp::sub1Thread, this);
-    std::thread sub2(&WstApp::sub2Thread, this);
+    std::thread sub1(&WstApp::checkDiskThread, this);
+    std::thread sub2(&WstApp::keepLiveThread, this);
     worker.join();
     sub1.join();
     sub2.join();

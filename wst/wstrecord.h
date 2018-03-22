@@ -8,8 +8,8 @@
 #include <cstring>
 #include <algorithm>
 
-#include "base/atomic.h"
-#include "base/log.h"
+#include <base/atomic.h>
+#include <base/log.h>
 
 #include "IAgoraRecordingEngine.h"
 

@@ -86,8 +86,8 @@ private:
     WstConf();
     ~WstConf();
     // parser config file
-    string _parse_conf(string input);
-    string _parse_conf(vector<string> &input);
+    string parseConf(string input);
+    string parseConf(vector<string> &input);
     
 protected:
     static WstConf     *_instance;
