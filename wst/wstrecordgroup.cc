@@ -4,6 +4,9 @@
 #include "wstclient.h"
 #include "wstlog.h"
 
+#include <iomanip>
+#include <chrono>
+
 RecorderGroup::RecorderGroup()
 {
     std::thread worker(&RecorderGroup::WorkerTime, this);
@@ -22,7 +25,7 @@ RecorderGroup::~RecorderGroup()
 
 }
 
-int  RecorderGroup::start(const string &appId, const string &channelId, const string &mixResolution)
+int  RecorderGroup::start(const string &appId, const string &channelId, const string &username, const string &mixResolution)
 {
     string channelKey;
     uint32_t uid = 0;
@@ -83,7 +86,13 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
         LOGW("create agora channel failed!");
         return 303;
     }
+    string user = username;
+    if (user.empty()){
+        user = "unknown";
+    }
+
     _mutex_id.lock();
+    _usernameMap.insert(make_pair(channelId, user));
     _recorderMap.insert(make_pair(channelId, recorder));
     _mutex_id.unlock();
     LOGW("create channel succeed!");
@@ -247,16 +256,19 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
         }
     }
 
+    map<string, string>::iterator itername = _usernameMap.find(channel);
     // python convert.py inpath outfile metadatafile
     // string mixfile = (*iter).path;
     // mixfile.append("/");
     // mixfile.append((*iter).name);
     // (*iter).name;
-    int pos = (*iter).name.find(".");
-    string tmpstr = (*iter).name.substr(0, pos);
-    string outfile = tmpstr + ".mp4";
-
-    string out = WstConf::Instance().recordpath()+"/"+outfile;
+        // int pos = (*iter).name.find(".");
+        // string tmpstr = (*iter).name.substr(0, pos);
+        // string outfile = tmpstr + ".mp4";
+    // change mp4 file name.
+    string timestamp = gettimstamp();
+    string outfile = timestamp + "_" + (*itername).second + ".mp4";
+    string out = WstConf::Instance().recordpath() + "/" + outfile;
     string mixpath = "python /opt/llmbs/tools/convert.py ";
     mixpath.append((*iter).path);   // python convert.py inpath
     mixpath.append(" ");
@@ -273,7 +285,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     // cout << "mixmedia: "<< mixfile << endl;
 
     // picture
-    string picfile = WstConf::Instance().recordpath()+"/"+tmpstr+".jpeg";
+    string picfile = WstConf::Instance().recordpath()+"/"+ timestamp + "_" + (*itername).second + ".jpeg";
     string command_pic = "/opt/llmbs/tools/ffmpeg -i ";
     command_pic.append(out);
     command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
@@ -285,7 +297,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     }
     FileInfo outinfo;
     outinfo.name = outfile;
-    outinfo.pic = tmpstr+".jpeg";
+    outinfo.pic = timestamp + (*itername).second +".jpeg";
     outinfo.type = "mp4";
     outinfo.path = WstConf::Instance().recordpath();
     outinfo.channel = channel;
@@ -423,6 +435,17 @@ void RecorderGroup::InitTimer()
     val.it_interval = val.it_value;
 
     setitimer(ITIMER_PROF, &val, NULL);
+}
+
+string RecorderGroup::gettimstamp()
+{
+    using std::chrono::system_clock;
+    std::time_t tt = system_clock::to_time_t(system_clock::now());
+
+    struct std::tm *ptm = std::localtime(&tt);
+    std::stringstream ss;
+    ss << std::put_time(ptm, "%Y-%m-%d-%H.%M.%S");
+    return ss.str();
 }
 
 void RecorderGroup::fCheckRecorder(int i)

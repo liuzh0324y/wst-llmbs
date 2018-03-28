@@ -43,7 +43,7 @@ public:
     int reportfiles();
     string channel();
     string storagepath();
-    
+
 private:
     virtual void onError(int error, agora::linuxsdk::STAT_CODE_TYPE stat_code);
     virtual void onWarning(int warn);
@@ -67,6 +67,7 @@ private:
     map<string, string> _userinfo;
 
     string _channel;
+    string _username;
     bool   _IsQuit;
 };
 

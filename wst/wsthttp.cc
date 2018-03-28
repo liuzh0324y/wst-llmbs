@@ -151,8 +151,9 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
     {
         result["command"] = "STARTRECORD";
         string mix = root["mixresolution"].asString();
+        
         if (mix.empty()) mix = "1280,720,15,2400";
-        result["code"] = _recorderGroup.start(root["key"].asString(), root["channel"].asString(), mix);
+        result["code"] = _recorderGroup.start(root["key"].asString(), root["channel"].asString(), root["username"].asString(), mix);
     }
     else if (!command.compare("STOPRECORD"))
     {

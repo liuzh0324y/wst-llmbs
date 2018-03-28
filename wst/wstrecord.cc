@@ -239,6 +239,7 @@ string Recorder::storagepath()
 	LOGW(iter->second);
 	return dir;
 }
+
 int Recorder::reportfiles()
 {
 	if (!_userinfo.size())

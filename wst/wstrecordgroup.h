@@ -27,7 +27,7 @@ public:
 
     ~RecorderGroup();
 
-    int  start(const string &appId, const string &channelId, const string &mixresolution);
+    int  start(const string &appId, const string &channelId, const string &username, const string &mixresolution);
     int  stop(const string &appId, const string &channelId);
     // Time delay mode
     int  stop(const string &channel);
@@ -49,6 +49,7 @@ protected:
 
 private:
     void InitTimer();
+    string gettimstamp();
 private:
     // recorder objs
     RecorderMap _recorderMap;
@@ -56,6 +57,7 @@ private:
     mutex _mutex_id;
     // appid
     string _appid;
+    map<string,string> _usernameMap;
 };
 
 #endif // WST_RECORDGROUP_H
