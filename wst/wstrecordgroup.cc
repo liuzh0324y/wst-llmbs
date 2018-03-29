@@ -90,9 +90,15 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
     if (user.empty()){
         user = "unknown";
     }
-
+    // if (user.size() > 27) {
+    //     user = user.substr(0, 26);
+    // }
+    string userinfo;
+    userinfo = gettimstamp();
+    userinfo.append("_");
+    userinfo.append(user);
     _mutex_id.lock();
-    _usernameMap.insert(make_pair(channelId, user));
+    _usernameMap.insert(make_pair(channelId, userinfo));
     _recorderMap.insert(make_pair(channelId, recorder));
     _mutex_id.unlock();
     LOGW("create channel succeed!");
@@ -259,7 +265,8 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     map<string, string>::iterator itername = _usernameMap.find(channel);
     if (itername == _usernameMap.end())
     {
-        LOGW("username")
+        LOGW("not found username");
+        return;
     }
     // python convert.py inpath outfile metadatafile
     // string mixfile = (*iter).path;
@@ -270,8 +277,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
         // string tmpstr = (*iter).name.substr(0, pos);
         // string outfile = tmpstr + ".mp4";
     // change mp4 file name.
-    string timestamp = gettimstamp();
-    string outfile = timestamp + "_" + (*itername).second + ".mp4";
+    string outfile = (*itername).second + ".mp4";
     string out = WstConf::Instance().recordpath() + "/" + outfile;
     string mixpath = "python /opt/llmbs/tools/convert.py ";
     mixpath.append((*iter).path);   // python convert.py inpath
@@ -289,7 +295,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     // cout << "mixmedia: "<< mixfile << endl;
 
     // picture
-    string picfile = WstConf::Instance().recordpath()+"/"+ timestamp + "_" + (*itername).second + ".jpeg";
+    string picfile = WstConf::Instance().recordpath()+"/"+ (*itername).second + ".jpeg";
     string command_pic = "/opt/llmbs/tools/ffmpeg -i ";
     command_pic.append(out);
     command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
@@ -301,7 +307,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     }
     FileInfo outinfo;
     outinfo.name = outfile;
-    outinfo.pic = timestamp + (*itername).second +".jpeg";
+    outinfo.pic = (*itername).second +".jpeg";
     outinfo.type = "mp4";
     outinfo.path = WstConf::Instance().recordpath();
     outinfo.channel = channel;
