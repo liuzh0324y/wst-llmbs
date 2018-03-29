@@ -257,6 +257,10 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     }
 
     map<string, string>::iterator itername = _usernameMap.find(channel);
+    if (itername == _usernameMap.end())
+    {
+        LOGW("username")
+    }
     // python convert.py inpath outfile metadatafile
     // string mixfile = (*iter).path;
     // mixfile.append("/");
@@ -315,6 +319,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     //     system(mixpath.c_str());
     //     cout << "mixmedia: "<< mixfile << endl;
     // }
+    _usernameMap.erase(itername);
 }
 
 int RecorderGroup::mixmedia(vector<FileInfo> files)
@@ -444,7 +449,7 @@ string RecorderGroup::gettimstamp()
 
     struct std::tm *ptm = std::localtime(&tt);
     std::stringstream ss;
-    ss << std::put_time(ptm, "%Y-%m-%d-%H.%M.%S");
+    ss << std::put_time(ptm, "%Y%m%d%H%M%S");
     return ss.str();
 }
 
