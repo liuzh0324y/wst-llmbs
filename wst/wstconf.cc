@@ -9,7 +9,7 @@ WstConf::WstConf()
     _seqnum = 0;
     _freedisk = 300;
     _keeplive = 3600;
-    _idleLimitSec = 600;
+    _idleLimitSec = 3600;
     
     _username = "admin";
     _password = "123456";

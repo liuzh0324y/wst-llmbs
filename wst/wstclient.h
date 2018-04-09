@@ -65,7 +65,7 @@ public:
 
     void    ReportFile(FileInfo fileinfo);
 
-    void    ReportStatus(uint32_t code, string description);
+    void    ReportStatus(uint32_t code, std::string channelid, std::string username, string description);
 
     string TimeOut();
 

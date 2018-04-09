@@ -43,7 +43,7 @@ void WstApp::checkDiskThread()
         size_t mbFreedisk = freeDisk>>20;
         if (mbFreedisk < WstConf::Instance().freedisk())
         {
-            WstHttpClient::Instance().ReportStatus(DISKFULL, "disk full");
+            WstHttpClient::Instance().ReportStatus(DISKFULL, NULL, NULL, "disk full");
         }
         // cout << WstConf::Instance().recordpath() << "; free disk: " << mbFreedisk << endl;
         sleep(60*60);

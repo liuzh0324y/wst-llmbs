@@ -136,17 +136,17 @@ void Recorder::onError(int error, agora::linuxsdk::STAT_CODE_TYPE stat_code)
 	{
 	case 1:
 		{
-			WstHttpClient::Instance().ReportStatus(AGORAFAILED, "agora filed");
+			WstHttpClient::Instance().ReportStatus(AGORAFAILED, _channel, _username, "agora failed");
 		}
 		break;
 	case 2:
 		{
-			WstHttpClient::Instance().ReportStatus(AGORAINVAILDAGUMENT, "agora invaild agument");
+			WstHttpClient::Instance().ReportStatus(AGORAINVAILDAGUMENT, _channel, _username, "agora invaild agument");
 		}
 		break;
 	case 3:
 		{
-			WstHttpClient::Instance().ReportStatus(AGORAINTERNALFAILED, "agora internal failed");
+			WstHttpClient::Instance().ReportStatus(AGORAINTERNALFAILED, _channel, _username, "agora internal error");
 		}
 		break;
 	default:

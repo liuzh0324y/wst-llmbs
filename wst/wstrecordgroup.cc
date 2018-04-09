@@ -285,6 +285,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     mixpath.append(out);            // python convert.py inpath outfile
     mixpath.append(" ");            
     mixpath.append((*iter).meta);   // python convert.py inpath outfile metadatafile
+    LOGW(mixpath);
     system(mixpath.c_str());
     if (::access(out.c_str(), F_OK) == -1)
     {

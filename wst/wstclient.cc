@@ -244,7 +244,7 @@ void WstHttpClient::ReportFile(FileInfo fileinfo)
     event_base_free(base);
 }
 
-void WstHttpClient::ReportStatus(uint32_t code, string description)
+void WstHttpClient::ReportStatus(uint32_t code, std::string channelid, std::string username, string description)
 {
     if (_token.empty())
     {
@@ -267,6 +267,8 @@ void WstHttpClient::ReportStatus(uint32_t code, string description)
     postjson["status"] = code;
     postjson["description"] = description;
     postjson["time"] = time(0);
+    postjson["channel"] = channelid;
+    postjson["username"] = username;
     base = event_base_new();
 
     uri = "http://";
