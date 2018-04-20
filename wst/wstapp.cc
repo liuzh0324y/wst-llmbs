@@ -2,6 +2,7 @@
 #include "wstrecord.h"
 #include "wstconf.h"
 #include "wstlog.h"
+#include "wstblinkrecord.h"
 
 #include <csignal>
 #include <thread>
@@ -57,6 +58,16 @@ void WstApp::keepLiveThread()
         sleep(WstConf::Instance().keeplivetime());
         WstHttpClient::Instance().KeepLive();
     }
+}
+
+void WstApp::blinkRecord()
+{
+    WstBlinkRecord blink;
+    blink.Initialize();
+    blink.Start();
+    blink.Stop();
+    blink.Destroy();
+    std::this_thread::
 }
 
 void WstApp::fSignalHandler(int signum)
@@ -128,9 +139,11 @@ int WstApp::Run()
     std::thread worker(&WstApp::mainThread, this);
     std::thread sub1(&WstApp::checkDiskThread, this);
     std::thread sub2(&WstApp::keepLiveThread, this);
+    std::thread blink(&WstApp::blinkRecord, this);
     worker.join();
     sub1.join();
     sub2.join();
+    blink.join();
 
     LOGW("server app stop");
     WstLog::Instance().Destroy();

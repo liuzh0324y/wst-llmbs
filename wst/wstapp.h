@@ -22,6 +22,7 @@ protected:
     void mainThread();
     void checkDiskThread();
     void keepLiveThread();
+    void blinkRecord();
     static void fSignalHandler(int signum);
 
 
