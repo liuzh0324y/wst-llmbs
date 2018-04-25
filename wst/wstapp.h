@@ -1,7 +1,7 @@
 #ifndef WST_APP_H
 #define WST_APP_H
 
-#include "wsthttp.h"
+#include "wstagoraserver.h"
 
 class AgoraRecorder;
 

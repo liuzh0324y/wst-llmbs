@@ -67,7 +67,6 @@ void WstApp::blinkRecord()
     blink.Start();
     blink.Stop();
     blink.Destroy();
-    std::this_thread::
 }
 
 void WstApp::fSignalHandler(int signum)
@@ -129,20 +128,20 @@ int WstApp::parseOption(int argc, char ** argv)
 
 int WstApp::Run()
 {
-    WstLog::Instance().Initialize();
-    WstConf::Instance().ReadConfigFile();
-    WstConf::Instance().ReadLicenseFile();
+    WstLog::Instance().Initialize("error.log");
+    // WstConf::Instance().ReadConfigFile();
+    // WstConf::Instance().ReadLicenseFile();
 
     LOGW("server app start");
 
     // signal(SIGINT, fSignalHandler);
-    std::thread worker(&WstApp::mainThread, this);
-    std::thread sub1(&WstApp::checkDiskThread, this);
-    std::thread sub2(&WstApp::keepLiveThread, this);
+    // std::thread worker(&WstApp::mainThread, this);
+    // std::thread sub1(&WstApp::checkDiskThread, this);
+    // std::thread sub2(&WstApp::keepLiveThread, this);
     std::thread blink(&WstApp::blinkRecord, this);
-    worker.join();
-    sub1.join();
-    sub2.join();
+    // worker.join();
+    // sub1.join();
+    // sub2.join();
     blink.join();
 
     LOGW("server app stop");

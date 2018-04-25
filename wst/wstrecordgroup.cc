@@ -1,7 +1,7 @@
 #include "wstrecordgroup.h"
 #include "wstconf.h"
 #include "wstrecord.h"
-#include "wstclient.h"
+#include "wstagoraclient.h"
 #include "wstlog.h"
 
 #include <iomanip>

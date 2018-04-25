@@ -1,6 +1,6 @@
 #include "wstrecord.h"
 #include "wstfile.h"
-#include "wstclient.h"
+#include "wstagoraclient.h"
 #include "wstconf.h"
 #include "wstlog.h"
 

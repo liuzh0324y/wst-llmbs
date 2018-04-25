@@ -1,8 +1,8 @@
-#ifndef WST_HTTP_H
-#define WST_HTTP_H
+#ifndef WST_AGORA_SERVER_H
+#define WST_AGORA_SERVER_H
 
 #include "wstrecordgroup.h"
-#include "wstclient.h"
+#include "wstagoraclient.h"
 
 #include <event2/event.h>
 #include <event2/http.h>
@@ -80,4 +80,4 @@ private:
     RecorderGroup _recorderGroup;
 };
 
-#endif // WST_HTTP_H
+#endif // WST_AGORA_SERVER_H

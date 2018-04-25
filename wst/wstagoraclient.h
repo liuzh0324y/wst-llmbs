@@ -1,13 +1,7 @@
-#ifndef WST_CLIENT_H
-#define WST_CLIENT_H
+#ifndef WST_AGORA_CLIENT_H
+#define WST_AGORA_CLIENT_H
 
 #include "config.h"
-
-#include <event2/event.h>
-#include <event2/buffer.h>
-#include <event2/http.h>
-#include <event2/http_struct.h>
-#include <event2/keyvalq_struct.h>
 
 #include <json/json.h>
 
@@ -25,37 +19,14 @@ using std::thread;
 using std::string;
 using std::vector;
 
-#define HTTP_CONTENT_TYPE_URL_ENCODED   "application/json"
-#define HTTP_CONTENT_TYPE_FORM_DATA     "multipart/form-data"
-#define HTTP_CONTENT_TYPE_TEXT_PLAIN    "text/plain"
-
-#define REQUEST_POST_FLAG               2
-#define REQUEST_GET_FLAG                3
-
-struct http_request_get 
-{
-    struct evhttp_uri *uri;
-    struct event_base *base;
-    struct evhttp_connection *cn;
-    struct evhttp_request *req;
-};
-
-struct http_request_post
-{
-    struct evhttp_uri *uri;
-    struct event_base *base;
-    struct evhttp_connection *cn;
-    struct evhttp_request *req;
-    char *content_type;
-    char *post_data;
-};
+typedef void (*cb)();
 
 class WstHttpClient 
 {
 public:
     // get WstConf instance
     static WstHttpClient& Instance();
-    static string GetToken();
+    static string GetToken(); 
 
     void    Login();
 
@@ -67,13 +38,22 @@ public:
 
     void    ReportStatus(uint32_t code, std::string channelid, std::string username, string description);
 
-    string TimeOut();
-
-    int    MaxClient();
+    void    GetDownloader();
     
-    int    MaxChannel();
+    string  TimeOut();
 
-    void KeepLive();
+    int     MaxClient();
+    
+    int     MaxChannel();
+
+    void    KeepLive();
+
+    void    GetBToken();
+
+    void    GetDownFile();
+    
+    void    SetCallBack(cb callback, void *arg);
+
 protected:
     WstHttpClient();
     ~WstHttpClient();
@@ -88,10 +68,14 @@ protected:
     void *startHttpRequest(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
 
 private:
+    
+    cb      _callback;
+private:
     static string       _token;
     static string       _time;
     static int          _maxclient;
     static int          _maxchannel;
+    static string       _btoken;
 };
 
-#endif // WST_CLIENT_H
+#endif // WST_AGORA_CLIENT_H

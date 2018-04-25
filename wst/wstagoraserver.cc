@@ -1,4 +1,4 @@
-#include "wsthttp.h"
+#include "wstagoraserver.h"
 #include "wstconf.h"
 #include "wstlog.h"
 

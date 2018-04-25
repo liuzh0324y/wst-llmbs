@@ -1,4 +1,4 @@
-#include "wstclient.h"
+#include "wstagoraclient.h"
 #include "wstconf.h"
 #include "wstlog.h"
 #include <string>
@@ -7,16 +7,22 @@ string       WstHttpClient::_token;
 string       WstHttpClient::_time;
 int          WstHttpClient::_maxclient = 0;
 int          WstHttpClient::_maxchannel = 0;
+string       WstHttpClient::_btoken;
 
 
 WstHttpClient::WstHttpClient()
 {
-    
+    _callback = NULL;
 }
 
 WstHttpClient::~WstHttpClient()
 {
 
+}
+
+void    WstHttpClient::SetCallBack(cb callback, void *arg)
+{
+    _callback = callback;
 }
 
 WstHttpClient& WstHttpClient::Instance()
@@ -285,6 +291,51 @@ void WstHttpClient::ReportStatus(uint32_t code, std::string channelid, std::stri
     event_base_free(base);
 }
 
+void    WstHttpClient::GetBToken() {
+    struct event_base *base;
+    struct http_request_get *request;
+    std::string url;
+    std::string getJson;
+    url = "http://glxsslivelocal2.llvision.com:8800/token?appid=1234567890abcdefg&uid=downloader";
+
+    base = event_base_new();
+    request = (struct http_request_get *)startHttpRequest(base, url.c_str(), REQUEST_GET_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, getJson.c_str());
+
+    event_base_dispatch(base);
+    httpRequestFree((struct http_request_get*)request, REQUEST_GET_FLAG);
+    event_base_free(base);
+}
+void    WstHttpClient::GetDownloader() {
+    struct event_base *base;
+    struct http_request_get *request;
+    std::string url;
+    std::string getJson;
+    url = "http://glxsslivelocal2.llvision.com:8040/downloadurl";
+    url.append("?");
+    url.append(_btoken);
+    url.append("&appid=1234567890abcdefg");
+
+    base = event_base_new();
+    request = (struct http_request_get *)startHttpRequest(base, url.c_str(), REQUEST_GET_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, getJson.c_str());
+
+    event_base_dispatch(base);
+    httpRequestFree((struct http_request_get*)request, REQUEST_GET_FLAG);
+    event_base_free(base);
+}
+
+void    WstHttpClient::GetDownFile() {
+    struct event_base *base;
+    struct http_request_get *request;
+    std::string url;
+    url = "http://glxsslivelocal2.llvision.com:8088/423487/2l76Zg0Gn519h22LI2654wn7y124OE";
+
+    base = event_base_new();
+    request = (struct http_request_get *)startHttpRequest(base, url.c_str(), REQUEST_GET_FLAG, HTTP_CONTENT_TYPE_FORM_DATA, "");
+
+    event_base_dispatch(base);
+    httpRequestFree((struct http_request_get *)request, REQUEST_GET_FLAG);
+    event_base_free(base);
+}
 string WstHttpClient::GetToken()
 {
     return _token;
@@ -339,19 +390,57 @@ void WstHttpClient::KeepLive()
 
 void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
 {
-    struct http_request_post *http_req_post = (struct http_request_post*)arg;
+    // struct http_request_post *http_req_post = (struct http_request_post*)arg;
+    struct http_request_get *reuqest = (struct http_request_get*)arg;
+    struct evbuffer *buf;
+    std::string llbuf;
 
+    buf = evhttp_request_get_input_buffer(req);
     switch (req->response_code)
     {
         case HTTP_OK:
         {
+            while (evbuffer_get_length(buf))
+            {
+                int n;
+                char cbuf[128];
+                n = evbuffer_remove(buf, cbuf, sizeof(cbuf));
+                if (n > 0)
+                {
+                    llbuf.append(cbuf, n);
+                }
+            }
+
+            if (llbuf.compare(0, 5, "sign=") == 0) {
+                _btoken = llbuf;
+            } else {
+                Json::Reader    jsonreader;
+                Json::Value     root;
+
+                jsonreader.parse(llbuf.c_str(), root);
+                if (!root["result"].isNull()) {
+                    if (root["result"].asInt() == 1) {
+                        std::cout << "array size: " << root["data"].size() << std::endl;
+                        Json::Value data = root["data"];
+                        for (int i = 0; i < data.size(); i++) {
+                            LOGW(data[i]["cid"].asString());
+                            LOGW(data[i]["downloadurl"].asString());
+                            LOGW(data[i]["time"].asString());
+                        }
+                    } else {
+                        LOGW("result failed.");
+                    }
+                }
+            }
+            LOGW("get: " + llbuf);
+            // _callback();
             break;
         }
         default:
             break;
             
     }
-    event_base_loopexit(http_req_post->base, 0);
+    event_base_loopexit(reuqest->base, 0);
 }
 
 void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg)
@@ -377,7 +466,7 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
                     llbuf.append(cbuf, n);
                 }
             }
-            LOGW(llbuf);
+            LOGW("post: " + llbuf);
             Json::Reader jsonreader;
             Json::Value root;
             jsonreader.parse(llbuf.c_str(), root);
@@ -404,38 +493,38 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
                 {
                     case ERROR:
                     {
-                        LOGW("code is error!");
+                        LOGW("post: code is error!");
                         break;
                     }
                     case SUCCESS:
                     {
-                        LOGW("code is success!");
+                        LOGW("post: code is success!");
                         break;
                     }
                     case TOKENERROR:
                     {
                         Instance().Login();
-                        LOGW("code is token error!");
+                        LOGW("post: code is token error!");
                         break;
                     }
                     case USERPWDERROR:
                     {
-                        LOGW("code is userpwd error!");
+                        LOGW("post: code is userpwd error!");
                         break;
                     }
                     case AUTHFAIL:
                     {
-                        LOGW("code is auth failed!");
+                        LOGW("post: code is auth failed!");
                         break;    
                     }
                     case NOTDEST:
                     {
-                        LOGW("code is not dest!");
+                        LOGW("post: code is not dest!");
                         break;
                     }
                     default:
                     {
-                        LOGW("code is unknown!");
+                        LOGW("post: code is unknown!");
                         break;
                     }
                         
@@ -444,7 +533,7 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
             break;
         }
         default:
-            LOGW("NO HTTP_OK.");
+            LOGW("post: NO HTTP_OK.");
             break;       
     }
 

@@ -22,6 +22,10 @@
 #include <algorithm>
 #include <mutex>
 
+// libevent include files
+#include <event.h>
+#include <evhttp.h>
+
 #if LOGER
 #include "logger.h"
 #endif // LOGER
@@ -80,5 +84,32 @@ typedef struct _dev_info
     string      devtype;
     string      devdescription;
 } DevInfo;
+
+#define HTTP_CONTENT_TYPE_URL_ENCODED   "application/json"
+#define HTTP_CONTENT_TYPE_FORM_DATA     "multipart/form-data"
+#define HTTP_CONTENT_TYPE_TEXT_PLAIN    "text/plain"
+
+#define REQUEST_POST_FLAG               2
+#define REQUEST_GET_FLAG                3
+
+struct http_request_get 
+{
+    struct evhttp_uri *uri;
+    struct event_base *base;
+    struct evhttp_connection *cn;
+    struct evhttp_request *req;
+    void * param;
+};
+
+struct http_request_post
+{
+    struct evhttp_uri *uri;
+    struct event_base *base;
+    struct evhttp_connection *cn;
+    struct evhttp_request *req;
+    char *content_type;
+    char *post_data;
+    void * param;
+};
 
 #endif // _CONFIG_H_
