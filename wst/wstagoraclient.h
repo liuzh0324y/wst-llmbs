@@ -13,13 +13,15 @@
 #include <iostream>
 #include <vector>
 
+#include "wstdownloader.h"
+#include "wstqueue.h"
+
 using std::cout;
 using std::endl;
 using std::thread;
 using std::string;
 using std::vector;
 
-typedef void (*cb)();
 
 class WstHttpClient 
 {
@@ -51,9 +53,8 @@ public:
     void    GetBToken();
 
     void    GetDownFile();
-    
-    void    SetCallBack(cb callback, void *arg);
 
+    static WstQueue     _wstqueue;
 protected:
     WstHttpClient();
     ~WstHttpClient();
@@ -68,14 +69,13 @@ protected:
     void *startHttpRequest(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
 
 private:
-    
-    cb      _callback;
-private:
     static string       _token;
     static string       _time;
     static int          _maxclient;
     static int          _maxchannel;
     static string       _btoken;
+    
 };
+
 
 #endif // WST_AGORA_CLIENT_H

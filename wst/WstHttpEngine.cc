@@ -20,7 +20,7 @@ void WstHttpEngine::Request(std::string url, std::string body, HTTPTYPE type) {
     request = (struct http_request_get *)startHttpRequest(base, url.c_str(), flag, HTTP_CONTENT_TYPE_URL_ENCODED, body.c_str());
 
     event_base_dispatch(base);
-    httpRequestFree((struct http_request_get*)request, REQUEST_GET_FLAG);
+    httpRequestFree((struct http_request_get*)request, flag);
     event_base_free(base);
 }
 
@@ -145,7 +145,7 @@ int   WstHttpEngine::startUrlRequest(struct http_request_get *http_req, int req_
     
     // cout << "((((((((((***************)))))))))))))))" << http_req->uri << endl;
     int port = evhttp_uri_get_port(http_req->uri);
-
+    
     http_req->cn = evhttp_connection_base_new(http_req->base, NULL, evhttp_uri_get_host(http_req->uri), (port == -1 ? 80 : port));
     
     if (req_get_flag == REQUEST_POST_FLAG)

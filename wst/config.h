@@ -19,6 +19,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <queue>
 #include <algorithm>
 #include <mutex>
 
@@ -111,5 +112,6 @@ struct http_request_post
     char *post_data;
     void * param;
 };
+
 
 #endif // _CONFIG_H_

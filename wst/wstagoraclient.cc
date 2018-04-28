@@ -8,21 +8,16 @@ string       WstHttpClient::_time;
 int          WstHttpClient::_maxclient = 0;
 int          WstHttpClient::_maxchannel = 0;
 string       WstHttpClient::_btoken;
-
+WstQueue     WstHttpClient::_wstqueue;
 
 WstHttpClient::WstHttpClient()
 {
-    _callback = NULL;
+
 }
 
 WstHttpClient::~WstHttpClient()
 {
 
-}
-
-void    WstHttpClient::SetCallBack(cb callback, void *arg)
-{
-    _callback = callback;
 }
 
 WstHttpClient& WstHttpClient::Instance()
@@ -394,6 +389,7 @@ void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
     struct http_request_get *reuqest = (struct http_request_get*)arg;
     struct evbuffer *buf;
     std::string llbuf;
+    WstHttpClient *param = (WstHttpClient*)reuqest->param;
 
     buf = evhttp_request_get_input_buffer(req);
     switch (req->response_code)
@@ -420,20 +416,29 @@ void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
                 jsonreader.parse(llbuf.c_str(), root);
                 if (!root["result"].isNull()) {
                     if (root["result"].asInt() == 1) {
-                        std::cout << "array size: " << root["data"].size() << std::endl;
-                        Json::Value data = root["data"];
-                        for (int i = 0; i < data.size(); i++) {
-                            LOGW(data[i]["cid"].asString());
-                            LOGW(data[i]["downloadurl"].asString());
-                            LOGW(data[i]["time"].asString());
+                        try {
+                            Json::Value data = root["data"];
+                            WstDownloader downloader;
+                            for (int i = 0; i < data.size(); i++) {
+                                WstValue value;
+                                value.cid = data[i]["cid"].asString();
+                                value.url = data[i]["downloadurl"].asString();
+                                value.timestamp = data[i]["time"].asString();
+                                
+                                _wstqueue.push(value);
+                                std::cout << "queue size: " << _wstqueue.size() << std::endl;
+                            }
                         }
+                        catch (std::exception &ex) {
+                            LOGW(ex.what());
+                        }
+                        
                     } else {
                         LOGW("result failed.");
                     }
                 }
             }
-            LOGW("get: " + llbuf);
-            // _callback();
+
             break;
         }
         default:
@@ -555,6 +560,7 @@ void *WstHttpClient::httpRequestNew(struct event_base *base, const char *url, in
     struct http_request_get *http_req_get = (struct http_request_get *)calloc(1, len);
     http_req_get->uri = evhttp_uri_parse(url);
     http_req_get->base = base;
+    http_req_get->param = this;
 
     LOGW(data);
     if (req_get_flag == REQUEST_POST_FLAG)

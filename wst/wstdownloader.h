@@ -10,17 +10,25 @@ public:
     WstDownloader();
     ~WstDownloader();
 
-    void run(std::string url);
+    void run(std::string &cid, std::string &url, std::string &time);
+
+protected:
+    void worker();
 
 public:
     static void httpRequestGetHandler(struct evhttp_request *req, void *arg);
     static void httpRequestPostHandler(struct evhttp_request *req, void *arg);
+    static void httpRequestReadChunk(struct evhttp_request *req, void *param);
 
     void *httpRequestNew(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
     void  httpRequestFree(struct http_request_get *http_req_get, int req_get_flag);
     int   startUrlRequest(struct http_request_get *http_req, int req_get_flag);
     void *startHttpRequest(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
 
+private:
+    std::string _cid;
+    std::string _url;
+    std::string _timestamp;
 };
 
 class IWstBlinkHandler {

@@ -11,51 +11,94 @@ WstDownloader::~WstDownloader() {
 
 }
 
-void WstDownloader::run(std::string url) {
+void WstDownloader::run(std::string &cid, std::string &url, std::string &time) {
+    LOGW("WstDownloader::run");
+    _cid = cid;
+    _url = url;
+    _timestamp = time;
+    std::thread worker(&WstDownloader::worker, this);
+    worker.join();
+}
 
+void WstDownloader::worker() {
+    struct event_base *base;
+    struct http_request_get *request;
+    LOGW(_url);
+    base = event_base_new();
+    request = (struct http_request_get *)startHttpRequest(base, _url.c_str(), REQUEST_GET_FLAG, HTTP_CONTENT_TYPE_FORM_DATA, "");
 
+    event_base_dispatch(base);
+    httpRequestFree((struct http_request_get*)request, REQUEST_GET_FLAG);
+    event_base_free(base);
 }
 
 void WstDownloader::httpRequestGetHandler(struct evhttp_request *req, void *arg) {
-
     struct http_request_get *reuqest = (struct http_request_get*)arg;
-    struct evbuffer *buf;
-    std::string llbuf;
-
-    buf = evhttp_request_get_input_buffer(req);
-    switch (req->response_code)
-    {
-        case HTTP_OK:
-        {
-            break;
-        }
-        default:
-            break;
+    // struct evbuffer *buf;
+    // buf = evhttp_request_get_input_buffer(req);
+    
+    // switch (req->response_code)
+    // {
+    //     case HTTP_OK:
+    //     {
+    //         while (int size = evbuffer_get_length(buf)) {
+    //             char cbuf[1024];
+    //             int n = evbuffer_remove(buf, cbuf, sizeof(cbuf));
+    //             if (n > 0) {
+    //                 std::cout << "buf size: " << n << std::endl;
+    //                 // fwrite(cbuf, 1, n, pFile);
+    //             }
+    //         }
             
-    }
-    event_base_loopexit(reuqest->base, 0);
+            
+    //         break;
+    //     }
+    //     default:
+    //         break;
+            
+    // }
+    LOGW("http request get handler");
+    char buffer[256];
+    int nread;
+    while ((nread = evbuffer_remove(evhttp_request_get_input_buffer(req),
+		    buffer, sizeof(buffer))) > 0) {
+		/* These are just arbitrary chunks of 256 bytes.
+		 * They are not lines, so we can't treat them as such. */
+		// fwrite(buffer, nread, 1, stdout);
+	}
+    // evhttp_send_reply(req, 200, "ok", NULL);
+    // event_base_loopexit(reuqest->base, 0);
 }
 
 void WstDownloader::httpRequestPostHandler(struct evhttp_request *req, void *arg) {
 
-    struct http_request_post *http_req_post;
-    struct evbuffer *buf;
-    string llbuf;
+    struct http_request_post *http_req_post = (struct http_request_post*)arg;
+    // struct evbuffer *buf;
+    // string llbuf;
 
-    http_req_post = (struct http_request_post*)arg;
-
-    buf = evhttp_request_get_input_buffer(req);
-    switch (req->response_code)
-    {
-        case HTTP_OK:
-        {
-            break;
-        }
-        default:
-            break;       
-    }
-
+    // buf = evhttp_request_get_input_buffer(req);
+    // switch (req->response_code)
+    // {
+    //     case HTTP_OK:
+    //     {
+    //         break;
+    //     }
+    //     default:
+    //         break;       
+    // }
+    
     event_base_loopexit(http_req_post->base, 0);
+}
+
+void WstDownloader::httpRequestReadChunk(struct evhttp_request *req, void *param) {
+    LOGW(" http request read chunk.");
+    char buf[1024];
+    struct evbuffer *evbuf = evhttp_request_get_input_buffer(req);
+    int n = 0;
+    while ((n = evbuffer_remove(evbuf, buf, sizeof(buf))) > 0) {
+        std::cout << "size --> " << n << std::endl;
+    }
+    
 }
 
 void *WstDownloader::httpRequestNew(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data) {
@@ -140,6 +183,7 @@ int   WstDownloader::startUrlRequest(struct http_request_get *http_req, int req_
     else if (req_get_flag == REQUEST_GET_FLAG)
     {
         http_req->req = evhttp_request_new(httpRequestGetHandler, http_req);
+        // evhttp_request_set_chunked_cb(http_req->req, httpRequestReadChunk);
     }
     
     if (req_get_flag == REQUEST_POST_FLAG)
