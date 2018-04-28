@@ -82,6 +82,26 @@ public:
     // get seq number
     uint32_t seqnum();
 
+    // Blink app path
+    void SetBlinkApp(std::string blinkapp);
+    std::string GetBlinkApp();
+
+    // Blink app id
+    void SetBlinkAppId(std::string appid);
+    std::string GetBlinkAppId();
+
+    // Blink channel id
+    void SetBlinkChannelId(std::string channelid);
+    std::string GetBlinkChannelId();
+
+    // Blink token url
+    void SetBlinkTokenUrl(std::string tokenurl);
+    std::string GetBlinkTokenUrl();
+
+    // Blink download url
+    void SetBlinkDownloadUrl(std::string downloadurl);
+    std::string GetBlinkDownloadUrl();
+
 private:
     WstConf();
     ~WstConf();
@@ -136,6 +156,16 @@ private:
     uint32_t   _keeplive;
     // idle limit second
     uint32_t   _idleLimitSec;
+    // blink convert tools
+    std::string _blinkexe;
+    // blink app id
+    std::string _blinkappid;
+    // blink channel id
+    std::string _blinkchannelid;
+    // blink token url
+    std::string _blinktokenurl;
+    // blink downloader url
+    std::string _blinkdownloadurl;
 };
 
 template<class T>

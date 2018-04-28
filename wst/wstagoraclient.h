@@ -52,8 +52,6 @@ public:
 
     void    GetBToken();
 
-    void    GetDownFile();
-
     static WstQueue     _wstqueue;
 protected:
     WstHttpClient();
@@ -67,6 +65,9 @@ protected:
     void  httpRequestFree(struct http_request_get *http_req_get, int req_get_flag);
     int   startUrlRequest(struct http_request_get *http_req, int req_get_flag);
     void *startHttpRequest(struct event_base *base, const char *url, int req_get_flag, const char *content_type, const char *data);
+
+private:
+    std::string GetNowTime(std::string& starttime, std::string& endtime);
 
 private:
     static string       _token;

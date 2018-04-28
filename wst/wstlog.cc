@@ -32,7 +32,10 @@ bool    WstLog::Initialize(string filename)
 
 void    WstLog::Destroy()
 {
-    _outFile.close();
+    if (_outFile.is_open()) {
+        _outFile.close();
+    }
+    
 }
 
 int     WstLog::Write(string message)
@@ -52,8 +55,11 @@ int     WstLog::writeConsole(string message)
 
 int     WstLog::writeFile(string message)
 {
-    _outFile << message << endl;
-    _outFile.flush();
+    if (_outFile.is_open()) {
+        _outFile << message << endl;
+        _outFile.flush();
+    }
+    
     return message.length();
 }
 

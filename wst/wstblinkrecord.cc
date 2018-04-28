@@ -1,5 +1,6 @@
 #include "wstblinkrecord.h"
 #include "wstdownloader.h"
+#include "wstlog.h"
 #include <thread>
 
 WstBlinkRecord::WstBlinkRecord() 
@@ -49,19 +50,15 @@ void WstBlinkRecord::Worker()
     WstHttpClient::Instance().GetBToken();
     while (!_isQuit) 
     {
-        
-        std::this_thread::sleep_for(std::chrono::seconds(2));
         WstHttpClient::Instance().GetDownloader();
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-        // WstHttpClient::Instance().GetDownFile();
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(60*5));
     }
 }
 
 void WstBlinkRecord::Downloader() {
 
     while (!_isQuit) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(5));
         if (WstHttpClient::Instance()._wstqueue.size() > 0) {
             WstValue value;
             value = WstHttpClient::Instance()._wstqueue.front();
@@ -79,29 +76,40 @@ void WstBlinkRecord::Handler(WstValue& value) {
     //     _downloader.run(value.cid, value.url, value.timestamp);
     //     ql = true;
     // }
-    if (ql) return;
+    std::string outname;
+    outname = value.timestamp;
+    outname.append("_");
+    outname.append(value.cid);
+    outname.append(".flv");
+    std::string outnamepath;
+    outnamepath = WstConf::Instance().recordpath();
+    outnamepath.append("/");
+    outnamepath.append(outname);
+
     int pos = value.url.find_last_of("/");
     std::string sname = value.url.substr(pos+1);
     std::cout << "source name: " << sname << std::endl;
-    std::string name = "video";
+    std::string spath = WstConf::Instance().recordpath();
     std::string command;
     command = "wget ";
     command.append(" -P ");
-    command.append(name);
+    command.append(spath + "/tmp");
     command.append(" ");
     command.append(value.url);
     system(command.c_str());
-    ql = true;
-    std::cout << "system out" << std::endl;
+    LOGW("wget: " + command);
 
     std::string convert;
-    convert = "/opt/blink/videorecorder";
-    convert.append(" video/");
-    convert.append(sname);
+    convert = WstConf::Instance().GetBlinkApp();
     convert.append(" ");
-    convert.append("test.flv");
+    convert.append(spath + "/tmp/" + sname);
+    convert.append(" ");
+    convert.append(outnamepath);
     system(convert.c_str());
-    std::cout << convert << "convert out" << std::endl; 
-    // std::string url = "http://glxsslivelocal2.llvision.com:8800/token?appid=1234567890abcdefg&uid=downloader";
-    // _downloader.run(value.cid, url, value.timestamp);
+    LOGW("convert: " + convert);
+
+    FileInfo info;
+    info.name = outname;
+    info.path = outnamepath;
+    WstHttpClient::Instance().ReportFile(info);
 }

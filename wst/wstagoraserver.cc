@@ -147,6 +147,9 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
         command = root["command"].asString();
     }
 
+    if (root["type"]) {
+        
+    }
     if (!command.compare("STARTRECORD"))
     {
         result["command"] = "STARTRECORD";

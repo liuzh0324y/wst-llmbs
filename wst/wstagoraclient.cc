@@ -291,8 +291,12 @@ void    WstHttpClient::GetBToken() {
     struct http_request_get *request;
     std::string url;
     std::string getJson;
-    url = "http://glxsslivelocal2.llvision.com:8800/token?appid=1234567890abcdefg&uid=downloader";
-
+    url = WstConf::Instance().GetBlinkTokenUrl();
+    url.append("?appid=");
+    url.append(WstConf::Instance().GetBlinkAppId());
+    url.append("&uid=");
+    url.append(WstConf::Instance().GetBlinkChannelId());
+    LOGW("blink token url: " + url);
     base = event_base_new();
     request = (struct http_request_get *)startHttpRequest(base, url.c_str(), REQUEST_GET_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, getJson.c_str());
 
@@ -305,11 +309,19 @@ void    WstHttpClient::GetDownloader() {
     struct http_request_get *request;
     std::string url;
     std::string getJson;
-    url = "http://glxsslivelocal2.llvision.com:8040/downloadurl";
+    std::string starttime;
+    std::string endtime;
+    GetNowTime(starttime, endtime);
+    url = WstConf::Instance().GetBlinkDownloadUrl();
     url.append("?");
     url.append(_btoken);
-    url.append("&appid=1234567890abcdefg");
-
+    url.append("&appid=");
+    url.append(WstConf::Instance().GetBlinkAppId());
+    url.append("&starttime=");
+    url.append(starttime);
+    url.append("&endtime=");
+    url.append(endtime);
+    LOGW("blink downloader url: " + url);
     base = event_base_new();
     request = (struct http_request_get *)startHttpRequest(base, url.c_str(), REQUEST_GET_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, getJson.c_str());
 
@@ -318,19 +330,6 @@ void    WstHttpClient::GetDownloader() {
     event_base_free(base);
 }
 
-void    WstHttpClient::GetDownFile() {
-    struct event_base *base;
-    struct http_request_get *request;
-    std::string url;
-    url = "http://glxsslivelocal2.llvision.com:8088/423487/2l76Zg0Gn519h22LI2654wn7y124OE";
-
-    base = event_base_new();
-    request = (struct http_request_get *)startHttpRequest(base, url.c_str(), REQUEST_GET_FLAG, HTTP_CONTENT_TYPE_FORM_DATA, "");
-
-    event_base_dispatch(base);
-    httpRequestFree((struct http_request_get *)request, REQUEST_GET_FLAG);
-    event_base_free(base);
-}
 string WstHttpClient::GetToken()
 {
     return _token;
@@ -414,6 +413,7 @@ void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
                 Json::Value     root;
 
                 jsonreader.parse(llbuf.c_str(), root);
+                std::cout << llbuf << std::endl;
                 if (!root["result"].isNull()) {
                     if (root["result"].asInt() == 1) {
                         try {
@@ -426,7 +426,7 @@ void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
                                 value.timestamp = data[i]["time"].asString();
                                 
                                 _wstqueue.push(value);
-                                std::cout << "queue size: " << _wstqueue.size() << std::endl;
+                                // std::cout << "queue size: " << _wstqueue.size() << std::endl;
                             }
                         }
                         catch (std::exception &ex) {
@@ -562,7 +562,6 @@ void *WstHttpClient::httpRequestNew(struct event_base *base, const char *url, in
     http_req_get->base = base;
     http_req_get->param = this;
 
-    LOGW(data);
     if (req_get_flag == REQUEST_POST_FLAG)
     {
         struct http_request_post *http_req_post = (struct http_request_post*)http_req_get;
@@ -664,4 +663,18 @@ void *WstHttpClient::startHttpRequest(struct event_base *base, const char *url, 
     startUrlRequest(http_req_get, req_get_flag);
 
     return http_req_get;
+}
+
+std::string WstHttpClient::GetNowTime(std::string& starttime, std::string& endtime) {
+    using std::chrono::system_clock;
+    std::stringstream start, end;
+    std::time_t tt = system_clock::to_time_t(system_clock::now());
+    std::time_t before = tt - (60*5);
+    start << before;
+    end << tt;
+    starttime = start.str();
+    starttime.append("000");
+    endtime = end.str();
+    endtime.append("000");
+    return end.str();
 }

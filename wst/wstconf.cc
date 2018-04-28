@@ -31,6 +31,13 @@ WstConf::WstConf()
     _freedisk = 300;
     _keeplive = 3600;
     _idleLimitSec = 3600;
+
+    // Blink
+    _blinkexe = "/opt/blink/videorecorder";
+    _blinkappid = "1234567890abcdefg";
+    _blinkchannelid = "downloader";
+    _blinktokenurl = "http://glxsslivelocal2.llvision.com:8800/token";
+    _blinkdownloadurl = "http://glxsslivelocal2.llvision.com:8040/downloadurl";
 }
 
 WstConf::~WstConf()
@@ -286,6 +293,21 @@ string WstConf::parseConf(vector<string> &filelist)
             else if (temp.compare("idleLimitSec") == 0)
             {
                 _idleLimitSec = string_as_T<uint32_t>(tempstr);
+            }
+            else if (temp.compare("blinkapp") == 0) {
+                _blinkexe = tempstr;
+            }
+            else if (temp.compare("blinkappid") == 0) {
+                _blinkappid = tempstr;
+            }
+            else if (temp.compare("blinkchannelid") == 0) {
+                _blinkchannelid = tempstr;
+            }
+            else if (temp.compare("blinktokenurl") == 0) {
+                _blinktokenurl = tempstr;
+            }
+            else if (temp.compare("blinkdownloadurl") == 0) {
+                _blinkdownloadurl = tempstr;
             }
         }
     } 
@@ -574,4 +596,49 @@ uint32_t WstConf::idleLimitSec()
 void     WstConf::setIdleLimitSec(const uint32_t sec)
 {
     _idleLimitSec = sec;
+}
+
+// Blink app path
+void WstConf::SetBlinkApp(std::string blinkapp) {
+    _blinkexe = blinkapp;
+}
+
+std::string WstConf::GetBlinkApp() {
+    return _blinkexe;
+}
+
+// Blink app id
+void WstConf::SetBlinkAppId(std::string appid) {
+    _blinkappid = appid;
+}
+
+std::string WstConf::GetBlinkAppId() {
+    return _blinkappid;
+}
+
+// Blink channel id
+void WstConf::SetBlinkChannelId(std::string channelid) {
+    _blinkchannelid = channelid;
+}
+
+std::string WstConf::GetBlinkChannelId() {
+    return _blinkchannelid;
+}
+
+// Blink token url
+void WstConf::SetBlinkTokenUrl(std::string tokenurl) {
+    _blinktokenurl = tokenurl;
+}
+
+std::string WstConf::GetBlinkTokenUrl() {
+    return _blinktokenurl;
+}
+
+// Blink download url
+void WstConf::SetBlinkDownloadUrl(std::string downloadurl) {
+    _blinkdownloadurl = downloadurl;
+}
+
+std::string WstConf::GetBlinkDownloadUrl() {
+    return _blinkdownloadurl;
 }
