@@ -11,6 +11,7 @@
 # Author: Wisdom <liuzh@llvision.com>
 
 DAEMON=/opt/llmbs/bin/llmbs
+export LD_LIBRARY_PATH=/opt/llmbs/tools/blink/lib:$LD_LIBRARY_PATH
 
 dostart() {
     start-stop-daemon --start --background --exec $DAEMON

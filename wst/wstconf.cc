@@ -22,7 +22,7 @@ WstConf::WstConf()
     _recvTimeout = 30000;
     _recordpath = "/record";
     _logspath = "/opt/llmbs/logs";
-    _applitepath = "/opt/llmbs/tools";
+    _applitepath = "/opt/llmbs/tools/agora";
     _groupid = "0";
     _type = "ambs";
     _httppath = "/record";

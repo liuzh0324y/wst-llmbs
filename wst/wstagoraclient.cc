@@ -484,10 +484,12 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
                     _time = root["time"].asString();
                     _maxclient = root["maxclient"].asInt();
                     _maxchannel = root["maxchannel"].asInt();
-                    cout << "token:" << _token << endl
-                         << "time: " << _time << endl
-                         << "maxclient: " << _maxclient << endl
-                         << "maxchannel: " << _maxchannel << endl;
+                    std::stringstream outtmp;
+                    outtmp << "token: " << _token << " , "
+                        << "time: " << _time << " , " 
+                        << "maxclient: " << _maxclient << " , "
+                        << "maxchannel: " << _maxchannel << " .";
+                    LOGW(outtmp.str());
                 }
             }
 

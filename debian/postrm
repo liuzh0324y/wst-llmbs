@@ -3,5 +3,6 @@
 set -e
 
 update-rc.d llmbs remove >/dev/null
+ldconfig
 
 exit 0

@@ -279,7 +279,9 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     // change mp4 file name.
     string outfile = (*itername).second + ".mp4";
     string out = WstConf::Instance().recordpath() + "/" + outfile;
-    string mixpath = "python /opt/llmbs/tools/convert.py ";
+    string mixpath = "python ";
+    mixpath.append(WstConf::Instance().applitepath());
+    mixpath.append("/convert.py ");
     mixpath.append((*iter).path);   // python convert.py inpath
     mixpath.append(" ");
     mixpath.append(out);            // python convert.py inpath outfile
@@ -297,7 +299,8 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
 
     // picture
     string picfile = WstConf::Instance().recordpath()+"/"+ (*itername).second + ".jpeg";
-    string command_pic = "/opt/llmbs/tools/ffmpeg -i ";
+    string command_pic = WstConf::Instance().applitepath();
+    command_pic.append("/ffmpeg -i ");
     command_pic.append(out);
     command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
     command_pic.append(picfile);
