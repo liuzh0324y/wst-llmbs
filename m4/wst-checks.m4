@@ -19,14 +19,18 @@ AC_DEFUN([WST_CHECKS],
     WST_LIB_DIR=$prefix/lib 
     WST_CONF_DIR=$prefix/conf 
     WST_LOGS_DIR=$prefix/logs 
-    WST_TOOLS_DIR=$prefix/tools
+    # WST_TOOLS_DIR=$prefix/tools
     WST_INC_DIR=$prefix/include
+    WST_TOOLS_AGORA_DIR=$prefix/tools/agora
+    WST_TOOLS_BLINK_DIR=$prefix/tools/blink
     AC_SUBST(WST_BIN_DIR)
     AC_SUBST(WST_LIB_DIR)
     AC_SUBST(WST_CONF_DIR)
     AC_SUBST(WST_LOGS_DIR)
-    AC_SUBST(WST_TOOLS_DIR)
+    # AC_SUBST(WST_TOOLS_DIR)
     AC_SUBST(WST_INC_DIR)
+    AC_SUBST(WST_TOOLS_AGORA_DIR)
+    AC_SUBST(WST_TOOLS_BLINK_DIR)
     dnl Checks for header files and declarations
     # AC_CHECK_HEADERS([unistd.h sys/wait.h sys/time.h], [], [], [AC_INCLUDES_DEFAULT])
 

@@ -22,7 +22,7 @@ WstApp::~WstApp()
 
 }
 
-void WstApp::mainThread()
+void WstApp::agoraServer()
 {
     // http server
     WstHttpServer http;
@@ -35,7 +35,16 @@ void WstApp::mainThread()
 void WstApp::checkDiskThread()
 {
     struct statfs diskinfo;
+    // Determine if the folder exists.
+    DIR *dir;
+    if ((dir = opendir(WstConf::Instance().recordpath().c_str())) == NULL) {
+        LOGW(WstConf::Instance().recordpath() + " not exist");
+        return;
+    }
+    closedir(dir);
     
+    //
+    sleep(60*10);
     while (!_isQuit)
     {
         statfs(WstConf::Instance().recordpath().c_str(), &diskinfo);
@@ -53,6 +62,7 @@ void WstApp::checkDiskThread()
 
 void WstApp::keepLiveThread()
 {
+    sleep(60*10);
     while (!_isQuit)
     {
         sleep(WstConf::Instance().keeplivetime());
@@ -60,70 +70,15 @@ void WstApp::keepLiveThread()
     }
 }
 
-void WstApp::blinkRecord()
+void WstApp::blinkServer()
 {
     WstBlinkRecord blink;
-    blink.Initialize();
-    blink.Start();
+    if (blink.Initialize()) {
+        blink.Start();
+    }
+    _isQuit = true;
     blink.Stop();
     blink.Destroy();
-}
-
-void WstApp::fSignalHandler(int signum)
-{
-    _isQuit = true;
-   
-    // LOG(logger::LOGDEBUG, "server app signal handler.");
-    // std::cout << "server app signal handler." << std::endl;
-}
-
-
-void WstApp::initSignals()
-{
-
-}
-
-int WstApp::parseOption(int argc, char ** argv)
-{
-    char *p;
-    
-    for (int i = 1; i < argc; i++)
-    {
-        p = argv[i];
-        if (*p++ != '-')
-        {
-            return -1;
-        }
-
-        while (*p)
-        {
-            switch (*p++)
-            {
-            case '?':
-            case 'h':
-                cout << "show help" << endl;
-                break;
-
-            case 'v':
-                cout << "show version" << endl;
-                break;
-
-            case 'q':
-                cout << "show quit" << endl;
-                break;
-
-            case 's':
-                cout << "show signal" << endl;
-                return -1;
-
-            default:
-                cout << "show other" << endl;
-                return -1;
-            }
-        }
-    }
-
-    return 0;
 }
 
 int WstApp::Run()
@@ -132,29 +87,25 @@ int WstApp::Run()
     WstConf::Instance().ReadConfigFile();
     WstConf::Instance().ReadLicenseFile();
 
-    LOGW("server app start");
+    std::thread checkdist(&WstApp::checkDiskThread, this);
+    std::thread keeplive(&WstApp::keepLiveThread, this);
 
-    // signal(SIGINT, fSignalHandler);
-    std::thread worker(&WstApp::mainThread, this);
-    // std::thread sub1(&WstApp::checkDiskThread, this);
-    std::thread sub2(&WstApp::keepLiveThread, this);
-    std::thread blink(&WstApp::blinkRecord, this);
-    worker.join();
-    // sub1.join();
-    sub2.join();
-    blink.join();
+    if (WstConf::Instance().servertype().compare("ambs") == 0) {
+        std::thread server(&WstApp::agoraServer, this);
+        LOGW("agora server app start");
+        server.join();
+    } else if (WstConf::Instance().servertype().compare("bmbs") == 0) {
+        std::thread server(&WstApp::blinkServer, this);
+        LOGW("blink server app start");
+        server.join();
+    }
+
+    checkdist.join();
+    keeplive.join();
 
     LOGW("server app stop");
+    _isQuit = true;
     WstLog::Instance().Destroy();
 
     return 0;
-}
-
-int WstApp::Run(int argc, char ** argv)
-{
-    if (parseOption(argc, argv) != 0)
-    {
-        return 1;
-    }
-
 }

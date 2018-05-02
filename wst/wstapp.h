@@ -12,19 +12,12 @@ public:
     ~WstApp();
 
     int Run();
-    int Run(int argc, char ** argv);
-
-private:
-    int     parseOption(int argc, char ** argv);
-    void    initSignals();
 
 protected:
-    void mainThread();
+    void agoraServer();
+    void blinkServer();
     void checkDiskThread();
     void keepLiveThread();
-    void blinkRecord();
-    static void fSignalHandler(int signum);
-
 
 private:
     // quit flag

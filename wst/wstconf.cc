@@ -58,7 +58,7 @@ bool WstConf::ReadConfigFile(string file)
     if (!_input)
     {
         std::stringstream temp;
-        temp << "could not load file. " << file;
+        temp << "could not load " << file;
         LOGW(temp.str());
         return false;
     }
@@ -104,105 +104,6 @@ bool WstConf::ReadLicenseFile(string file)
     return true;
 }
 
-string WstConf::parseConf(string input)
-{
-    if (input.empty())
-    {
-        return string();
-    }
-    if ((input.compare(0, 1, "#") == 0))
-    {
-        return string();
-    }
-    if (std::size_t pos = input.find("="))
-    {
-        string temp = input.substr(0, pos);
-        string tempstr = input.substr(pos+1);
-
-        if (!temp.compare("username"))
-        {
-            _username = tempstr;
-        }
-        else if (temp.compare("password") == 0)
-        {
-            _password = tempstr;
-        }
-        else if (temp.compare("local_ip") == 0)
-        {
-            _localip = tempstr;
-        }
-        else if (temp.compare("local_port") == 0)
-        {
-            _localport = tempstr;
-        }
-        else if (temp.compare("server_ip") == 0)
-        {
-            _serverIp = tempstr;
-        }
-        else if (temp.compare("server_port") == 0)
-        {
-            _serverPort = tempstr;
-        }
-        else if (temp.compare("connect_timeout") == 0)
-        {
-            _connectTimeout = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("send_timeout") == 0)
-        {
-            _sendTimeout = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("recv_timeout") == 0)
-        {
-            _recvTimeout = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("record_path") == 0)
-        {
-            _recordpath = tempstr;
-        }
-        // else if (temp.compare("logs_path") == 0)
-        // {
-        //     _logspath = tempstr;
-        // }
-        // else if (temp.compare("applite_path") == 0)
-        // {
-        //     _applitepath = tempstr;
-        // }
-        else if (temp.compare("groupid") == 0)
-        {
-            _groupid = tempstr;
-        }
-        else if (temp.compare("type") == 0)
-        {
-            _type = tempstr;
-        }
-        else if (temp.compare("http_path") == 0)
-        {
-            _httppath = tempstr;
-        }
-        else if (temp.compare("http_port") == 0)
-        {
-            _httpport = tempstr;
-        }
-        else if (temp.compare("rtmpport") == 0)
-        {
-            _rtmpport = tempstr;
-        }
-        else if (temp.compare("freedisk") == 0)
-        {
-            _freedisk = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("keeplive") == 0)
-        {
-            _keeplive = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("idleLimitSec") == 0)
-        {
-            _idleLimitSec = string_as_T<uint32_t>(tempstr);
-        }
-    }
-    return string();
-}
-
 string WstConf::parseConf(vector<string> &filelist)
 {
     vector<string>::iterator iter = filelist.begin();
@@ -222,43 +123,43 @@ string WstConf::parseConf(vector<string> &filelist)
             {
                 _password = tempstr;
             }
-            else if (temp.compare("local_ip") == 0)
+            else if (temp.compare("localip") == 0)
             {
                 _localip = tempstr;
             }
-            else if (temp.compare("local_port") == 0)
+            else if (temp.compare("localport") == 0)
             {
                 _localport = tempstr;
             }
-            else if (temp.compare("server_ip") == 0)
+            else if (temp.compare("serverip") == 0)
             {
                 _serverIp = tempstr;
             }
-            else if (temp.compare("server_port") == 0)
+            else if (temp.compare("serverport") == 0)
             {
                 _serverPort = tempstr;
             }
-            else if (temp.compare("connect_timeout") == 0)
+            else if (temp.compare("connecttimeout") == 0)
             {
                 _connectTimeout = string_as_T<uint32_t>(tempstr);
             }
-            else if (temp.compare("send_timeout") == 0)
+            else if (temp.compare("sendtimeout") == 0)
             {
                 _sendTimeout = string_as_T<uint32_t>(tempstr);
             }
-            else if (temp.compare("recv_timeout") == 0)
+            else if (temp.compare("recvtimeout") == 0)
             {
                 _recvTimeout = string_as_T<uint32_t>(tempstr);
             }
-            else if (temp.compare("record_path") == 0)
+            else if (temp.compare("recordpath") == 0)
             {
                 _recordpath = tempstr;
             }
-            // else if (temp.compare("logs_path") == 0)
+            // else if (temp.compare("logspath") == 0)
             // {
             //     _logspath = tempstr;
             // }
-            // else if (temp.compare("applite_path") == 0)
+            // else if (temp.compare("applitepath") == 0)
             // {
             //     _applitepath = tempstr;
             // }
@@ -270,11 +171,11 @@ string WstConf::parseConf(vector<string> &filelist)
             {
                 _type = tempstr;
             }
-            else if (temp.compare("http_path") == 0)
+            else if (temp.compare("httppath") == 0)
             {
                 _httppath = tempstr;
             }
-            else if (temp.compare("http_port") == 0)
+            else if (temp.compare("httpport") == 0)
             {
                 _httpport = tempstr;
             }

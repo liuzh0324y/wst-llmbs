@@ -17,7 +17,29 @@ WstBlinkRecord::~WstBlinkRecord()
 
 bool WstBlinkRecord::Initialize()
 {
-    
+    // check dir
+    DIR *record, *tmp;
+    std::string recordpath = WstConf::Instance().recordpath();
+    std::string tmppath = recordpath + "/tmp";
+    std::string toolpath = WstConf::Instance().GetBlinkApp();
+    record = opendir(recordpath.c_str());
+    if (record == NULL) {
+        LOGW("record is null.");
+        return false;
+    }
+    tmp = opendir(tmppath.c_str());
+    if (tmp == NULL) {
+        LOGW("record/tmp is null.");
+        return false;
+    }
+    if (::access(toolpath.c_str(), F_OK) == -1)
+    {
+        std::stringstream tempstr;
+        tempstr << "not found " << toolpath;
+        LOGW(tempstr.str());
+        return false;
+    }
+    return true;
 }
 
 bool WstBlinkRecord::Start()
@@ -69,7 +91,6 @@ void WstBlinkRecord::Downloader() {
     }
 }
 
-bool ql = false;
 void WstBlinkRecord::Handler(WstValue& value) {
     // if (!ql) {
     //     std::cout << "downloader url: " << value.url << std::endl;
@@ -111,5 +132,6 @@ void WstBlinkRecord::Handler(WstValue& value) {
     FileInfo info;
     info.name = outname;
     info.path = outnamepath;
+    info.type = "flv";
     WstHttpClient::Instance().ReportFile(info);
 }

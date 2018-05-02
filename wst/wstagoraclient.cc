@@ -538,7 +538,9 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
             break;
         }
         default:
-            LOGW("post: NO HTTP_OK.");
+            std::stringstream err;
+            err << "receive code " << req->response_code << " for client.";
+            LOGW(err.str());
             break;       
     }
 
@@ -659,7 +661,8 @@ void *WstHttpClient::startHttpRequest(struct event_base *base, const char *url, 
 {
     
     struct http_request_get *http_req_get = (struct http_request_get *)httpRequestNew(base, url, req_get_flag, content_type, data);
-    
+    LOGW(url);
+    LOGW(data);
     startUrlRequest(http_req_get, req_get_flag);
 
     return http_req_get;

@@ -55,14 +55,31 @@ else
     echo ": skipped version checks"
 fi
 
-if test ! -f $srcdir/tools/AgoraCoreService;
+# agora
+if test ! -f $srcdir/tools/agora/AgoraCoreService;
 then
-    cp $srcdir/wst-ext/agora/v2.1.0/bin/AgoraCoreService $srcdir/tools/AgoraCoreService
+    cp $srcdir/wst-ext/agora/v2.1.0/bin/AgoraCoreService $srcdir/tools/agora/AgoraCoreService
 fi
 
-if test ! -f $srcdir/tools/ffmpeg;
+if test ! -f $srcdir/tools/agora/ffmpeg;
 then
-    cp $srcdir/wst-ext/agora/v2.1.0/tools/ffmpeg $srcdir/tools/ffmpeg
+    cp $srcdir/wst-ext/agora/v2.1.0/tools/ffmpeg $srcdir/tools/agora/ffmpeg
+fi
+
+if test ! -f $srcdir/tools/agora/convert.py;
+then
+    cp $srcdir/wst-ext/agora/convert.py $srcdir/tools/agora/convert.py
+fi
+
+# blink
+if test ! -f $srcdir/tools/blink/videorecorder;
+then
+    cp $srcdir/wst-ext/blink/v1.0.0/videorecorder $srcdir/tools/blink/videorecorder
+fi
+
+if test ! -f $srcdir/tools/blink/lib;
+then
+    cp -rf $srcdir/wst-ext/blink/v1.0.0/lib $srcdir/tools/blink/lib
 fi
 
 # if no arguments specified then this will be printed

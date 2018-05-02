@@ -15,16 +15,26 @@ WstLog& WstLog::Instance()
     return theLogger;
 }
 
-bool    WstLog::Initialize(string filename)
+bool    WstLog::Initialize(string filepath)
 {
-    _outFile.open(filename, ofstream::out | ofstream::app);
+    std::string logname;
+    _currentDate = GetDate();
+    logname = filepath;
+    logname.append("/");
+    logname.append(_currentDate);
+    logname.append("_error.log");
+    _outFile.open(logname, ofstream::out | ofstream::app);
     if (!_outFile)
     {
-        LOGW("could not load logger file.");
+        std::stringstream tmp;
+        tmp << "could not open " << logname;
+        LOGW(tmp.str());
     }
     else
     {
-        LOGW("load logger file.");
+        std::stringstream tmp;
+        tmp << "open the log file " << logname;
+        LOGW(tmp.str());
     }
     
     return true;
@@ -40,6 +50,10 @@ void    WstLog::Destroy()
 
 int     WstLog::Write(string message)
 {
+    if (_currentDate.compare(GetDate()) != 0) {
+        Destroy();
+        Initialize();
+    }
     std::stringstream msg;
     msg << getTime() << " --> " << message;
     writeConsole(msg.str());
@@ -71,5 +85,15 @@ std::string WstLog::getTime()
     struct std::tm *ptm = std::localtime(&tt);
     std::stringstream ss;
     ss << std::put_time(ptm, "[%Y-%m-%d %H.%M.%S]");
+    return ss.str();
+}
+
+std::string WstLog::GetDate() {
+    using std::chrono::system_clock;
+    std::time_t tt = system_clock::to_time_t(system_clock::now());
+
+    struct std::tm *ptm = std::localtime(&tt);
+    std::stringstream ss;
+    ss << std::put_time(ptm, "%Y-%m-%d");
     return ss.str();
 }

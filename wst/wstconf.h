@@ -105,8 +105,7 @@ public:
 private:
     WstConf();
     ~WstConf();
-    // parser config file
-    string parseConf(string input);
+
     string parseConf(vector<string> &input);
     
 protected:

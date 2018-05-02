@@ -57,7 +57,8 @@ AC_CONFIG_FILES(
     Makefile
     wst/Makefile
     conf/Makefile
-    tools/Makefile
+    tools/agora/Makefile
+    tools/blink/Makefile
 )
 
 AC_OUTPUT
