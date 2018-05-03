@@ -10,14 +10,14 @@
 
 # libraries
 *.lib
-#*.a
-#*.la 
-#*.lo 
+*.a
+*.la 
+*.lo 
 
 # shared objects
 *.dll
-#*.so
-#*.so.*
+*.so
+*.so.*
 *.dylib
 
 # executables
@@ -102,3 +102,7 @@ install-sh
 
 *.*~
 *.deb
+
+tools/agora/ffmpeg
+
+tools/blink/videorecorder

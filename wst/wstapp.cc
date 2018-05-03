@@ -90,16 +90,22 @@ int WstApp::Run()
     std::thread checkdist(&WstApp::checkDiskThread, this);
     std::thread keeplive(&WstApp::keepLiveThread, this);
 
-    if (WstConf::Instance().servertype().compare("ambs") == 0) {
-        std::thread server(&WstApp::agoraServer, this);
-        LOGW("agora server app start");
-        server.join();
-    } else if (WstConf::Instance().servertype().compare("bmbs") == 0) {
-        std::thread server(&WstApp::blinkServer, this);
-        LOGW("blink server app start");
-        server.join();
-    }
-
+    // if (WstConf::Instance().servertype().compare("ambs") == 0) {
+    //     std::thread server(&WstApp::agoraServer, this);
+    //     LOGW("agora server app start");
+    //     server.join();
+    // } else if (WstConf::Instance().servertype().compare("bmbs") == 0) {
+    //     std::thread server(&WstApp::blinkServer, this);
+    //     LOGW("blink server app start");
+    //     server.join();
+    // }
+    std::thread agoraserver(&WstApp::agoraServer, this);
+    std::thread blinkserver(&WstApp::blinkServer, this);
+    LOGW("blink blink server app start");
+    
+    agoraserver.join();
+    blinkserver.join();
+    
     checkdist.join();
     keeplive.join();
 

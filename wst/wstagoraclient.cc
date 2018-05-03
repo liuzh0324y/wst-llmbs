@@ -426,6 +426,7 @@ void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
                                 value.timestamp = data[i]["time"].asString();
                                 
                                 _wstqueue.push(value);
+                                LOGW("");
                                 // std::cout << "queue size: " << _wstqueue.size() << std::endl;
                             }
                         }
@@ -540,10 +541,13 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
             break;
         }
         default:
+        {
             std::stringstream err;
             err << "receive code " << req->response_code << " for client.";
             LOGW(err.str());
-            break;       
+            break;  
+        }
+                 
     }
 
     event_base_loopexit(http_req_post->base, 0);

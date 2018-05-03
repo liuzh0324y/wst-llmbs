@@ -153,21 +153,29 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
     if (!command.compare("STARTRECORD"))
     {
         result["command"] = "STARTRECORD";
+        result["code"] = 0;
+#if 0
         string mix = root["mixresolution"].asString();
-        
         if (mix.empty()) mix = "1280,720,15,2400";
         result["code"] = _recorderGroup.start(root["key"].asString(), root["channel"].asString(), root["username"].asString(), mix);
+#endif 
+        
     }
     else if (!command.compare("STOPRECORD"))
     {
         result["command"] = "STOPRECORD";
-
+        result["code"] = 0;
+#if 0
         result["code"] = _recorderGroup.stop(root["channel"].asString());
+#endif 
+        
     }
     else if (!command.compare("MIXMEDIA"))
     {
         string channel = root["channel"].asString();
         result["command"] = "MIXMEDIA";
+        result["code"] = 0;
+#if 0
         result["code"] = PARAMERROR;
         if (!root["list"].isNull())
         {
@@ -193,10 +201,14 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
                 result["code"] = MIXPARAM2;
             }
         }
+#endif 
+
     }
     else if (!command.compare("DELETEFILE"))
     {
         result["command"] = "DELETEFILE";
+        result["code"] = 0;
+#if 0
         result["code"] = PARAMERROR;
         if (!root["list"].isNull())
         {
@@ -214,6 +226,7 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
 
             result["code"] = _recorderGroup.deletefile(fileinfo);
         }
+#endif
     }
     else
     {
