@@ -131,7 +131,7 @@ void WstBlinkRecord::Handler(WstValue& value) {
 
     FileInfo info;
     info.name = outname;
-    info.path = outnamepath;
+    info.path = WstConf::Instance().recordpath();
     info.type = "flv";
     WstHttpClient::Instance().ReportFile(info);
 }
