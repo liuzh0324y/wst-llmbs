@@ -2,6 +2,7 @@
 #include "wstdownloader.h"
 #include "wstlog.h"
 #include <thread>
+#include <chrono>
 
 WstBlinkRecord::WstBlinkRecord() 
 {
@@ -133,5 +134,10 @@ void WstBlinkRecord::Handler(WstValue& value) {
     info.name = outname;
     info.path = WstConf::Instance().recordpath();
     info.type = "flv";
+
+    std::vector<FileInfo> fileinfo;
+    fileinfo.push_back(info);
+    WstHttpClient::Instance().ReportFile(fileinfo);
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     WstHttpClient::Instance().ReportFile(info);
 }
