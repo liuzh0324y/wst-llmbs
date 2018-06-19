@@ -132,12 +132,13 @@ void WstBlinkRecord::Handler(WstValue& value) {
 
     FileInfo info;
     info.name = outname;
+    info.channel = value.cid.substr(0, value.cid.find('@'));
     info.path = WstConf::Instance().recordpath();
     info.type = "flv";
 
     std::vector<FileInfo> fileinfo;
     fileinfo.push_back(info);
     WstHttpClient::Instance().ReportFile(fileinfo);
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    WstHttpClient::Instance().ReportFile(info);
+    // std::this_thread::sleep_for(std::chrono::seconds(1));
+    // WstHttpClient::Instance().ReportFile(info);
 }

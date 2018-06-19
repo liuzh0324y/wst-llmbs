@@ -28,6 +28,7 @@ public:
     ~RecorderGroup();
 
     int  start(const string &appId, const string &channelId, const string &username, const string &mixresolution);
+    int  bstart(const string &appId, const string &channelId, const string &username, const string &mixresolution);
     int  stop(const string &appId, const string &channelId);
     // Time delay mode
     int  stop(const string &channel);

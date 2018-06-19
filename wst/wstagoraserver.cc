@@ -154,6 +154,14 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
     {
         result["command"] = "STARTRECORD";
         result["code"] = 0;
+        string user = root["username"].asString();
+        if (user.empty()){
+            user = "unknown";
+        }
+        // if (user.size() > 27) {
+        //     user = user.substr(0, 26);
+        // }
+
 #if 0
         string mix = root["mixresolution"].asString();
         if (mix.empty()) mix = "1280,720,15,2400";
@@ -174,12 +182,11 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
     {
         string channel = root["channel"].asString();
         result["command"] = "MIXMEDIA";
-        result["code"] = 0;
-#if 0
         result["code"] = PARAMERROR;
         if (!root["list"].isNull())
         {
             Json::Value node = root["list"];
+            #ifdef AGORARECORD
             if (node.size() == 2)
             {
                 vector<FileInfo> fileinfo;
@@ -200,8 +207,24 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
             {
                 result["code"] = MIXPARAM2;
             }
+            #endif 
+            if (node.size())
+            {
+                FileInfo info;
+                Json::Value nodeValue = node[0];
+                info.name = nodeValue["name"].asString();
+                info.meta = nodeValue["meta"].asString();
+                info.type = nodeValue["type"].asString();
+                info.path = nodeValue["path"].asString();
+                info.channel = channel;
+                reportThread(info);
+            }
+            else 
+            {
+                result["code"] = MIXPARAM2;
+            }
         }
-#endif 
+
 
     }
     else if (!command.compare("DELETEFILE"))
@@ -456,4 +479,15 @@ void WstHttpServer::workThread()
     }
     WstHttpClient::Instance().Logout();
     LOGW("worker_thread end");
+}
+
+void WstHttpServer::reportMixFileThread(FileInfo info)
+{
+    WstHttpClient::Instance().ReportFile(info);
+}
+
+void WstHttpServer::reportThread(FileInfo& info)
+{
+    std::thread worker(&WstHttpServer::reportMixFileThread, this, info);
+    worker.detach();
 }

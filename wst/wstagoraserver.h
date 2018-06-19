@@ -59,6 +59,7 @@ public:
 
 protected:
     void workThread();
+    void reportMixFileThread(FileInfo info);
 
     static void requestHandler(struct evhttp_request *req, void *arg);
     static void signalHandler(evutil_socket_t sig, short events, void *user_data);
@@ -78,6 +79,8 @@ private:
     mutex _mutex;
     JsonHeader _header;
     RecorderGroup _recorderGroup;
+
+    void reportThread(FileInfo& info);
 };
 
 #endif // WST_AGORA_SERVER_H
