@@ -67,6 +67,8 @@ public:
 
     void    ReportStatus(uint32_t code, string description);
 
+    void    ReportFileToGoServer(FileInfo fileinfo);
+
     string TimeOut();
 
     int    MaxClient();

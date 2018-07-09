@@ -17,6 +17,8 @@ WstConf::WstConf()
     _localport = "18005";
     _serverIp = "127.0.0.1";
     _serverPort = "18003";
+    _goserverip = "127.0.0.1";
+    _goserverport = "8888";
     _connectTimeout = 30000;
     _sendTimeout = 30000;
     _recvTimeout = 30000;
@@ -97,105 +99,6 @@ bool WstConf::ReadLicenseFile(string file)
     return true;
 }
 
-string WstConf::parseConf(string input)
-{
-    if (input.empty())
-    {
-        return string();
-    }
-    if ((input.compare(0, 1, "#") == 0))
-    {
-        return string();
-    }
-    if (std::size_t pos = input.find("="))
-    {
-        string temp = input.substr(0, pos);
-        string tempstr = input.substr(pos+1);
-
-        if (!temp.compare("username"))
-        {
-            _username = tempstr;
-        }
-        else if (temp.compare("password") == 0)
-        {
-            _password = tempstr;
-        }
-        else if (temp.compare("local_ip") == 0)
-        {
-            _localip = tempstr;
-        }
-        else if (temp.compare("local_port") == 0)
-        {
-            _localport = tempstr;
-        }
-        else if (temp.compare("server_ip") == 0)
-        {
-            _serverIp = tempstr;
-        }
-        else if (temp.compare("server_port") == 0)
-        {
-            _serverPort = tempstr;
-        }
-        else if (temp.compare("connect_timeout") == 0)
-        {
-            _connectTimeout = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("send_timeout") == 0)
-        {
-            _sendTimeout = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("recv_timeout") == 0)
-        {
-            _recvTimeout = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("record_path") == 0)
-        {
-            _recordpath = tempstr;
-        }
-        // else if (temp.compare("logs_path") == 0)
-        // {
-        //     _logspath = tempstr;
-        // }
-        // else if (temp.compare("applite_path") == 0)
-        // {
-        //     _applitepath = tempstr;
-        // }
-        else if (temp.compare("groupid") == 0)
-        {
-            _groupid = tempstr;
-        }
-        else if (temp.compare("type") == 0)
-        {
-            _type = tempstr;
-        }
-        else if (temp.compare("http_path") == 0)
-        {
-            _httppath = tempstr;
-        }
-        else if (temp.compare("http_port") == 0)
-        {
-            _httpport = tempstr;
-        }
-        else if (temp.compare("rtmpport") == 0)
-        {
-            _rtmpport = tempstr;
-        }
-        else if (temp.compare("freedisk") == 0)
-        {
-            _freedisk = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("keeplive") == 0)
-        {
-            _keeplive = string_as_T<uint32_t>(tempstr);
-        }
-        else if (temp.compare("idleLimitSec") == 0)
-        {
-            _idleLimitSec = string_as_T<uint32_t>(tempstr);
-        }
-    }
-    return string();
-}
-
 string WstConf::parseConf(vector<string> &filelist)
 {
     vector<string>::iterator iter = filelist.begin();
@@ -230,6 +133,14 @@ string WstConf::parseConf(vector<string> &filelist)
             else if (temp.compare("server_port") == 0)
             {
                 _serverPort = tempstr;
+            }
+            else if (temp.compare("goserverip") == 0)
+            {
+                _goserverip = tempstr;
+            }
+            else if (temp.compare("goserverport") == 0)
+            {
+                _goserverport = tempstr;
             }
             else if (temp.compare("connect_timeout") == 0)
             {
@@ -413,6 +324,27 @@ void   WstConf::setserverport(const string& port)
     _serverPort = port;
 }
 
+// go server ip
+string WstConf::goserverip()
+{
+    return _goserverip;
+}
+
+void   WstConf::setgoserverip(const string& ip)
+{
+    _goserverip = ip;
+}
+
+// go server port
+string WstConf::goserverport()
+{
+    return _goserverport;
+}
+
+void   WstConf::setgoserverport(const string& port)
+{
+    _goserverport = port;
+}
 
 // connect timeout
 uint32_t WstConf::connecttimeout()

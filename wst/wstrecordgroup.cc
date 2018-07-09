@@ -313,7 +313,8 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     outinfo.channel = channel;
 
     LOGW("MIX FILES REPORT FILE.");
-    WstHttpClient::Instance().ReportFile(outinfo);
+    // WstHttpClient::Instance().ReportFile(outinfo);
+    WstHttpClient::Instance().ReportFileToGoServer(outinfo);
     // reportfiles(outinfo);
     // for (iter; iter != files.end(); iter++)
     // {

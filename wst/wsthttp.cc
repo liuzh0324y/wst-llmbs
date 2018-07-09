@@ -212,6 +212,10 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
             result["code"] = _recorderGroup.deletefile(fileinfo);
         }
     }
+    else if (!command.compare("REPORT"))
+    {
+        
+    }
     else
     {
         result["command"] = "UNKNOWN";

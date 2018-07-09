@@ -32,6 +32,12 @@ public:
     // server ip
     string serverip();
     void   setserverip(const string& ip);
+    // go server ip
+    string goserverip();
+    void   setgoserverip(const string& ip);
+    // go server port
+    string goserverport();
+    void   setgoserverport(const string& port);
     // server port
     string serverport();
     void   setserverport(const string& port);
@@ -86,7 +92,6 @@ private:
     WstConf();
     ~WstConf();
     // parser config file
-    string parseConf(string input);
     string parseConf(vector<string> &input);
     
 protected:
@@ -108,6 +113,10 @@ private:
     string     _serverIp;
     // server port
     string     _serverPort;
+    // go server ip
+    string     _goserverip;
+    // go server port
+    string     _goserverport;
     // connect server timeout
     uint32_t   _connectTimeout;
     // socket send timeout

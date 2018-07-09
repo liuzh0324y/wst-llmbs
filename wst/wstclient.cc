@@ -2,6 +2,7 @@
 #include "wstconf.h"
 #include "wstlog.h"
 #include <string>
+#include <thread>
 
 string       WstHttpClient::_token;
 string       WstHttpClient::_time;
@@ -244,6 +245,39 @@ void WstHttpClient::ReportFile(FileInfo fileinfo)
     event_base_free(base);
 }
 
+void    WstHttpClient::ReportFileToGoServer(FileInfo fileinfo)
+{
+    struct event_base *base;
+    struct http_request_post *http_req_post;
+    string uri;
+    Json::Value postjson;
+    postjson["seqnum"] = WstConf::Instance().seqnum();
+    postjson["service"] = "oss";
+    postjson["bucket"] = "llvision";
+
+    Json::Value data;
+    data["filename"] = fileinfo.name;
+    data["filepath"] = fileinfo.path;
+    data["filetype"] = fileinfo.type;
+    data["channel"] = fileinfo.channel;
+    postjson["data"] = data;
+    
+    base = event_base_new();
+
+    uri = "http://";
+    uri.append(WstConf::Instance().goserverip());
+    uri.append(":");
+    uri.append(WstConf::Instance().goserverport());
+    uri.append("/v1/file/putfile");
+    std::cout << "request url: " << uri << std::endl;
+    http_req_post = (struct http_request_post *)startHttpRequest(base,
+        uri.c_str(), REQUEST_POST_FLAG, HTTP_CONTENT_TYPE_URL_ENCODED, postjson.toStyledString().c_str());
+        
+    event_base_dispatch(base);
+    httpRequestFree((struct http_request_get*)http_req_post, REQUEST_POST_FLAG);
+    event_base_free(base);
+}
+
 void WstHttpClient::ReportStatus(uint32_t code, string description)
 {
     if (_token.empty())
@@ -352,6 +386,16 @@ void WstHttpClient::httpRequestGetHandler(struct evhttp_request *req, void *arg)
     event_base_loopexit(http_req_post->base, 0);
 }
 
+void doSession(std::string name, std::string path, std::string type, std::string channel)
+{
+    FileInfo info;
+    info.name = name;
+    info.path = path;
+    info.type = type;
+    info.channel = channel;
+    WstHttpClient::Instance().ReportFile(info);
+}
+
 void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg)
 {
     struct http_request_post *http_req_post;
@@ -393,8 +437,28 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
                          << "maxclient: " << _maxclient << endl
                          << "maxchannel: " << _maxchannel << endl;
                 }
+                
             }
-
+            else 
+            {
+                Json::Value subData = root["data"];
+                string subCommand = subData["command"].asString();
+                std::cout << "sub command: " << subCommand << std::endl;
+                if (subCommand.compare("FIN") == 0)
+                {
+                    std::thread {
+                        std::bind(
+                            &doSession, 
+                            subData["filename"].asString(), 
+                            subData["filepath"].asString(), 
+                            subData["filetype"].asString(), 
+                            subData["channel"].asString())
+                    }.detach();
+                }
+                
+            }
+            
+            
             if (!root["code"].isNull())
             {
                 int32_t code = root["code"].asInt();
