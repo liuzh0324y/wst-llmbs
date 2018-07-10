@@ -441,20 +441,20 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
             }
             else 
             {
-                Json::Value subData = root["data"];
-                string subCommand = subData["command"].asString();
-                std::cout << "sub command: " << subCommand << std::endl;
-                if (subCommand.compare("FIN") == 0)
-                {
-                    std::thread {
-                        std::bind(
-                            &doSession, 
-                            subData["filename"].asString(), 
-                            subData["filepath"].asString(), 
-                            subData["filetype"].asString(), 
-                            subData["channel"].asString())
-                    }.detach();
-                }
+                // Json::Value subData = root["data"];
+                // string subCommand = subData["command"].asString();
+                // std::cout << "sub command: " << subCommand << std::endl;
+                // if (subCommand.compare("FIN") == 0)
+                // {
+                //     std::thread {
+                //         std::bind(
+                //             &doSession, 
+                //             subData["filename"].asString(), 
+                //             subData["filepath"].asString(), 
+                //             subData["filetype"].asString(), 
+                //             subData["channel"].asString())
+                //     }.detach();
+                // }
                 
             }
             

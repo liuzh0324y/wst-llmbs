@@ -145,6 +145,29 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
     if (!root["command"].isNull())
     {
         command = root["command"].asString();
+        std::cout << "root command: " << command << std::endl;
+    }
+    else
+    {
+        Json::Value data = root["data"];
+        std::cout << "sub command: " << data["command"].asString() << std::endl;
+        if (!data["command"].isNull())
+        {
+            if (!data["command"].asString().compare("FIN"))
+            {
+                // std::thread{std::bind()
+                // }.detach();
+                FileInfo info;
+                info.name = data["filename"].asString();
+                info.path = data["filepath"].asString();
+                info.channel = data["channel"].asString();
+                info.type = data["filetype"].asString();
+                WstHttpClient::Instance().ReportFile(info);
+                result["code"] = 0;
+                return result.toStyledString();
+            }
+        }
+        
     }
 
     if (!command.compare("STARTRECORD"))
@@ -214,7 +237,7 @@ string WstHttpServer::parseJsonRPC(string jsonstr)
     }
     else if (!command.compare("REPORT"))
     {
-        
+
     }
     else
     {
