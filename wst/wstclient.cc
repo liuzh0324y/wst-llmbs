@@ -258,6 +258,7 @@ void    WstHttpClient::ReportFileToGoServer(FileInfo fileinfo)
     Json::Value data;
     data["filename"] = fileinfo.name;
     data["filepath"] = fileinfo.path;
+    data["tmppath"] = fileinfo.tmppath;
     data["filetype"] = fileinfo.type;
     data["channel"] = fileinfo.channel;
     postjson["data"] = data;

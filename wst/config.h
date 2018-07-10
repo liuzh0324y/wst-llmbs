@@ -68,6 +68,7 @@ typedef struct _file_info
     string pic;         // picture file
     string type;        // file type
     string path;        // file path
+    string tmppath;
     string channel;
 } FileInfo;
 

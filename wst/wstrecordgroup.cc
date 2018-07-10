@@ -310,6 +310,7 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     outinfo.pic = (*itername).second +".jpeg";
     outinfo.type = "mp4";
     outinfo.path = WstConf::Instance().recordpath();
+    outinfo.tmppath = (*iter).path;
     outinfo.channel = channel;
 
     LOGW("MIX FILES REPORT FILE.");
