@@ -295,16 +295,16 @@ void RecorderGroup::mixmedia_worker(vector<FileInfo> files)
     // cout << "mixmedia: "<< mixfile << endl;
 
     // picture
-    string picfile = WstConf::Instance().recordpath()+"/"+ (*itername).second + ".jpeg";
-    string command_pic = "/opt/llmbs/tools/ffmpeg -i ";
-    command_pic.append(out);
-    command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
-    command_pic.append(picfile);
-    system(command_pic.c_str());
-    if (::access(picfile.c_str(), F_OK) == -1)
-    {
-        LOGW("get pic failed.");
-    }
+    // string picfile = WstConf::Instance().recordpath()+"/"+ (*itername).second + ".jpeg";
+    // string command_pic = "/opt/llmbs/tools/ffmpeg -i ";
+    // command_pic.append(out);
+    // command_pic.append(" -y -f image2 -ss 1 -t 0.001 -s 800x600 ");
+    // command_pic.append(picfile);
+    // system(command_pic.c_str());
+    // if (::access(picfile.c_str(), F_OK) == -1)
+    // {
+    //     LOGW("get pic failed.");
+    // }
     FileInfo outinfo;
     outinfo.name = outfile;
     outinfo.pic = (*itername).second +".jpeg";

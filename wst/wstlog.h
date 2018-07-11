@@ -14,7 +14,7 @@ class WstLog
 public:
     static WstLog& Instance();
 
-    bool    Initialize(string filename="/opt/llmbs/logs/error.log");
+    bool    Initialize(string filename="/opt/llmbs/logs");
 
     void    Destroy();
 
@@ -28,9 +28,12 @@ private:
 
     std::string getTime();
     
+    std::string GetDate();
+
     WstLog();
 
     ofstream    _outFile;
+    std::string currentDate;
 };
 
 #define LOGW(msg)   \
