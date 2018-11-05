@@ -86,7 +86,7 @@ int  RecorderGroup::start(const string &appId, const string &channelId, const st
         LOGW("create agora channel failed!");
         return 303;
     }
-    string user = username;
+    string user = "llvision";
     if (user.empty()){
         user = "unknown";
     }

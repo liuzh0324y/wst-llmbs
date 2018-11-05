@@ -253,7 +253,7 @@ void    WstHttpClient::ReportFileToGoServer(FileInfo fileinfo)
     Json::Value postjson;
     postjson["seqnum"] = WstConf::Instance().seqnum();
     postjson["service"] = "oss";
-    postjson["bucket"] = "llvision";
+    postjson["bucket"] = "glxsslive";
 
     Json::Value data;
     data["filename"] = fileinfo.name;
@@ -488,6 +488,7 @@ void WstHttpClient::httpRequestPostHandler(struct evhttp_request *req, void *arg
                     }
                     case AUTHFAIL:
                     {
+                        Instance().Login();
                         LOGW("code is auth failed!");
                         break;    
                     }

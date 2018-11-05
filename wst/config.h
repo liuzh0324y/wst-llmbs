@@ -27,7 +27,7 @@
 #endif // LOGER
 using namespace std;
 
-#define LLMBS_VERSION "v1.0.0"
+#define LLMBS_VERSION "v2.0.5"
 
 enum errcode 
 {

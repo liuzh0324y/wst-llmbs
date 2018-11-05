@@ -1,5 +1,5 @@
 Package: llmbs
-Version: 2.0.5.beta~trusty
+Version: 2.0.5.release~trusty
 Architecture: amd64
 Maintainer: wisdom <liuzh@llvision.com>
 Description: llmbs
