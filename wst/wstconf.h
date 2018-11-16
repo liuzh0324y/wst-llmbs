@@ -13,9 +13,9 @@ public:
     // get WstConf instance
     static WstConf& Instance();
     // load config file
-    bool ReadConfigFile(string file="/opt/llmbs/conf/llmbs.conf");
+    bool ReadConfigFile(string file="/wst/conf/llmbs.conf");
     // create license
-    bool ReadLicenseFile(string file="/opt/llmbs/conf/license.key");
+    bool ReadLicenseFile(string file="/wst/conf/license.key");
 
     // user name
     string username();

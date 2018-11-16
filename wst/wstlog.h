@@ -14,7 +14,7 @@ class WstLog
 public:
     static WstLog& Instance();
 
-    bool    Initialize(string filename="/opt/llmbs/logs");
+    bool    Initialize(string filename="/wst/logs");
 
     void    Destroy();
 

@@ -22,9 +22,9 @@ WstConf::WstConf()
     _connectTimeout = 30000;
     _sendTimeout = 30000;
     _recvTimeout = 30000;
-    _recordpath = "/record";
-    _logspath = "/opt/llmbs/logs";
-    _applitepath = "/opt/llmbs/tools";
+    _recordpath = "/wst/data";
+    _logspath = "/wst/logs";
+    _applitepath = "/wst/tools";
     _groupid = "0";
     _type = "ambs";
     _httppath = "/record";
